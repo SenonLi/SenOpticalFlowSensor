@@ -1,0 +1,1508 @@
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Sen_SPI_OF.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.SenDeselectChip,"ax",%progbits
+  18              		.align	2
+  19              		.global	SenDeselectChip
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	SenDeselectChip, %function
+  23              	SenDeselectChip:
+  24              	.LFB35:
+  25              		.file 1 ".\\Sen_SPI_OF.c"
+   1:.\Sen_SPI_OF.c **** /* ========================================
+   2:.\Sen_SPI_OF.c ****  *
+   3:.\Sen_SPI_OF.c ****  * Copyright YOUR COMPANY, THE YEAR
+   4:.\Sen_SPI_OF.c ****  * All Rights Reserved
+   5:.\Sen_SPI_OF.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\Sen_SPI_OF.c ****  *
+   7:.\Sen_SPI_OF.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\Sen_SPI_OF.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:.\Sen_SPI_OF.c ****  *
+  10:.\Sen_SPI_OF.c ****  * ========================================
+  11:.\Sen_SPI_OF.c **** */
+  12:.\Sen_SPI_OF.c **** 
+  13:.\Sen_SPI_OF.c **** /* [] END OF FILE */
+  14:.\Sen_SPI_OF.c **** 
+  15:.\Sen_SPI_OF.c **** #include "Sen_SPI_OF.h"
+  16:.\Sen_SPI_OF.c **** 
+  17:.\Sen_SPI_OF.c **** 
+  18:.\Sen_SPI_OF.c **** void SenDeselectChip(void){
+  26              		.loc 1 18 0
+  27              		.cfi_startproc
+  28 0000 08B5     		push	{r3, lr}
+  29              		.cfi_def_cfa_offset 8
+  30              		.cfi_offset 3, -8
+  31              		.cfi_offset 14, -4
+  19:.\Sen_SPI_OF.c ****   SS_Write(1);
+  32              		.loc 1 19 0
+  33 0002 0120     		mov	r0, #1
+  34 0004 FFF7FEFF 		bl	SS_Write
+  35              	.LVL0:
+  20:.\Sen_SPI_OF.c **** //  SPI_Master_SpiSetActiveSlaveSelect(0x01u);
+  21:.\Sen_SPI_OF.c **** }
+  36              		.loc 1 21 0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 2
+
+
+  37              		@ sp needed
+  38 0008 08BD     		pop	{r3, pc}
+  39              		.cfi_endproc
+  40              	.LFE35:
+  41              		.size	SenDeselectChip, .-SenDeselectChip
+  42              		.section	.text.SenChipSelect,"ax",%progbits
+  43              		.align	2
+  44              		.global	SenChipSelect
+  45              		.code	16
+  46              		.thumb_func
+  47              		.type	SenChipSelect, %function
+  48              	SenChipSelect:
+  49              	.LFB36:
+  22:.\Sen_SPI_OF.c **** 
+  23:.\Sen_SPI_OF.c **** void SenChipSelect(void){
+  50              		.loc 1 23 0
+  51              		.cfi_startproc
+  52 0000 08B5     		push	{r3, lr}
+  53              		.cfi_def_cfa_offset 8
+  54              		.cfi_offset 3, -8
+  55              		.cfi_offset 14, -4
+  24:.\Sen_SPI_OF.c ****   	SS_Write(0);
+  56              		.loc 1 24 0
+  57 0002 0020     		mov	r0, #0
+  58 0004 FFF7FEFF 		bl	SS_Write
+  59              	.LVL1:
+  25:.\Sen_SPI_OF.c **** //  SPI_Master_SpiSetActiveSlaveSelect(0x00u);
+  26:.\Sen_SPI_OF.c **** }
+  60              		.loc 1 26 0
+  61              		@ sp needed
+  62 0008 08BD     		pop	{r3, pc}
+  63              		.cfi_endproc
+  64              	.LFE36:
+  65              		.size	SenChipSelect, .-SenChipSelect
+  66 000a C046     		.section	.text.SenReset,"ax",%progbits
+  67              		.align	2
+  68              		.global	SenReset
+  69              		.code	16
+  70              		.thumb_func
+  71              		.type	SenReset, %function
+  72              	SenReset:
+  73              	.LFB37:
+  27:.\Sen_SPI_OF.c ****   
+  28:.\Sen_SPI_OF.c **** void SenReset(void){
+  74              		.loc 1 28 0
+  75              		.cfi_startproc
+  76 0000 08B5     		push	{r3, lr}
+  77              		.cfi_def_cfa_offset 8
+  78              		.cfi_offset 3, -8
+  79              		.cfi_offset 14, -4
+  29:.\Sen_SPI_OF.c ****     SenChipSelect();
+  80              		.loc 1 29 0
+  81 0002 FFF7FEFF 		bl	SenChipSelect
+  82              	.LVL2:
+  30:.\Sen_SPI_OF.c ****     CyDelayUs(50);
+  83              		.loc 1 30 0
+  84 0006 3220     		mov	r0, #50
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 3
+
+
+  85 0008 FFF7FEFF 		bl	CyDelayUs
+  86              	.LVL3:
+  31:.\Sen_SPI_OF.c ****     Reset_Write(1);                 // reset sensor
+  87              		.loc 1 31 0
+  88 000c 0120     		mov	r0, #1
+  89 000e FFF7FEFF 		bl	Reset_Write
+  90              	.LVL4:
+  32:.\Sen_SPI_OF.c ****     CyDelayUs(75);
+  91              		.loc 1 32 0
+  92 0012 4B20     		mov	r0, #75
+  93 0014 FFF7FEFF 		bl	CyDelayUs
+  94              	.LVL5:
+  33:.\Sen_SPI_OF.c ****     Reset_Write(0);                     // return sensor to normal
+  95              		.loc 1 33 0
+  96 0018 0020     		mov	r0, #0
+  97 001a FFF7FEFF 		bl	Reset_Write
+  98              	.LVL6:
+  34:.\Sen_SPI_OF.c ****     SenDeselectChip(); 
+  99              		.loc 1 34 0
+ 100 001e FFF7FEFF 		bl	SenDeselectChip
+ 101              	.LVL7:
+  35:.\Sen_SPI_OF.c ****     SenChipSelect();
+ 102              		.loc 1 35 0
+ 103 0022 FFF7FEFF 		bl	SenChipSelect
+ 104              	.LVL8:
+  36:.\Sen_SPI_OF.c **** }
+ 105              		.loc 1 36 0
+ 106              		@ sp needed
+ 107 0026 08BD     		pop	{r3, pc}
+ 108              		.cfi_endproc
+ 109              	.LFE37:
+ 110              		.size	SenReset, .-SenReset
+ 111              		.section	.text.SenSPI_Transfer,"ax",%progbits
+ 112              		.align	2
+ 113              		.global	SenSPI_Transfer
+ 114              		.code	16
+ 115              		.thumb_func
+ 116              		.type	SenSPI_Transfer, %function
+ 117              	SenSPI_Transfer:
+ 118              	.LFB38:
+  37:.\Sen_SPI_OF.c **** 
+  38:.\Sen_SPI_OF.c **** uint32 SenSPI_Transfer(uint8 fixedAddress){
+ 119              		.loc 1 38 0
+ 120              		.cfi_startproc
+ 121              	.LVL9:
+ 122 0000 08B5     		push	{r3, lr}
+ 123              		.cfi_def_cfa_offset 8
+ 124              		.cfi_offset 3, -8
+ 125              		.cfi_offset 14, -4
+  39:.\Sen_SPI_OF.c ****   SPI_Master_SpiUartWriteTxData((uint32)fixedAddress);
+ 126              		.loc 1 39 0
+ 127 0002 FFF7FEFF 		bl	SPI_Master_SpiUartWriteTxData
+ 128              	.LVL10:
+  40:.\Sen_SPI_OF.c ****   CyDelayUs(6);
+ 129              		.loc 1 40 0
+ 130 0006 0620     		mov	r0, #6
+ 131 0008 FFF7FEFF 		bl	CyDelayUs
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 4
+
+
+ 132              	.LVL11:
+  41:.\Sen_SPI_OF.c ****   uint32 readBuffer = SPI_Master_SpiUartReadRxData();
+ 133              		.loc 1 41 0
+ 134 000c FFF7FEFF 		bl	SPI_Master_SpiUartReadRxData
+ 135              	.LVL12:
+  42:.\Sen_SPI_OF.c **** 
+  43:.\Sen_SPI_OF.c ****   return readBuffer;
+  44:.\Sen_SPI_OF.c **** }  
+ 136              		.loc 1 44 0
+ 137              		@ sp needed
+ 138 0010 08BD     		pop	{r3, pc}
+ 139              		.cfi_endproc
+ 140              	.LFE38:
+ 141              		.size	SenSPI_Transfer, .-SenSPI_Transfer
+ 142 0012 C046     		.section	.text.SenUartPutHexDecimalByte,"ax",%progbits
+ 143              		.align	2
+ 144              		.global	SenUartPutHexDecimalByte
+ 145              		.code	16
+ 146              		.thumb_func
+ 147              		.type	SenUartPutHexDecimalByte, %function
+ 148              	SenUartPutHexDecimalByte:
+ 149              	.LFB39:
+  45:.\Sen_SPI_OF.c **** 
+  46:.\Sen_SPI_OF.c **** void SenUartPutHexDecimalByte(uint8 dataByte) {
+ 150              		.loc 1 46 0
+ 151              		.cfi_startproc
+ 152              	.LVL13:
+ 153 0000 10B5     		push	{r4, lr}
+ 154              		.cfi_def_cfa_offset 8
+ 155              		.cfi_offset 4, -8
+ 156              		.cfi_offset 14, -4
+ 157 0002 041C     		mov	r4, r0
+ 158              	.LVL14:
+  47:.\Sen_SPI_OF.c **** 	uint8 temp = dataByte;
+  48:.\Sen_SPI_OF.c **** 	temp = temp >> 4;
+ 159              		.loc 1 48 0
+ 160 0004 0009     		lsr	r0, r0, #4
+ 161              	.LVL15:
+  49:.\Sen_SPI_OF.c **** 	if(temp>9)      temp+=('A'-10);
+ 162              		.loc 1 49 0
+ 163 0006 0928     		cmp	r0, #9
+ 164 0008 01D9     		bls	.L6
+ 165              		.loc 1 49 0 is_stmt 0 discriminator 1
+ 166 000a 3730     		add	r0, r0, #55
+ 167              	.LVL16:
+ 168 000c 00E0     		b	.L7
+ 169              	.L6:
+  50:.\Sen_SPI_OF.c **** 	else temp += '0';
+ 170              		.loc 1 50 0 is_stmt 1
+ 171 000e 3030     		add	r0, r0, #48
+ 172              	.LVL17:
+ 173              	.L7:
+  51:.\Sen_SPI_OF.c ****         
+  52:.\Sen_SPI_OF.c **** 	UART_UartPutChar(temp);
+ 174              		.loc 1 52 0
+ 175 0010 FFF7FEFF 		bl	UART_SpiUartWriteTxData
+ 176              	.LVL18:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 5
+
+
+  53:.\Sen_SPI_OF.c ****         
+  54:.\Sen_SPI_OF.c **** 	dataByte = dataByte & 0x0f;
+ 177              		.loc 1 54 0
+ 178 0014 0F20     		mov	r0, #15
+ 179 0016 0440     		and	r4, r0
+ 180              	.LVL19:
+  55:.\Sen_SPI_OF.c **** 	if(dataByte > 9)        dataByte+=('A'-10);
+ 181              		.loc 1 55 0
+ 182 0018 092C     		cmp	r4, #9
+ 183 001a 02D9     		bls	.L8
+ 184              		.loc 1 55 0 is_stmt 0 discriminator 1
+ 185 001c 201C     		mov	r0, r4
+ 186 001e 3730     		add	r0, r0, #55
+ 187              	.LVL20:
+ 188 0020 01E0     		b	.L9
+ 189              	.LVL21:
+ 190              	.L8:
+  56:.\Sen_SPI_OF.c **** 	else    dataByte += '0';
+ 191              		.loc 1 56 0 is_stmt 1
+ 192 0022 201C     		mov	r0, r4
+ 193 0024 3030     		add	r0, r0, #48
+ 194              	.LVL22:
+ 195              	.L9:
+  57:.\Sen_SPI_OF.c ****         
+  58:.\Sen_SPI_OF.c **** 	UART_UartPutChar(dataByte);
+ 196              		.loc 1 58 0
+ 197 0026 FFF7FEFF 		bl	UART_SpiUartWriteTxData
+ 198              	.LVL23:
+  59:.\Sen_SPI_OF.c **** }
+ 199              		.loc 1 59 0
+ 200              		@ sp needed
+ 201 002a 10BD     		pop	{r4, pc}
+ 202              		.cfi_endproc
+ 203              	.LFE39:
+ 204              		.size	SenUartPutHexDecimalByte, .-SenUartPutHexDecimalByte
+ 205              		.section	.text.SenReadReg,"ax",%progbits
+ 206              		.align	2
+ 207              		.global	SenReadReg
+ 208              		.code	16
+ 209              		.thumb_func
+ 210              		.type	SenReadReg, %function
+ 211              	SenReadReg:
+ 212              	.LFB40:
+  60:.\Sen_SPI_OF.c **** 
+  61:.\Sen_SPI_OF.c **** uint8 SenReadReg(uint8 fixedAddress){
+ 213              		.loc 1 61 0
+ 214              		.cfi_startproc
+ 215              	.LVL24:
+ 216 0000 10B5     		push	{r4, lr}
+ 217              		.cfi_def_cfa_offset 8
+ 218              		.cfi_offset 4, -8
+ 219              		.cfi_offset 14, -4
+ 220              	.LVL25:
+  62:.\Sen_SPI_OF.c **** 	uint8 regValue = 0x00u;
+  63:.\Sen_SPI_OF.c **** 	fixedAddress &= (uint8)~(1 << 7);
+ 221              		.loc 1 63 0
+ 222 0002 7F24     		mov	r4, #127
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 6
+
+
+ 223 0004 0440     		and	r4, r0
+ 224              	.LVL26:
+  64:.\Sen_SPI_OF.c **** 	SenChipSelect();
+ 225              		.loc 1 64 0
+ 226 0006 FFF7FEFF 		bl	SenChipSelect
+ 227              	.LVL27:
+  65:.\Sen_SPI_OF.c **** 
+  66:.\Sen_SPI_OF.c **** 	SenSPI_Transfer(fixedAddress);
+ 228              		.loc 1 66 0
+ 229 000a 201C     		mov	r0, r4
+ 230 000c FFF7FEFF 		bl	SenSPI_Transfer
+ 231              	.LVL28:
+  67:.\Sen_SPI_OF.c **** 	CyDelayUs(50);
+ 232              		.loc 1 67 0
+ 233 0010 3220     		mov	r0, #50
+ 234 0012 FFF7FEFF 		bl	CyDelayUs
+ 235              	.LVL29:
+  68:.\Sen_SPI_OF.c **** 	regValue = SenSPI_Transfer(0x00);
+ 236              		.loc 1 68 0
+ 237 0016 0020     		mov	r0, #0
+ 238 0018 FFF7FEFF 		bl	SenSPI_Transfer
+ 239              	.LVL30:
+ 240 001c C4B2     		uxtb	r4, r0
+ 241              	.LVL31:
+  69:.\Sen_SPI_OF.c **** 
+  70:.\Sen_SPI_OF.c ****         SenDeselectChip();
+ 242              		.loc 1 70 0
+ 243 001e FFF7FEFF 		bl	SenDeselectChip
+ 244              	.LVL32:
+  71:.\Sen_SPI_OF.c **** 
+  72:.\Sen_SPI_OF.c **** //        CyDelayUs(75);
+  73:.\Sen_SPI_OF.c **** 	return (regValue);
+  74:.\Sen_SPI_OF.c **** }
+ 245              		.loc 1 74 0
+ 246 0022 201C     		mov	r0, r4
+ 247              		@ sp needed
+ 248              	.LVL33:
+ 249 0024 10BD     		pop	{r4, pc}
+ 250              		.cfi_endproc
+ 251              	.LFE40:
+ 252              		.size	SenReadReg, .-SenReadReg
+ 253 0026 C046     		.section	.text.SenWriteReg,"ax",%progbits
+ 254              		.align	2
+ 255              		.global	SenWriteReg
+ 256              		.code	16
+ 257              		.thumb_func
+ 258              		.type	SenWriteReg, %function
+ 259              	SenWriteReg:
+ 260              	.LFB41:
+  75:.\Sen_SPI_OF.c **** 
+  76:.\Sen_SPI_OF.c **** void SenWriteReg(uint8 fixedAddress, uint8 dataValue){
+ 261              		.loc 1 76 0
+ 262              		.cfi_startproc
+ 263              	.LVL34:
+ 264 0000 38B5     		push	{r3, r4, r5, lr}
+ 265              		.cfi_def_cfa_offset 16
+ 266              		.cfi_offset 3, -16
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 7
+
+
+ 267              		.cfi_offset 4, -12
+ 268              		.cfi_offset 5, -8
+ 269              		.cfi_offset 14, -4
+ 270 0002 051C     		mov	r5, r0
+ 271 0004 0C1C     		mov	r4, r1
+  77:.\Sen_SPI_OF.c ****   SenChipSelect();
+ 272              		.loc 1 77 0
+ 273 0006 FFF7FEFF 		bl	SenChipSelect
+ 274              	.LVL35:
+  78:.\Sen_SPI_OF.c ****   SenSPI_Transfer(fixedAddress | 0x80 );   // send register address
+ 275              		.loc 1 78 0
+ 276 000a 8020     		mov	r0, #128
+ 277 000c 2843     		orr	r0, r5
+ 278 000e FFF7FEFF 		bl	SenSPI_Transfer
+ 279              	.LVL36:
+  79:.\Sen_SPI_OF.c ****   CyDelayUs(50);                  // small delay
+ 280              		.loc 1 79 0
+ 281 0012 3220     		mov	r0, #50
+ 282 0014 FFF7FEFF 		bl	CyDelayUs
+ 283              	.LVL37:
+  80:.\Sen_SPI_OF.c ****   SenSPI_Transfer(dataValue);             // send data
+ 284              		.loc 1 80 0
+ 285 0018 201C     		mov	r0, r4
+ 286 001a FFF7FEFF 		bl	SenSPI_Transfer
+ 287              	.LVL38:
+  81:.\Sen_SPI_OF.c ****   SenDeselectChip(); 
+ 288              		.loc 1 81 0
+ 289 001e FFF7FEFF 		bl	SenDeselectChip
+ 290              	.LVL39:
+  82:.\Sen_SPI_OF.c **** }              ...
+ 291              		.loc 1 82 0
+ 292              		@ sp needed
+ 293 0022 38BD     		pop	{r3, r4, r5, pc}
+ 294              		.cfi_endproc
+ 295              	.LFE41:
+ 296              		.size	SenWriteReg, .-SenWriteReg
+ 297              		.text
+ 298              	.Letext0:
+ 299              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 300              		.file 3 "Generated_Source\\PSoC4/SS.h"
+ 301              		.file 4 "Generated_Source\\PSoC4/CyLib.h"
+ 302              		.file 5 "Generated_Source\\PSoC4/Reset.h"
+ 303              		.file 6 "Generated_Source\\PSoC4/SPI_Master_SPI_UART.h"
+ 304              		.file 7 "Generated_Source\\PSoC4/UART_SPI_UART.h"
+ 305              		.section	.debug_info,"",%progbits
+ 306              	.Ldebug_info0:
+ 307 0000 78030000 		.4byte	0x378
+ 308 0004 0400     		.2byte	0x4
+ 309 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 310 000a 04       		.byte	0x4
+ 311 000b 01       		.uleb128 0x1
+ 312 000c E2010000 		.4byte	.LASF33
+ 313 0010 01       		.byte	0x1
+ 314 0011 B9020000 		.4byte	.LASF34
+ 315 0015 A6000000 		.4byte	.LASF35
+ 316 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 317 001d 00000000 		.4byte	0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 8
+
+
+ 318 0021 00000000 		.4byte	.Ldebug_line0
+ 319 0025 02       		.uleb128 0x2
+ 320 0026 01       		.byte	0x1
+ 321 0027 06       		.byte	0x6
+ 322 0028 C8020000 		.4byte	.LASF0
+ 323 002c 02       		.uleb128 0x2
+ 324 002d 01       		.byte	0x1
+ 325 002e 08       		.byte	0x8
+ 326 002f 7B000000 		.4byte	.LASF1
+ 327 0033 02       		.uleb128 0x2
+ 328 0034 02       		.byte	0x2
+ 329 0035 05       		.byte	0x5
+ 330 0036 5E010000 		.4byte	.LASF2
+ 331 003a 02       		.uleb128 0x2
+ 332 003b 02       		.byte	0x2
+ 333 003c 07       		.byte	0x7
+ 334 003d D4020000 		.4byte	.LASF3
+ 335 0041 02       		.uleb128 0x2
+ 336 0042 04       		.byte	0x4
+ 337 0043 05       		.byte	0x5
+ 338 0044 B0020000 		.4byte	.LASF4
+ 339 0048 02       		.uleb128 0x2
+ 340 0049 04       		.byte	0x4
+ 341 004a 07       		.byte	0x7
+ 342 004b 89000000 		.4byte	.LASF5
+ 343 004f 02       		.uleb128 0x2
+ 344 0050 08       		.byte	0x8
+ 345 0051 05       		.byte	0x5
+ 346 0052 B7010000 		.4byte	.LASF6
+ 347 0056 02       		.uleb128 0x2
+ 348 0057 08       		.byte	0x8
+ 349 0058 07       		.byte	0x7
+ 350 0059 59000000 		.4byte	.LASF7
+ 351 005d 03       		.uleb128 0x3
+ 352 005e 04       		.byte	0x4
+ 353 005f 05       		.byte	0x5
+ 354 0060 696E7400 		.ascii	"int\000"
+ 355 0064 02       		.uleb128 0x2
+ 356 0065 04       		.byte	0x4
+ 357 0066 07       		.byte	0x7
+ 358 0067 83010000 		.4byte	.LASF8
+ 359 006b 04       		.uleb128 0x4
+ 360 006c A0000000 		.4byte	.LASF9
+ 361 0070 02       		.byte	0x2
+ 362 0071 C2       		.byte	0xc2
+ 363 0072 2C000000 		.4byte	0x2c
+ 364 0076 04       		.uleb128 0x4
+ 365 0077 57010000 		.4byte	.LASF10
+ 366 007b 02       		.byte	0x2
+ 367 007c C3       		.byte	0xc3
+ 368 007d 3A000000 		.4byte	0x3a
+ 369 0081 04       		.uleb128 0x4
+ 370 0082 72010000 		.4byte	.LASF11
+ 371 0086 02       		.byte	0x2
+ 372 0087 C4       		.byte	0xc4
+ 373 0088 48000000 		.4byte	0x48
+ 374 008c 02       		.uleb128 0x2
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 9
+
+
+ 375 008d 04       		.byte	0x4
+ 376 008e 04       		.byte	0x4
+ 377 008f 53000000 		.4byte	.LASF12
+ 378 0093 02       		.uleb128 0x2
+ 379 0094 08       		.byte	0x8
+ 380 0095 04       		.byte	0x4
+ 381 0096 50010000 		.4byte	.LASF13
+ 382 009a 02       		.uleb128 0x2
+ 383 009b 01       		.byte	0x1
+ 384 009c 08       		.byte	0x8
+ 385 009d 90010000 		.4byte	.LASF14
+ 386 00a1 02       		.uleb128 0x2
+ 387 00a2 04       		.byte	0x4
+ 388 00a3 07       		.byte	0x7
+ 389 00a4 AE010000 		.4byte	.LASF15
+ 390 00a8 05       		.uleb128 0x5
+ 391 00a9 34010000 		.4byte	.LASF16
+ 392 00ad 01       		.byte	0x1
+ 393 00ae 12       		.byte	0x12
+ 394 00af 00000000 		.4byte	.LFB35
+ 395 00b3 0A000000 		.4byte	.LFE35-.LFB35
+ 396 00b7 01       		.uleb128 0x1
+ 397 00b8 9C       		.byte	0x9c
+ 398 00b9 CD000000 		.4byte	0xcd
+ 399 00bd 06       		.uleb128 0x6
+ 400 00be 08000000 		.4byte	.LVL0
+ 401 00c2 1C030000 		.4byte	0x31c
+ 402 00c6 07       		.uleb128 0x7
+ 403 00c7 01       		.uleb128 0x1
+ 404 00c8 50       		.byte	0x50
+ 405 00c9 01       		.uleb128 0x1
+ 406 00ca 31       		.byte	0x31
+ 407 00cb 00       		.byte	0
+ 408 00cc 00       		.byte	0
+ 409 00cd 05       		.uleb128 0x5
+ 410 00ce A0010000 		.4byte	.LASF17
+ 411 00d2 01       		.byte	0x1
+ 412 00d3 17       		.byte	0x17
+ 413 00d4 00000000 		.4byte	.LFB36
+ 414 00d8 0A000000 		.4byte	.LFE36-.LFB36
+ 415 00dc 01       		.uleb128 0x1
+ 416 00dd 9C       		.byte	0x9c
+ 417 00de F2000000 		.4byte	0xf2
+ 418 00e2 06       		.uleb128 0x6
+ 419 00e3 08000000 		.4byte	.LVL1
+ 420 00e7 1C030000 		.4byte	0x31c
+ 421 00eb 07       		.uleb128 0x7
+ 422 00ec 01       		.uleb128 0x1
+ 423 00ed 50       		.byte	0x50
+ 424 00ee 01       		.uleb128 0x1
+ 425 00ef 30       		.byte	0x30
+ 426 00f0 00       		.byte	0
+ 427 00f1 00       		.byte	0
+ 428 00f2 05       		.uleb128 0x5
+ 429 00f3 00000000 		.4byte	.LASF18
+ 430 00f7 01       		.byte	0x1
+ 431 00f8 1C       		.byte	0x1c
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 10
+
+
+ 432 00f9 00000000 		.4byte	.LFB37
+ 433 00fd 28000000 		.4byte	.LFE37-.LFB37
+ 434 0101 01       		.uleb128 0x1
+ 435 0102 9C       		.byte	0x9c
+ 436 0103 71010000 		.4byte	0x171
+ 437 0107 08       		.uleb128 0x8
+ 438 0108 06000000 		.4byte	.LVL2
+ 439 010c CD000000 		.4byte	0xcd
+ 440 0110 09       		.uleb128 0x9
+ 441 0111 0C000000 		.4byte	.LVL3
+ 442 0115 2D030000 		.4byte	0x32d
+ 443 0119 24010000 		.4byte	0x124
+ 444 011d 07       		.uleb128 0x7
+ 445 011e 01       		.uleb128 0x1
+ 446 011f 50       		.byte	0x50
+ 447 0120 02       		.uleb128 0x2
+ 448 0121 08       		.byte	0x8
+ 449 0122 32       		.byte	0x32
+ 450 0123 00       		.byte	0
+ 451 0124 09       		.uleb128 0x9
+ 452 0125 12000000 		.4byte	.LVL4
+ 453 0129 3E030000 		.4byte	0x33e
+ 454 012d 37010000 		.4byte	0x137
+ 455 0131 07       		.uleb128 0x7
+ 456 0132 01       		.uleb128 0x1
+ 457 0133 50       		.byte	0x50
+ 458 0134 01       		.uleb128 0x1
+ 459 0135 31       		.byte	0x31
+ 460 0136 00       		.byte	0
+ 461 0137 09       		.uleb128 0x9
+ 462 0138 18000000 		.4byte	.LVL5
+ 463 013c 2D030000 		.4byte	0x32d
+ 464 0140 4B010000 		.4byte	0x14b
+ 465 0144 07       		.uleb128 0x7
+ 466 0145 01       		.uleb128 0x1
+ 467 0146 50       		.byte	0x50
+ 468 0147 02       		.uleb128 0x2
+ 469 0148 08       		.byte	0x8
+ 470 0149 4B       		.byte	0x4b
+ 471 014a 00       		.byte	0
+ 472 014b 09       		.uleb128 0x9
+ 473 014c 1E000000 		.4byte	.LVL6
+ 474 0150 3E030000 		.4byte	0x33e
+ 475 0154 5E010000 		.4byte	0x15e
+ 476 0158 07       		.uleb128 0x7
+ 477 0159 01       		.uleb128 0x1
+ 478 015a 50       		.byte	0x50
+ 479 015b 01       		.uleb128 0x1
+ 480 015c 30       		.byte	0x30
+ 481 015d 00       		.byte	0
+ 482 015e 08       		.uleb128 0x8
+ 483 015f 22000000 		.4byte	.LVL7
+ 484 0163 A8000000 		.4byte	0xa8
+ 485 0167 08       		.uleb128 0x8
+ 486 0168 26000000 		.4byte	.LVL8
+ 487 016c CD000000 		.4byte	0xcd
+ 488 0170 00       		.byte	0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 11
+
+
+ 489 0171 0A       		.uleb128 0xa
+ 490 0172 09000000 		.4byte	.LASF24
+ 491 0176 01       		.byte	0x1
+ 492 0177 26       		.byte	0x26
+ 493 0178 81000000 		.4byte	0x81
+ 494 017c 00000000 		.4byte	.LFB38
+ 495 0180 12000000 		.4byte	.LFE38-.LFB38
+ 496 0184 01       		.uleb128 0x1
+ 497 0185 9C       		.byte	0x9c
+ 498 0186 CC010000 		.4byte	0x1cc
+ 499 018a 0B       		.uleb128 0xb
+ 500 018b 3A000000 		.4byte	.LASF20
+ 501 018f 01       		.byte	0x1
+ 502 0190 26       		.byte	0x26
+ 503 0191 6B000000 		.4byte	0x6b
+ 504 0195 00000000 		.4byte	.LLST0
+ 505 0199 0C       		.uleb128 0xc
+ 506 019a 70000000 		.4byte	.LASF22
+ 507 019e 01       		.byte	0x1
+ 508 019f 29       		.byte	0x29
+ 509 01a0 81000000 		.4byte	0x81
+ 510 01a4 01       		.uleb128 0x1
+ 511 01a5 50       		.byte	0x50
+ 512 01a6 08       		.uleb128 0x8
+ 513 01a7 06000000 		.4byte	.LVL10
+ 514 01ab 4F030000 		.4byte	0x34f
+ 515 01af 09       		.uleb128 0x9
+ 516 01b0 0C000000 		.4byte	.LVL11
+ 517 01b4 2D030000 		.4byte	0x32d
+ 518 01b8 C2010000 		.4byte	0x1c2
+ 519 01bc 07       		.uleb128 0x7
+ 520 01bd 01       		.uleb128 0x1
+ 521 01be 50       		.byte	0x50
+ 522 01bf 01       		.uleb128 0x1
+ 523 01c0 36       		.byte	0x36
+ 524 01c1 00       		.byte	0
+ 525 01c2 08       		.uleb128 0x8
+ 526 01c3 10000000 		.4byte	.LVL12
+ 527 01c7 61030000 		.4byte	0x361
+ 528 01cb 00       		.byte	0
+ 529 01cc 05       		.uleb128 0x5
+ 530 01cd 70020000 		.4byte	.LASF19
+ 531 01d1 01       		.byte	0x1
+ 532 01d2 2E       		.byte	0x2e
+ 533 01d3 00000000 		.4byte	.LFB39
+ 534 01d7 2C000000 		.4byte	.LFE39-.LFB39
+ 535 01db 01       		.uleb128 0x1
+ 536 01dc 9C       		.byte	0x9c
+ 537 01dd 12020000 		.4byte	0x212
+ 538 01e1 0B       		.uleb128 0xb
+ 539 01e2 89020000 		.4byte	.LASF21
+ 540 01e6 01       		.byte	0x1
+ 541 01e7 2E       		.byte	0x2e
+ 542 01e8 6B000000 		.4byte	0x6b
+ 543 01ec 21000000 		.4byte	.LLST1
+ 544 01f0 0D       		.uleb128 0xd
+ 545 01f1 9B000000 		.4byte	.LASF23
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 12
+
+
+ 546 01f5 01       		.byte	0x1
+ 547 01f6 2F       		.byte	0x2f
+ 548 01f7 6B000000 		.4byte	0x6b
+ 549 01fb 6E000000 		.4byte	.LLST2
+ 550 01ff 08       		.uleb128 0x8
+ 551 0200 14000000 		.4byte	.LVL18
+ 552 0204 6D030000 		.4byte	0x36d
+ 553 0208 08       		.uleb128 0x8
+ 554 0209 2A000000 		.4byte	.LVL23
+ 555 020d 6D030000 		.4byte	0x36d
+ 556 0211 00       		.byte	0
+ 557 0212 0A       		.uleb128 0xa
+ 558 0213 95010000 		.4byte	.LASF25
+ 559 0217 01       		.byte	0x1
+ 560 0218 3D       		.byte	0x3d
+ 561 0219 6B000000 		.4byte	0x6b
+ 562 021d 00000000 		.4byte	.LFB40
+ 563 0221 26000000 		.4byte	.LFE40-.LFB40
+ 564 0225 01       		.uleb128 0x1
+ 565 0226 9C       		.byte	0x9c
+ 566 0227 97020000 		.4byte	0x297
+ 567 022b 0B       		.uleb128 0xb
+ 568 022c 3A000000 		.4byte	.LASF20
+ 569 0230 01       		.byte	0x1
+ 570 0231 3D       		.byte	0x3d
+ 571 0232 6B000000 		.4byte	0x6b
+ 572 0236 81000000 		.4byte	.LLST3
+ 573 023a 0D       		.uleb128 0xd
+ 574 023b E7020000 		.4byte	.LASF26
+ 575 023f 01       		.byte	0x1
+ 576 0240 3E       		.byte	0x3e
+ 577 0241 6B000000 		.4byte	0x6b
+ 578 0245 9F000000 		.4byte	.LLST4
+ 579 0249 08       		.uleb128 0x8
+ 580 024a 0A000000 		.4byte	.LVL27
+ 581 024e CD000000 		.4byte	0xcd
+ 582 0252 09       		.uleb128 0x9
+ 583 0253 10000000 		.4byte	.LVL28
+ 584 0257 71010000 		.4byte	0x171
+ 585 025b 66020000 		.4byte	0x266
+ 586 025f 07       		.uleb128 0x7
+ 587 0260 01       		.uleb128 0x1
+ 588 0261 50       		.byte	0x50
+ 589 0262 02       		.uleb128 0x2
+ 590 0263 74       		.byte	0x74
+ 591 0264 00       		.sleb128 0
+ 592 0265 00       		.byte	0
+ 593 0266 09       		.uleb128 0x9
+ 594 0267 16000000 		.4byte	.LVL29
+ 595 026b 2D030000 		.4byte	0x32d
+ 596 026f 7A020000 		.4byte	0x27a
+ 597 0273 07       		.uleb128 0x7
+ 598 0274 01       		.uleb128 0x1
+ 599 0275 50       		.byte	0x50
+ 600 0276 02       		.uleb128 0x2
+ 601 0277 08       		.byte	0x8
+ 602 0278 32       		.byte	0x32
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 13
+
+
+ 603 0279 00       		.byte	0
+ 604 027a 09       		.uleb128 0x9
+ 605 027b 1C000000 		.4byte	.LVL30
+ 606 027f 71010000 		.4byte	0x171
+ 607 0283 8D020000 		.4byte	0x28d
+ 608 0287 07       		.uleb128 0x7
+ 609 0288 01       		.uleb128 0x1
+ 610 0289 50       		.byte	0x50
+ 611 028a 01       		.uleb128 0x1
+ 612 028b 30       		.byte	0x30
+ 613 028c 00       		.byte	0
+ 614 028d 08       		.uleb128 0x8
+ 615 028e 22000000 		.4byte	.LVL32
+ 616 0292 A8000000 		.4byte	0xa8
+ 617 0296 00       		.byte	0
+ 618 0297 05       		.uleb128 0x5
+ 619 0298 47000000 		.4byte	.LASF27
+ 620 029c 01       		.byte	0x1
+ 621 029d 4C       		.byte	0x4c
+ 622 029e 00000000 		.4byte	.LFB41
+ 623 02a2 24000000 		.4byte	.LFE41-.LFB41
+ 624 02a6 01       		.uleb128 0x1
+ 625 02a7 9C       		.byte	0x9c
+ 626 02a8 1C030000 		.4byte	0x31c
+ 627 02ac 0B       		.uleb128 0xb
+ 628 02ad 3A000000 		.4byte	.LASF20
+ 629 02b1 01       		.byte	0x1
+ 630 02b2 4C       		.byte	0x4c
+ 631 02b3 6B000000 		.4byte	0x6b
+ 632 02b7 C9000000 		.4byte	.LLST5
+ 633 02bb 0B       		.uleb128 0xb
+ 634 02bc 79010000 		.4byte	.LASF28
+ 635 02c0 01       		.byte	0x1
+ 636 02c1 4C       		.byte	0x4c
+ 637 02c2 6B000000 		.4byte	0x6b
+ 638 02c6 EA000000 		.4byte	.LLST6
+ 639 02ca 08       		.uleb128 0x8
+ 640 02cb 0A000000 		.4byte	.LVL35
+ 641 02cf CD000000 		.4byte	0xcd
+ 642 02d3 09       		.uleb128 0x9
+ 643 02d4 12000000 		.4byte	.LVL36
+ 644 02d8 71010000 		.4byte	0x171
+ 645 02dc EA020000 		.4byte	0x2ea
+ 646 02e0 07       		.uleb128 0x7
+ 647 02e1 01       		.uleb128 0x1
+ 648 02e2 50       		.byte	0x50
+ 649 02e3 05       		.uleb128 0x5
+ 650 02e4 75       		.byte	0x75
+ 651 02e5 00       		.sleb128 0
+ 652 02e6 08       		.byte	0x8
+ 653 02e7 80       		.byte	0x80
+ 654 02e8 21       		.byte	0x21
+ 655 02e9 00       		.byte	0
+ 656 02ea 09       		.uleb128 0x9
+ 657 02eb 18000000 		.4byte	.LVL37
+ 658 02ef 2D030000 		.4byte	0x32d
+ 659 02f3 FE020000 		.4byte	0x2fe
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 14
+
+
+ 660 02f7 07       		.uleb128 0x7
+ 661 02f8 01       		.uleb128 0x1
+ 662 02f9 50       		.byte	0x50
+ 663 02fa 02       		.uleb128 0x2
+ 664 02fb 08       		.byte	0x8
+ 665 02fc 32       		.byte	0x32
+ 666 02fd 00       		.byte	0
+ 667 02fe 09       		.uleb128 0x9
+ 668 02ff 1E000000 		.4byte	.LVL38
+ 669 0303 71010000 		.4byte	0x171
+ 670 0307 12030000 		.4byte	0x312
+ 671 030b 07       		.uleb128 0x7
+ 672 030c 01       		.uleb128 0x1
+ 673 030d 50       		.byte	0x50
+ 674 030e 02       		.uleb128 0x2
+ 675 030f 74       		.byte	0x74
+ 676 0310 00       		.sleb128 0
+ 677 0311 00       		.byte	0
+ 678 0312 08       		.uleb128 0x8
+ 679 0313 22000000 		.4byte	.LVL39
+ 680 0317 A8000000 		.4byte	0xa8
+ 681 031b 00       		.byte	0
+ 682 031c 0E       		.uleb128 0xe
+ 683 031d 19000000 		.4byte	.LASF29
+ 684 0321 03       		.byte	0x3
+ 685 0322 1D       		.byte	0x1d
+ 686 0323 2D030000 		.4byte	0x32d
+ 687 0327 0F       		.uleb128 0xf
+ 688 0328 6B000000 		.4byte	0x6b
+ 689 032c 00       		.byte	0
+ 690 032d 0E       		.uleb128 0xe
+ 691 032e 68010000 		.4byte	.LASF30
+ 692 0332 04       		.byte	0x4
+ 693 0333 58       		.byte	0x58
+ 694 0334 3E030000 		.4byte	0x33e
+ 695 0338 0F       		.uleb128 0xf
+ 696 0339 76000000 		.4byte	0x76
+ 697 033d 00       		.byte	0
+ 698 033e 0E       		.uleb128 0xe
+ 699 033f 44010000 		.4byte	.LASF31
+ 700 0343 05       		.byte	0x5
+ 701 0344 1D       		.byte	0x1d
+ 702 0345 4F030000 		.4byte	0x34f
+ 703 0349 0F       		.uleb128 0xf
+ 704 034a 6B000000 		.4byte	0x6b
+ 705 034e 00       		.byte	0
+ 706 034f 10       		.uleb128 0x10
+ 707 0350 92020000 		.4byte	.LASF32
+ 708 0354 06       		.byte	0x6
+ 709 0355 8C01     		.2byte	0x18c
+ 710 0357 61030000 		.4byte	0x361
+ 711 035b 0F       		.uleb128 0xf
+ 712 035c 81000000 		.4byte	0x81
+ 713 0360 00       		.byte	0
+ 714 0361 11       		.uleb128 0x11
+ 715 0362 C5010000 		.4byte	.LASF36
+ 716 0366 06       		.byte	0x6
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 15
+
+
+ 717 0367 8501     		.2byte	0x185
+ 718 0369 81000000 		.4byte	0x81
+ 719 036d 12       		.uleb128 0x12
+ 720 036e 22000000 		.4byte	.LASF37
+ 721 0372 07       		.byte	0x7
+ 722 0373 8C01     		.2byte	0x18c
+ 723 0375 0F       		.uleb128 0xf
+ 724 0376 81000000 		.4byte	0x81
+ 725 037a 00       		.byte	0
+ 726 037b 00       		.byte	0
+ 727              		.section	.debug_abbrev,"",%progbits
+ 728              	.Ldebug_abbrev0:
+ 729 0000 01       		.uleb128 0x1
+ 730 0001 11       		.uleb128 0x11
+ 731 0002 01       		.byte	0x1
+ 732 0003 25       		.uleb128 0x25
+ 733 0004 0E       		.uleb128 0xe
+ 734 0005 13       		.uleb128 0x13
+ 735 0006 0B       		.uleb128 0xb
+ 736 0007 03       		.uleb128 0x3
+ 737 0008 0E       		.uleb128 0xe
+ 738 0009 1B       		.uleb128 0x1b
+ 739 000a 0E       		.uleb128 0xe
+ 740 000b 55       		.uleb128 0x55
+ 741 000c 17       		.uleb128 0x17
+ 742 000d 11       		.uleb128 0x11
+ 743 000e 01       		.uleb128 0x1
+ 744 000f 10       		.uleb128 0x10
+ 745 0010 17       		.uleb128 0x17
+ 746 0011 00       		.byte	0
+ 747 0012 00       		.byte	0
+ 748 0013 02       		.uleb128 0x2
+ 749 0014 24       		.uleb128 0x24
+ 750 0015 00       		.byte	0
+ 751 0016 0B       		.uleb128 0xb
+ 752 0017 0B       		.uleb128 0xb
+ 753 0018 3E       		.uleb128 0x3e
+ 754 0019 0B       		.uleb128 0xb
+ 755 001a 03       		.uleb128 0x3
+ 756 001b 0E       		.uleb128 0xe
+ 757 001c 00       		.byte	0
+ 758 001d 00       		.byte	0
+ 759 001e 03       		.uleb128 0x3
+ 760 001f 24       		.uleb128 0x24
+ 761 0020 00       		.byte	0
+ 762 0021 0B       		.uleb128 0xb
+ 763 0022 0B       		.uleb128 0xb
+ 764 0023 3E       		.uleb128 0x3e
+ 765 0024 0B       		.uleb128 0xb
+ 766 0025 03       		.uleb128 0x3
+ 767 0026 08       		.uleb128 0x8
+ 768 0027 00       		.byte	0
+ 769 0028 00       		.byte	0
+ 770 0029 04       		.uleb128 0x4
+ 771 002a 16       		.uleb128 0x16
+ 772 002b 00       		.byte	0
+ 773 002c 03       		.uleb128 0x3
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 16
+
+
+ 774 002d 0E       		.uleb128 0xe
+ 775 002e 3A       		.uleb128 0x3a
+ 776 002f 0B       		.uleb128 0xb
+ 777 0030 3B       		.uleb128 0x3b
+ 778 0031 0B       		.uleb128 0xb
+ 779 0032 49       		.uleb128 0x49
+ 780 0033 13       		.uleb128 0x13
+ 781 0034 00       		.byte	0
+ 782 0035 00       		.byte	0
+ 783 0036 05       		.uleb128 0x5
+ 784 0037 2E       		.uleb128 0x2e
+ 785 0038 01       		.byte	0x1
+ 786 0039 3F       		.uleb128 0x3f
+ 787 003a 19       		.uleb128 0x19
+ 788 003b 03       		.uleb128 0x3
+ 789 003c 0E       		.uleb128 0xe
+ 790 003d 3A       		.uleb128 0x3a
+ 791 003e 0B       		.uleb128 0xb
+ 792 003f 3B       		.uleb128 0x3b
+ 793 0040 0B       		.uleb128 0xb
+ 794 0041 27       		.uleb128 0x27
+ 795 0042 19       		.uleb128 0x19
+ 796 0043 11       		.uleb128 0x11
+ 797 0044 01       		.uleb128 0x1
+ 798 0045 12       		.uleb128 0x12
+ 799 0046 06       		.uleb128 0x6
+ 800 0047 40       		.uleb128 0x40
+ 801 0048 18       		.uleb128 0x18
+ 802 0049 9742     		.uleb128 0x2117
+ 803 004b 19       		.uleb128 0x19
+ 804 004c 01       		.uleb128 0x1
+ 805 004d 13       		.uleb128 0x13
+ 806 004e 00       		.byte	0
+ 807 004f 00       		.byte	0
+ 808 0050 06       		.uleb128 0x6
+ 809 0051 898201   		.uleb128 0x4109
+ 810 0054 01       		.byte	0x1
+ 811 0055 11       		.uleb128 0x11
+ 812 0056 01       		.uleb128 0x1
+ 813 0057 31       		.uleb128 0x31
+ 814 0058 13       		.uleb128 0x13
+ 815 0059 00       		.byte	0
+ 816 005a 00       		.byte	0
+ 817 005b 07       		.uleb128 0x7
+ 818 005c 8A8201   		.uleb128 0x410a
+ 819 005f 00       		.byte	0
+ 820 0060 02       		.uleb128 0x2
+ 821 0061 18       		.uleb128 0x18
+ 822 0062 9142     		.uleb128 0x2111
+ 823 0064 18       		.uleb128 0x18
+ 824 0065 00       		.byte	0
+ 825 0066 00       		.byte	0
+ 826 0067 08       		.uleb128 0x8
+ 827 0068 898201   		.uleb128 0x4109
+ 828 006b 00       		.byte	0
+ 829 006c 11       		.uleb128 0x11
+ 830 006d 01       		.uleb128 0x1
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 17
+
+
+ 831 006e 31       		.uleb128 0x31
+ 832 006f 13       		.uleb128 0x13
+ 833 0070 00       		.byte	0
+ 834 0071 00       		.byte	0
+ 835 0072 09       		.uleb128 0x9
+ 836 0073 898201   		.uleb128 0x4109
+ 837 0076 01       		.byte	0x1
+ 838 0077 11       		.uleb128 0x11
+ 839 0078 01       		.uleb128 0x1
+ 840 0079 31       		.uleb128 0x31
+ 841 007a 13       		.uleb128 0x13
+ 842 007b 01       		.uleb128 0x1
+ 843 007c 13       		.uleb128 0x13
+ 844 007d 00       		.byte	0
+ 845 007e 00       		.byte	0
+ 846 007f 0A       		.uleb128 0xa
+ 847 0080 2E       		.uleb128 0x2e
+ 848 0081 01       		.byte	0x1
+ 849 0082 3F       		.uleb128 0x3f
+ 850 0083 19       		.uleb128 0x19
+ 851 0084 03       		.uleb128 0x3
+ 852 0085 0E       		.uleb128 0xe
+ 853 0086 3A       		.uleb128 0x3a
+ 854 0087 0B       		.uleb128 0xb
+ 855 0088 3B       		.uleb128 0x3b
+ 856 0089 0B       		.uleb128 0xb
+ 857 008a 27       		.uleb128 0x27
+ 858 008b 19       		.uleb128 0x19
+ 859 008c 49       		.uleb128 0x49
+ 860 008d 13       		.uleb128 0x13
+ 861 008e 11       		.uleb128 0x11
+ 862 008f 01       		.uleb128 0x1
+ 863 0090 12       		.uleb128 0x12
+ 864 0091 06       		.uleb128 0x6
+ 865 0092 40       		.uleb128 0x40
+ 866 0093 18       		.uleb128 0x18
+ 867 0094 9742     		.uleb128 0x2117
+ 868 0096 19       		.uleb128 0x19
+ 869 0097 01       		.uleb128 0x1
+ 870 0098 13       		.uleb128 0x13
+ 871 0099 00       		.byte	0
+ 872 009a 00       		.byte	0
+ 873 009b 0B       		.uleb128 0xb
+ 874 009c 05       		.uleb128 0x5
+ 875 009d 00       		.byte	0
+ 876 009e 03       		.uleb128 0x3
+ 877 009f 0E       		.uleb128 0xe
+ 878 00a0 3A       		.uleb128 0x3a
+ 879 00a1 0B       		.uleb128 0xb
+ 880 00a2 3B       		.uleb128 0x3b
+ 881 00a3 0B       		.uleb128 0xb
+ 882 00a4 49       		.uleb128 0x49
+ 883 00a5 13       		.uleb128 0x13
+ 884 00a6 02       		.uleb128 0x2
+ 885 00a7 17       		.uleb128 0x17
+ 886 00a8 00       		.byte	0
+ 887 00a9 00       		.byte	0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 18
+
+
+ 888 00aa 0C       		.uleb128 0xc
+ 889 00ab 34       		.uleb128 0x34
+ 890 00ac 00       		.byte	0
+ 891 00ad 03       		.uleb128 0x3
+ 892 00ae 0E       		.uleb128 0xe
+ 893 00af 3A       		.uleb128 0x3a
+ 894 00b0 0B       		.uleb128 0xb
+ 895 00b1 3B       		.uleb128 0x3b
+ 896 00b2 0B       		.uleb128 0xb
+ 897 00b3 49       		.uleb128 0x49
+ 898 00b4 13       		.uleb128 0x13
+ 899 00b5 02       		.uleb128 0x2
+ 900 00b6 18       		.uleb128 0x18
+ 901 00b7 00       		.byte	0
+ 902 00b8 00       		.byte	0
+ 903 00b9 0D       		.uleb128 0xd
+ 904 00ba 34       		.uleb128 0x34
+ 905 00bb 00       		.byte	0
+ 906 00bc 03       		.uleb128 0x3
+ 907 00bd 0E       		.uleb128 0xe
+ 908 00be 3A       		.uleb128 0x3a
+ 909 00bf 0B       		.uleb128 0xb
+ 910 00c0 3B       		.uleb128 0x3b
+ 911 00c1 0B       		.uleb128 0xb
+ 912 00c2 49       		.uleb128 0x49
+ 913 00c3 13       		.uleb128 0x13
+ 914 00c4 02       		.uleb128 0x2
+ 915 00c5 17       		.uleb128 0x17
+ 916 00c6 00       		.byte	0
+ 917 00c7 00       		.byte	0
+ 918 00c8 0E       		.uleb128 0xe
+ 919 00c9 2E       		.uleb128 0x2e
+ 920 00ca 01       		.byte	0x1
+ 921 00cb 3F       		.uleb128 0x3f
+ 922 00cc 19       		.uleb128 0x19
+ 923 00cd 03       		.uleb128 0x3
+ 924 00ce 0E       		.uleb128 0xe
+ 925 00cf 3A       		.uleb128 0x3a
+ 926 00d0 0B       		.uleb128 0xb
+ 927 00d1 3B       		.uleb128 0x3b
+ 928 00d2 0B       		.uleb128 0xb
+ 929 00d3 27       		.uleb128 0x27
+ 930 00d4 19       		.uleb128 0x19
+ 931 00d5 3C       		.uleb128 0x3c
+ 932 00d6 19       		.uleb128 0x19
+ 933 00d7 01       		.uleb128 0x1
+ 934 00d8 13       		.uleb128 0x13
+ 935 00d9 00       		.byte	0
+ 936 00da 00       		.byte	0
+ 937 00db 0F       		.uleb128 0xf
+ 938 00dc 05       		.uleb128 0x5
+ 939 00dd 00       		.byte	0
+ 940 00de 49       		.uleb128 0x49
+ 941 00df 13       		.uleb128 0x13
+ 942 00e0 00       		.byte	0
+ 943 00e1 00       		.byte	0
+ 944 00e2 10       		.uleb128 0x10
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 19
+
+
+ 945 00e3 2E       		.uleb128 0x2e
+ 946 00e4 01       		.byte	0x1
+ 947 00e5 3F       		.uleb128 0x3f
+ 948 00e6 19       		.uleb128 0x19
+ 949 00e7 03       		.uleb128 0x3
+ 950 00e8 0E       		.uleb128 0xe
+ 951 00e9 3A       		.uleb128 0x3a
+ 952 00ea 0B       		.uleb128 0xb
+ 953 00eb 3B       		.uleb128 0x3b
+ 954 00ec 05       		.uleb128 0x5
+ 955 00ed 27       		.uleb128 0x27
+ 956 00ee 19       		.uleb128 0x19
+ 957 00ef 3C       		.uleb128 0x3c
+ 958 00f0 19       		.uleb128 0x19
+ 959 00f1 01       		.uleb128 0x1
+ 960 00f2 13       		.uleb128 0x13
+ 961 00f3 00       		.byte	0
+ 962 00f4 00       		.byte	0
+ 963 00f5 11       		.uleb128 0x11
+ 964 00f6 2E       		.uleb128 0x2e
+ 965 00f7 00       		.byte	0
+ 966 00f8 3F       		.uleb128 0x3f
+ 967 00f9 19       		.uleb128 0x19
+ 968 00fa 03       		.uleb128 0x3
+ 969 00fb 0E       		.uleb128 0xe
+ 970 00fc 3A       		.uleb128 0x3a
+ 971 00fd 0B       		.uleb128 0xb
+ 972 00fe 3B       		.uleb128 0x3b
+ 973 00ff 05       		.uleb128 0x5
+ 974 0100 27       		.uleb128 0x27
+ 975 0101 19       		.uleb128 0x19
+ 976 0102 49       		.uleb128 0x49
+ 977 0103 13       		.uleb128 0x13
+ 978 0104 3C       		.uleb128 0x3c
+ 979 0105 19       		.uleb128 0x19
+ 980 0106 00       		.byte	0
+ 981 0107 00       		.byte	0
+ 982 0108 12       		.uleb128 0x12
+ 983 0109 2E       		.uleb128 0x2e
+ 984 010a 01       		.byte	0x1
+ 985 010b 3F       		.uleb128 0x3f
+ 986 010c 19       		.uleb128 0x19
+ 987 010d 03       		.uleb128 0x3
+ 988 010e 0E       		.uleb128 0xe
+ 989 010f 3A       		.uleb128 0x3a
+ 990 0110 0B       		.uleb128 0xb
+ 991 0111 3B       		.uleb128 0x3b
+ 992 0112 05       		.uleb128 0x5
+ 993 0113 27       		.uleb128 0x27
+ 994 0114 19       		.uleb128 0x19
+ 995 0115 3C       		.uleb128 0x3c
+ 996 0116 19       		.uleb128 0x19
+ 997 0117 00       		.byte	0
+ 998 0118 00       		.byte	0
+ 999 0119 00       		.byte	0
+ 1000              		.section	.debug_loc,"",%progbits
+ 1001              	.Ldebug_loc0:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 20
+
+
+ 1002              	.LLST0:
+ 1003 0000 00000000 		.4byte	.LVL9
+ 1004 0004 05000000 		.4byte	.LVL10-1
+ 1005 0008 0100     		.2byte	0x1
+ 1006 000a 50       		.byte	0x50
+ 1007 000b 05000000 		.4byte	.LVL10-1
+ 1008 000f 12000000 		.4byte	.LFE38
+ 1009 0013 0400     		.2byte	0x4
+ 1010 0015 F3       		.byte	0xf3
+ 1011 0016 01       		.uleb128 0x1
+ 1012 0017 50       		.byte	0x50
+ 1013 0018 9F       		.byte	0x9f
+ 1014 0019 00000000 		.4byte	0
+ 1015 001d 00000000 		.4byte	0
+ 1016              	.LLST1:
+ 1017 0021 00000000 		.4byte	.LVL13
+ 1018 0025 06000000 		.4byte	.LVL15
+ 1019 0029 0100     		.2byte	0x1
+ 1020 002b 50       		.byte	0x50
+ 1021 002c 06000000 		.4byte	.LVL15
+ 1022 0030 18000000 		.4byte	.LVL19
+ 1023 0034 0400     		.2byte	0x4
+ 1024 0036 F3       		.byte	0xf3
+ 1025 0037 01       		.uleb128 0x1
+ 1026 0038 50       		.byte	0x50
+ 1027 0039 9F       		.byte	0x9f
+ 1028 003a 18000000 		.4byte	.LVL19
+ 1029 003e 20000000 		.4byte	.LVL20
+ 1030 0042 0100     		.2byte	0x1
+ 1031 0044 54       		.byte	0x54
+ 1032 0045 20000000 		.4byte	.LVL20
+ 1033 0049 22000000 		.4byte	.LVL21
+ 1034 004d 0100     		.2byte	0x1
+ 1035 004f 50       		.byte	0x50
+ 1036 0050 22000000 		.4byte	.LVL21
+ 1037 0054 26000000 		.4byte	.LVL22
+ 1038 0058 0100     		.2byte	0x1
+ 1039 005a 54       		.byte	0x54
+ 1040 005b 26000000 		.4byte	.LVL22
+ 1041 005f 29000000 		.4byte	.LVL23-1
+ 1042 0063 0100     		.2byte	0x1
+ 1043 0065 50       		.byte	0x50
+ 1044 0066 00000000 		.4byte	0
+ 1045 006a 00000000 		.4byte	0
+ 1046              	.LLST2:
+ 1047 006e 04000000 		.4byte	.LVL14
+ 1048 0072 13000000 		.4byte	.LVL18-1
+ 1049 0076 0100     		.2byte	0x1
+ 1050 0078 50       		.byte	0x50
+ 1051 0079 00000000 		.4byte	0
+ 1052 007d 00000000 		.4byte	0
+ 1053              	.LLST3:
+ 1054 0081 00000000 		.4byte	.LVL24
+ 1055 0085 06000000 		.4byte	.LVL26
+ 1056 0089 0100     		.2byte	0x1
+ 1057 008b 50       		.byte	0x50
+ 1058 008c 06000000 		.4byte	.LVL26
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 21
+
+
+ 1059 0090 1E000000 		.4byte	.LVL31
+ 1060 0094 0100     		.2byte	0x1
+ 1061 0096 54       		.byte	0x54
+ 1062 0097 00000000 		.4byte	0
+ 1063 009b 00000000 		.4byte	0
+ 1064              	.LLST4:
+ 1065 009f 02000000 		.4byte	.LVL25
+ 1066 00a3 1E000000 		.4byte	.LVL31
+ 1067 00a7 0200     		.2byte	0x2
+ 1068 00a9 30       		.byte	0x30
+ 1069 00aa 9F       		.byte	0x9f
+ 1070 00ab 1E000000 		.4byte	.LVL31
+ 1071 00af 24000000 		.4byte	.LVL33
+ 1072 00b3 0100     		.2byte	0x1
+ 1073 00b5 54       		.byte	0x54
+ 1074 00b6 24000000 		.4byte	.LVL33
+ 1075 00ba 26000000 		.4byte	.LFE40
+ 1076 00be 0100     		.2byte	0x1
+ 1077 00c0 50       		.byte	0x50
+ 1078 00c1 00000000 		.4byte	0
+ 1079 00c5 00000000 		.4byte	0
+ 1080              	.LLST5:
+ 1081 00c9 00000000 		.4byte	.LVL34
+ 1082 00cd 09000000 		.4byte	.LVL35-1
+ 1083 00d1 0100     		.2byte	0x1
+ 1084 00d3 50       		.byte	0x50
+ 1085 00d4 09000000 		.4byte	.LVL35-1
+ 1086 00d8 24000000 		.4byte	.LFE41
+ 1087 00dc 0400     		.2byte	0x4
+ 1088 00de F3       		.byte	0xf3
+ 1089 00df 01       		.uleb128 0x1
+ 1090 00e0 50       		.byte	0x50
+ 1091 00e1 9F       		.byte	0x9f
+ 1092 00e2 00000000 		.4byte	0
+ 1093 00e6 00000000 		.4byte	0
+ 1094              	.LLST6:
+ 1095 00ea 00000000 		.4byte	.LVL34
+ 1096 00ee 09000000 		.4byte	.LVL35-1
+ 1097 00f2 0100     		.2byte	0x1
+ 1098 00f4 51       		.byte	0x51
+ 1099 00f5 09000000 		.4byte	.LVL35-1
+ 1100 00f9 24000000 		.4byte	.LFE41
+ 1101 00fd 0400     		.2byte	0x4
+ 1102 00ff F3       		.byte	0xf3
+ 1103 0100 01       		.uleb128 0x1
+ 1104 0101 51       		.byte	0x51
+ 1105 0102 9F       		.byte	0x9f
+ 1106 0103 00000000 		.4byte	0
+ 1107 0107 00000000 		.4byte	0
+ 1108              		.section	.debug_aranges,"",%progbits
+ 1109 0000 4C000000 		.4byte	0x4c
+ 1110 0004 0200     		.2byte	0x2
+ 1111 0006 00000000 		.4byte	.Ldebug_info0
+ 1112 000a 04       		.byte	0x4
+ 1113 000b 00       		.byte	0
+ 1114 000c 0000     		.2byte	0
+ 1115 000e 0000     		.2byte	0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 22
+
+
+ 1116 0010 00000000 		.4byte	.LFB35
+ 1117 0014 0A000000 		.4byte	.LFE35-.LFB35
+ 1118 0018 00000000 		.4byte	.LFB36
+ 1119 001c 0A000000 		.4byte	.LFE36-.LFB36
+ 1120 0020 00000000 		.4byte	.LFB37
+ 1121 0024 28000000 		.4byte	.LFE37-.LFB37
+ 1122 0028 00000000 		.4byte	.LFB38
+ 1123 002c 12000000 		.4byte	.LFE38-.LFB38
+ 1124 0030 00000000 		.4byte	.LFB39
+ 1125 0034 2C000000 		.4byte	.LFE39-.LFB39
+ 1126 0038 00000000 		.4byte	.LFB40
+ 1127 003c 26000000 		.4byte	.LFE40-.LFB40
+ 1128 0040 00000000 		.4byte	.LFB41
+ 1129 0044 24000000 		.4byte	.LFE41-.LFB41
+ 1130 0048 00000000 		.4byte	0
+ 1131 004c 00000000 		.4byte	0
+ 1132              		.section	.debug_ranges,"",%progbits
+ 1133              	.Ldebug_ranges0:
+ 1134 0000 00000000 		.4byte	.LFB35
+ 1135 0004 0A000000 		.4byte	.LFE35
+ 1136 0008 00000000 		.4byte	.LFB36
+ 1137 000c 0A000000 		.4byte	.LFE36
+ 1138 0010 00000000 		.4byte	.LFB37
+ 1139 0014 28000000 		.4byte	.LFE37
+ 1140 0018 00000000 		.4byte	.LFB38
+ 1141 001c 12000000 		.4byte	.LFE38
+ 1142 0020 00000000 		.4byte	.LFB39
+ 1143 0024 2C000000 		.4byte	.LFE39
+ 1144 0028 00000000 		.4byte	.LFB40
+ 1145 002c 26000000 		.4byte	.LFE40
+ 1146 0030 00000000 		.4byte	.LFB41
+ 1147 0034 24000000 		.4byte	.LFE41
+ 1148 0038 00000000 		.4byte	0
+ 1149 003c 00000000 		.4byte	0
+ 1150              		.section	.debug_line,"",%progbits
+ 1151              	.Ldebug_line0:
+ 1152 0000 37010000 		.section	.debug_str,"MS",%progbits,1
+ 1152      02009300 
+ 1152      00000201 
+ 1152      FB0E0D00 
+ 1152      01010101 
+ 1153              	.LASF18:
+ 1154 0000 53656E52 		.ascii	"SenReset\000"
+ 1154      65736574 
+ 1154      00
+ 1155              	.LASF24:
+ 1156 0009 53656E53 		.ascii	"SenSPI_Transfer\000"
+ 1156      50495F54 
+ 1156      72616E73 
+ 1156      66657200 
+ 1157              	.LASF29:
+ 1158 0019 53535F57 		.ascii	"SS_Write\000"
+ 1158      72697465 
+ 1158      00
+ 1159              	.LASF37:
+ 1160 0022 55415254 		.ascii	"UART_SpiUartWriteTxData\000"
+ 1160      5F537069 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 23
+
+
+ 1160      55617274 
+ 1160      57726974 
+ 1160      65547844 
+ 1161              	.LASF20:
+ 1162 003a 66697865 		.ascii	"fixedAddress\000"
+ 1162      64416464 
+ 1162      72657373 
+ 1162      00
+ 1163              	.LASF27:
+ 1164 0047 53656E57 		.ascii	"SenWriteReg\000"
+ 1164      72697465 
+ 1164      52656700 
+ 1165              	.LASF12:
+ 1166 0053 666C6F61 		.ascii	"float\000"
+ 1166      7400
+ 1167              	.LASF7:
+ 1168 0059 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1168      206C6F6E 
+ 1168      6720756E 
+ 1168      7369676E 
+ 1168      65642069 
+ 1169              	.LASF22:
+ 1170 0070 72656164 		.ascii	"readBuffer\000"
+ 1170      42756666 
+ 1170      657200
+ 1171              	.LASF1:
+ 1172 007b 756E7369 		.ascii	"unsigned char\000"
+ 1172      676E6564 
+ 1172      20636861 
+ 1172      7200
+ 1173              	.LASF5:
+ 1174 0089 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1174      20756E73 
+ 1174      69676E65 
+ 1174      6420696E 
+ 1174      7400
+ 1175              	.LASF23:
+ 1176 009b 74656D70 		.ascii	"temp\000"
+ 1176      00
+ 1177              	.LASF9:
+ 1178 00a0 75696E74 		.ascii	"uint8\000"
+ 1178      3800
+ 1179              	.LASF35:
+ 1180 00a6 433A5C55 		.ascii	"C:\\Users\\liziy\\Desktop\\62_SenBlePSoC_AbandonSer"
+ 1180      73657273 
+ 1180      5C6C697A 
+ 1180      69795C44 
+ 1180      65736B74 
+ 1181 00d5 69616C44 		.ascii	"ialDialogUI_Perfect\\PSoC_Ble\\04_SenOpticalFlowPix"
+ 1181      69616C6F 
+ 1181      6755495F 
+ 1181      50657266 
+ 1181      6563745C 
+ 1182 0106 656C734F 		.ascii	"elsOTA _ Refine\\SenOpticalFlowPixelsOTA.cydsn\000"
+ 1182      5441205F 
+ 1182      20526566 
+ 1182      696E655C 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 24
+
+
+ 1182      53656E4F 
+ 1183              	.LASF16:
+ 1184 0134 53656E44 		.ascii	"SenDeselectChip\000"
+ 1184      6573656C 
+ 1184      65637443 
+ 1184      68697000 
+ 1185              	.LASF31:
+ 1186 0144 52657365 		.ascii	"Reset_Write\000"
+ 1186      745F5772 
+ 1186      69746500 
+ 1187              	.LASF13:
+ 1188 0150 646F7562 		.ascii	"double\000"
+ 1188      6C6500
+ 1189              	.LASF10:
+ 1190 0157 75696E74 		.ascii	"uint16\000"
+ 1190      313600
+ 1191              	.LASF2:
+ 1192 015e 73686F72 		.ascii	"short int\000"
+ 1192      7420696E 
+ 1192      7400
+ 1193              	.LASF30:
+ 1194 0168 43794465 		.ascii	"CyDelayUs\000"
+ 1194      6C617955 
+ 1194      7300
+ 1195              	.LASF11:
+ 1196 0172 75696E74 		.ascii	"uint32\000"
+ 1196      333200
+ 1197              	.LASF28:
+ 1198 0179 64617461 		.ascii	"dataValue\000"
+ 1198      56616C75 
+ 1198      6500
+ 1199              	.LASF8:
+ 1200 0183 756E7369 		.ascii	"unsigned int\000"
+ 1200      676E6564 
+ 1200      20696E74 
+ 1200      00
+ 1201              	.LASF14:
+ 1202 0190 63686172 		.ascii	"char\000"
+ 1202      00
+ 1203              	.LASF25:
+ 1204 0195 53656E52 		.ascii	"SenReadReg\000"
+ 1204      65616452 
+ 1204      656700
+ 1205              	.LASF17:
+ 1206 01a0 53656E43 		.ascii	"SenChipSelect\000"
+ 1206      68697053 
+ 1206      656C6563 
+ 1206      7400
+ 1207              	.LASF15:
+ 1208 01ae 73697A65 		.ascii	"sizetype\000"
+ 1208      74797065 
+ 1208      00
+ 1209              	.LASF6:
+ 1210 01b7 6C6F6E67 		.ascii	"long long int\000"
+ 1210      206C6F6E 
+ 1210      6720696E 
+ 1210      7400
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 25
+
+
+ 1211              	.LASF36:
+ 1212 01c5 5350495F 		.ascii	"SPI_Master_SpiUartReadRxData\000"
+ 1212      4D617374 
+ 1212      65725F53 
+ 1212      70695561 
+ 1212      72745265 
+ 1213              	.LASF33:
+ 1214 01e2 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1214      4320342E 
+ 1214      392E3320 
+ 1214      32303135 
+ 1214      30333033 
+ 1215 0215 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 1215      20726576 
+ 1215      6973696F 
+ 1215      6E203232 
+ 1215      31323230 
+ 1216 0248 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1216      66756E63 
+ 1216      74696F6E 
+ 1216      2D736563 
+ 1216      74696F6E 
+ 1217              	.LASF19:
+ 1218 0270 53656E55 		.ascii	"SenUartPutHexDecimalByte\000"
+ 1218      61727450 
+ 1218      75744865 
+ 1218      78446563 
+ 1218      696D616C 
+ 1219              	.LASF21:
+ 1220 0289 64617461 		.ascii	"dataByte\000"
+ 1220      42797465 
+ 1220      00
+ 1221              	.LASF32:
+ 1222 0292 5350495F 		.ascii	"SPI_Master_SpiUartWriteTxData\000"
+ 1222      4D617374 
+ 1222      65725F53 
+ 1222      70695561 
+ 1222      72745772 
+ 1223              	.LASF4:
+ 1224 02b0 6C6F6E67 		.ascii	"long int\000"
+ 1224      20696E74 
+ 1224      00
+ 1225              	.LASF34:
+ 1226 02b9 2E5C5365 		.ascii	".\\Sen_SPI_OF.c\000"
+ 1226      6E5F5350 
+ 1226      495F4F46 
+ 1226      2E6300
+ 1227              	.LASF0:
+ 1228 02c8 7369676E 		.ascii	"signed char\000"
+ 1228      65642063 
+ 1228      68617200 
+ 1229              	.LASF3:
+ 1230 02d4 73686F72 		.ascii	"short unsigned int\000"
+ 1230      7420756E 
+ 1230      7369676E 
+ 1230      65642069 
+ 1230      6E7400
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccn18UJe.s 			page 26
+
+
+ 1231              	.LASF26:
+ 1232 02e7 72656756 		.ascii	"regValue\000"
+ 1232      616C7565 
+ 1232      00
+ 1233              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

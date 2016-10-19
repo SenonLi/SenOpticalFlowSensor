@@ -1,0 +1,8 @@
+C:/Users/liziy/Desktop/62_SenBlePSoC_AbandonSerialDialogUI_Perfect/PSoC_Ble/04_SenOpticalFlowPixelsOTA\ _\ Refine/SenOpticalFlowPixelsOTA.cydsn/CortexM0/ARM_GCC_493/Debug/CyBootAsmGnu.o : C:/Users/liziy/Desktop/62_SenBlePSoC_AbandonSerialDialogUI_Perfect/PSoC_Ble/04_SenOpticalFlowPixelsOTA\ _\ Refine/SenOpticalFlowPixelsOTA.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s C:/Users/liziy/Desktop/62_SenBlePSoC_AbandonSerialDialogUI_Perfect/PSoC_Ble/04_SenOpticalFlowPixelsOTA\ _\ Refine/SenOpticalFlowPixelsOTA.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc C:/Users/liziy/Desktop/62_SenBlePSoC_AbandonSerialDialogUI_Perfect/PSoC_Ble/04_SenOpticalFlowPixelsOTA\ _\ Refine/SenOpticalFlowPixelsOTA.cydsn/Generated_Source/PSoC4/cyfittergnu.inc 
+
+C:/Users/liziy/Desktop/62_SenBlePSoC_AbandonSerialDialogUI_Perfect/PSoC_Ble/04_SenOpticalFlowPixelsOTA\ _\ Refine/SenOpticalFlowPixelsOTA.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s : 
+
+C:/Users/liziy/Desktop/62_SenBlePSoC_AbandonSerialDialogUI_Perfect/PSoC_Ble/04_SenOpticalFlowPixelsOTA\ _\ Refine/SenOpticalFlowPixelsOTA.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc : 
+
+C:/Users/liziy/Desktop/62_SenBlePSoC_AbandonSerialDialogUI_Perfect/PSoC_Ble/04_SenOpticalFlowPixelsOTA\ _\ Refine/SenOpticalFlowPixelsOTA.cydsn/Generated_Source/PSoC4/cyfittergnu.inc : 
+

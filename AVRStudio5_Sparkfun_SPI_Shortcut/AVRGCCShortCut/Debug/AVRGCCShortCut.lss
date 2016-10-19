@@ -1,0 +1,2600 @@
+
+AVRGCCShortCut.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         0000030e  00800100  00001324  000013b8  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00001324  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          0000029f  0080040e  0080040e  000016c6  2**0
+                  ALLOC
+  3 .stab         00000738  00000000  00000000  000016c8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00000101  00000000  00000000  00001e00  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_aranges 00000060  00000000  00000000  00001f01  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_pubnames 00000529  00000000  00000000  00001f61  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_info   000017e9  00000000  00000000  0000248a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_abbrev 00000608  00000000  00000000  00003c73  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_line   000011c6  00000000  00000000  0000427b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_frame  00000280  00000000  00000000  00005444  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_str    00000686  00000000  00000000  000056c4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_loc    00000b8b  00000000  00000000  00005d4a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_pubtypes 000000d5  00000000  00000000  000068d5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 14 .debug_ranges 00000048  00000000  00000000  000069aa  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+       0:	0c 94 a0 03 	jmp	0x740	; 0x740 <__ctors_end>
+       4:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+       8:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+       c:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      10:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      14:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      18:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      1c:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      20:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      24:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      28:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      2c:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      30:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      34:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      38:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      3c:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      40:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      44:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      48:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      4c:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      50:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      54:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      58:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      5c:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      60:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+      64:	0c 94 bd 03 	jmp	0x77a	; 0x77a <__bad_interrupt>
+
+00000068 <welcom_menu>:
+      68:	0d 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a     .***************
+      78:	2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a     ****************
+      88:	2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a     ****************
+      98:	2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 0a 09     **************..
+      a8:	57 65 6c 63 6f 6d 65 20 74 6f 20 53 65 6e 20 41     Welcome to Sen A
+      b8:	72 64 75 69 6e 6f 20 4f 70 74 69 63 61 6c 2d 46     rduino Optical-F
+      c8:	6c 6f 77 20 57 6f 72 6c 64 20 0a 2a 2a 2a 2a 2a     low World .*****
+      d8:	2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a     ****************
+      e8:	2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a     ****************
+      f8:	2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a     ****************
+     108:	2a 2a 2a 2a 2a 2a 2a 2a 0a 00                       ********..
+
+00000112 <arrow>:
+     112:	50 6c 65 61 73 65 20 49 6e 70 75 74 3a 0a 00        Please Input:..
+
+00000121 <senMenu>:
+     121:	50 6c 65 61 73 65 20 49 6e 70 75 74 3a 0a 20 30     Please Input:. 0
+     131:	2c 20 43 6f 6e 74 69 6e 75 6f 75 73 20 46 72 61     , Continuous Fra
+     141:	6d 65 73 20 50 69 78 65 6c 73 2d 42 75 72 73 74     mes Pixels-Burst
+     151:	3b 0d 20 31 2c 20 4f 6e 6c 79 20 4f 6e 65 20 46     ;. 1, Only One F
+     161:	72 61 6d 65 20 50 69 78 65 6c 73 2d 42 75 72 73     rame Pixels-Burs
+     171:	74 3b 0d 20 32 2c 20 4d 6f 74 69 6f 6e 20 54 72     t;. 2, Motion Tr
+     181:	61 63 6b 69 6e 67 20 61 6e 64 20 52 65 63 6f 72     acking and Recor
+     191:	64 69 6e 67 3b 0a 20 33 2c 20 53 65 6e 20 4d 6f     ding;. 3, Sen Mo
+     1a1:	74 69 6f 6e 20 42 75 72 73 74 2e 0a 00              tion Burst...
+
+000001ae <invalid>:
+     1ae:	49 6e 76 61 6c 69 64 20 43 68 61 72 61 63 74 65     Invalid Characte
+     1be:	72 0a 0d 00                                         r...
+
+000001c2 <send_single>:
+     1c2:	45 6e 74 65 72 20 63 68 61 72 61 63 74 65 72 73     Enter characters
+     1d2:	20 74 6f 20 73 65 6e 64 2c 20 70 72 65 73 73 20      to send, press 
+     1e2:	65 6e 74 65 72 20 74 6f 20 72 65 74 75 72 6e 20     enter to return 
+     1f2:	74 6f 20 6d 65 6e 75 0a 0d 2d 3e 00                 to menu..->.
+
+000001fe <action_menu>:
+     1fe:	0a 0d 41 43 54 49 4f 4e 53 20 4d 45 4e 55 3a 0a     ..ACTIONS MENU:.
+     20e:	0d 28 31 29 20 53 65 6e 64 20 63 6f 6d 6d 61 6e     .(1) Send comman
+     21e:	64 20 73 74 72 69 6e 67 0a 0d 28 32 29 20 53 65     d string..(2) Se
+     22e:	6e 64 20 41 53 43 49 49 20 63 68 61 72 61 63 74     nd ASCII charact
+     23e:	65 72 73 0a 0d 28 33 29 20 43 6f 6e 74 69 6e 75     ers..(3) Continu
+     24e:	6f 75 73 20 72 65 63 65 69 76 65 0a 0d 28 34 29     ous receive..(4)
+     25e:	20 52 65 74 75 72 6e 20 74 6f 20 6d 61 69 6e 20      Return to main 
+     26e:	6d 65 6e 75 0a 0d 0a 0d 00                          menu.....
+
+00000277 <cont_receive>:
+     277:	52 65 63 65 69 76 69 6e 67 2c 20 43 54 52 4c 2b     Receiving, CTRL+
+     287:	43 20 74 6f 20 73 74 6f 70 0a 0d 00                 C to stop...
+
+00000293 <send_command>:
+     293:	45 6e 74 65 72 20 68 65 78 20 73 74 72 69 6e 67     Enter hex string
+     2a3:	20 6f 66 20 32 35 36 20 76 61 6c 75 65 73 20 6f      of 256 values o
+     2b3:	72 20 6c 65 73 73 2e 20 50 72 65 73 73 20 72 65     r less. Press re
+     2c3:	74 75 72 6e 20 77 68 65 6e 20 66 69 6e 69 73 68     turn when finish
+     2d3:	65 64 2e 0a 0d 52 52 20 3d 20 52 65 63 65 69 76     ed...RR = Receiv
+     2e3:	65 2c 20 43 48 20 3d 20 43 68 69 70 20 53 65 6c     e, CH = Chip Sel
+     2f3:	65 63 74 20 48 69 67 68 2c 20 43 4c 20 3d 20 43     ect High, CL = C
+     303:	68 69 70 20 53 65 6c 65 63 74 20 4c 6f 77 2c 20     hip Select Low, 
+     313:	44 59 20 3d 20 31 30 6d 73 20 44 65 6c 61 79 0a     DY = 10ms Delay.
+     323:	0d 00                                               ..
+
+00000325 <cs_high>:
+     325:	43 53 20 48 69 67 68 0a 0d 00                       CS High...
+
+0000032f <cs_low>:
+     32f:	43 53 20 4c 6f 77 0a 0d 00                          CS Low...
+
+00000338 <string_sent>:
+     338:	53 74 72 69 6e 67 20 73 65 6e 74 21 0a 0d 00        String sent!...
+
+00000347 <settings>:
+     347:	0a 0d 53 45 54 54 49 4e 47 53 20 4d 45 4e 55 3a     ..SETTINGS MENU:
+     357:	0a 0d 28 31 29 20 53 65 74 20 63 6c 6f 63 6b 20     ..(1) Set clock 
+     367:	70 6f 6c 61 72 69 74 79 20 61 6e 64 20 70 68 61     polarity and pha
+     377:	73 65 0a 0d 28 32 29 20 53 65 74 20 66 72 65 71     se..(2) Set freq
+     387:	75 65 6e 63 79 0a 0d 28 33 29 20 53 65 74 20 64     uency..(3) Set d
+     397:	61 74 61 20 6f 72 64 65 72 0a 0d 28 34 29 20 53     ata order..(4) S
+     3a7:	68 6f 77 20 63 75 72 72 65 6e 74 20 73 65 74 74     how current sett
+     3b7:	69 6e 67 73 0a 0d 28 35 29 20 52 65 74 75 72 6e     ings..(5) Return
+     3c7:	20 74 6f 20 6d 61 69 6e 20 6d 65 6e 75 0a 0d 00      to main menu...
+
+000003d7 <set_polarity_1>:
+     3d7:	0a 0d 43 6c 6f 63 6b 20 73 65 74 74 69 6e 67 73     ..Clock settings
+     3e7:	20 63 61 6e 20 62 65 20 64 65 66 69 6e 65 64 20      can be defined 
+     3f7:	69 6e 20 74 68 65 20 66 6f 6c 6c 6f 77 69 6e 67     in the following
+     407:	20 77 61 79 73 3a 0a 0d 0a 0d 43 50 4f 4c 2f 43      ways:....CPOL/C
+     417:	50 48 41 5f 5f 5f 4c 45 41 44 49 4e 47 20 45 44     PHA___LEADING ED
+     427:	47 45 5f 5f 5f 5f 5f 5f 5f 5f 54 52 41 49 4c 49     GE________TRAILI
+     437:	4e 47 20 45 44 47 45 5f 5f 5f 5f 5f 5f 5f 5f 4d     NG EDGE________M
+     447:	4f 44 45 0a 0d 30 2f 30 20 20 20 20 20 20 20 20     ODE..0/0        
+     457:	20 53 61 6d 70 6c 65 20 28 52 69 73 69 6e 67 29      Sample (Rising)
+     467:	20 20 20 20 20 53 65 74 75 70 20 28 46 61 6c 6c          Setup (Fall
+     477:	69 6e 67 29 20 20 20 20 20 20 20 28 31 29 0a 0d     ing)       (1)..
+	...
+
+00000488 <set_polarity_2>:
+     488:	30 2f 31 20 20 20 20 20 20 20 20 20 53 65 74 75     0/1         Setu
+     498:	70 20 28 52 69 73 69 6e 67 29 20 20 20 20 20 20     p (Rising)      
+     4a8:	53 61 6d 70 6c 65 20 28 46 61 6c 6c 69 6e 67 29     Sample (Falling)
+     4b8:	20 20 20 20 20 20 28 32 29 0a 0d 31 2f 30 20 20           (2)..1/0  
+     4c8:	20 20 20 20 20 20 20 53 61 6d 70 6c 65 20 28 46            Sample (F
+     4d8:	61 6c 6c 69 6e 67 29 20 20 20 20 53 65 74 75 70     alling)    Setup
+     4e8:	20 28 52 69 73 69 6e 67 29 20 20 20 20 20 20 20      (Rising)       
+     4f8:	20 28 33 29 0a 0d 31 2f 31 20 20 20 20 20 20 20      (3)..1/1       
+     508:	20 20 53 65 74 75 70 20 28 46 61 6c 6c 69 6e 67       Setup (Falling
+     518:	29 20 20 20 20 20 53 61 6d 70 6c 65 28 52 69 73     )     Sample(Ris
+     528:	69 6e 67 29 20 20 20 20 20 20 20 20 28 34 29 0a     ing)        (4).
+     538:	0d 0a 0d 00                                         ....
+
+0000053c <set_polarity_3>:
+     53c:	43 68 61 6e 67 65 20 74 6f 20 6d 6f 64 65 3a 00     Change to mode:.
+
+0000054c <mode_changed>:
+     54c:	0a 0d 4d 6f 64 65 20 63 68 61 6e 67 65 64 21 0a     ..Mode changed!.
+     55c:	0d 0a 0d 00                                         ....
+
+00000560 <frequency_menu_1>:
+     560:	0a 0d 46 72 65 71 75 65 6e 63 79 20 4f 70 74 69     ..Frequency Opti
+     570:	6f 6e 73 3a 0a 0d 0a 0d 4d 4f 44 45 20 20 20 20     ons:....MODE    
+     580:	45 46 46 45 43 54 49 56 45 20 46 52 45 51 55 45     EFFECTIVE FREQUE
+     590:	4e 43 59 0a 0d 28 31 29 20 20 20 20 20 20 20 20     NCY..(1)        
+     5a0:	20 20 34 4d 48 7a 0a 0d 28 32 29 20 20 20 20 20       4MHz..(2)     
+     5b0:	20 20 20 20 20 32 4d 48 7a 0a 0d 28 33 29 20 20          2MHz..(3)  
+     5c0:	20 20 20 20 20 20 20 20 31 4d 48 7a 0a 0d 28 34             1MHz..(4
+     5d0:	29 20 20 20 20 20 20 20 20 20 20 35 30 30 6b 48     )          500kH
+     5e0:	7a 0a 0d 28 35 29 20 20 20 20 20 20 20 20 20 20     z..(5)          
+     5f0:	32 35 30 6b 48 7a 0a 0d 00                          250kHz...
+
+000005f9 <frequency_menu_2>:
+     5f9:	28 36 29 20 20 20 20 20 20 20 20 20 20 31 32 35     (6)          125
+     609:	6b 48 7a 0a 0d 28 37 29 20 20 20 20 20 20 20 20     kHz..(7)        
+     619:	20 20 36 32 2e 35 6b 48 7a 0a 0d 0a 0d 4e 65 77       62.5kHz....New
+     629:	20 66 72 65 71 75 65 6e 63 79 20 6d 6f 64 65 3a      frequency mode:
+     639:	20 00                                                .
+
+0000063b <frequency_changed>:
+     63b:	46 72 65 71 75 65 6e 63 79 20 63 68 61 6e 67 65     Frequency change
+     64b:	64 21 0a 0d 0a 0d 00                                d!.....
+
+00000652 <dorder_menu>:
+     652:	0a 0d 44 61 74 61 20 4f 72 64 65 72 20 4d 6f 64     ..Data Order Mod
+     662:	65 73 3a 0a 0d 0a 0d 28 30 29 20 20 20 4d 53 42     es:....(0)   MSB
+     672:	20 74 72 61 6e 73 6d 69 74 74 65 64 20 66 69 72      transmitted fir
+     682:	73 74 0a 0d 28 31 29 20 20 20 4c 53 42 20 74 72     st..(1)   LSB tr
+     692:	61 6e 73 6d 69 74 74 65 64 20 66 69 72 73 74 0a     ansmitted first.
+     6a2:	0d 4e 65 77 20 64 61 74 61 20 6d 6f 64 65 3a 20     .New data mode: 
+	...
+
+000006b3 <dorder_changed>:
+     6b3:	44 61 74 61 20 6f 72 64 65 72 20 63 68 61 6e 67     Data order chang
+     6c3:	65 64 21 0a 0d 0a 0d 00                             ed!.....
+
+000006cb <cur_settings>:
+     6cb:	0a 0d 43 75 72 72 65 6e 74 20 53 65 74 74 69 6e     ..Current Settin
+     6db:	67 73 3a 0a 0d 00                                   gs:...
+
+000006e1 <data_order>:
+     6e1:	44 61 74 61 20 4f 72 64 65 72 3a 20 00              Data Order: .
+
+000006ee <msb>:
+     6ee:	4d 53 42 0a 0d 0a 0d 00                             MSB.....
+
+000006f6 <lsb>:
+     6f6:	4c 53 42 0a 0d 0a 0d 00                             LSB.....
+
+000006fe <command_delay>:
+     6fe:	44 65 6c 61 79 20 31 30 6d 73 0a 0d 00              Delay 10ms...
+
+0000070b <string_table>:
+     70b:	68 00 12 01 21 01 ae 01 c2 01 fe 01 77 02 93 02     h...!.......w...
+     71b:	25 03 2f 03 38 03 47 03 d7 03 88 04 3c 05 4c 05     %./.8.G.....<.L.
+     72b:	60 05 f9 05 3b 06 52 06 b3 06 cb 06 e1 06 ee 06     `...;.R.........
+     73b:	f6 06 fe 06 00                                      .....
+
+00000740 <__ctors_end>:
+     740:	11 24       	eor	r1, r1
+     742:	1f be       	out	0x3f, r1	; 63
+     744:	cf ef       	ldi	r28, 0xFF	; 255
+     746:	d8 e0       	ldi	r29, 0x08	; 8
+     748:	de bf       	out	0x3e, r29	; 62
+     74a:	cd bf       	out	0x3d, r28	; 61
+
+0000074c <__do_copy_data>:
+     74c:	14 e0       	ldi	r17, 0x04	; 4
+     74e:	a0 e0       	ldi	r26, 0x00	; 0
+     750:	b1 e0       	ldi	r27, 0x01	; 1
+     752:	e4 e2       	ldi	r30, 0x24	; 36
+     754:	f3 e1       	ldi	r31, 0x13	; 19
+     756:	02 c0       	rjmp	.+4      	; 0x75c <__do_copy_data+0x10>
+     758:	05 90       	lpm	r0, Z+
+     75a:	0d 92       	st	X+, r0
+     75c:	ae 30       	cpi	r26, 0x0E	; 14
+     75e:	b1 07       	cpc	r27, r17
+     760:	d9 f7       	brne	.-10     	; 0x758 <__do_copy_data+0xc>
+
+00000762 <__do_clear_bss>:
+     762:	16 e0       	ldi	r17, 0x06	; 6
+     764:	ae e0       	ldi	r26, 0x0E	; 14
+     766:	b4 e0       	ldi	r27, 0x04	; 4
+     768:	01 c0       	rjmp	.+2      	; 0x76c <.do_clear_bss_start>
+
+0000076a <.do_clear_bss_loop>:
+     76a:	1d 92       	st	X+, r1
+
+0000076c <.do_clear_bss_start>:
+     76c:	ad 3a       	cpi	r26, 0xAD	; 173
+     76e:	b1 07       	cpc	r27, r17
+     770:	e1 f7       	brne	.-8      	; 0x76a <.do_clear_bss_loop>
+     772:	0e 94 96 06 	call	0xd2c	; 0xd2c <main>
+     776:	0c 94 90 09 	jmp	0x1320	; 0x1320 <_exit>
+
+0000077a <__bad_interrupt>:
+     77a:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000077e <SenMotionBurstActive>:
+
+char SenMotionBurstActive(void){
+  char value=0, fixedaddress = MOTION_BURST;
+  fixedaddress &=~ (1 << 7);
+
+  SenSPI_Transfer(fixedaddress);
+     77e:	80 e5       	ldi	r24, 0x50	; 80
+     780:	0e 94 22 09 	call	0x1244	; 0x1244 <SenSPI_Transfer>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+     784:	8a e1       	ldi	r24, 0x1A	; 26
+     786:	8a 95       	dec	r24
+     788:	f1 f7       	brne	.-4      	; 0x786 <SenMotionBurstActive+0x8>
+     78a:	00 c0       	rjmp	.+0      	; 0x78c <SenMotionBurstActive+0xe>
+  _delay_us(80);
+  value = SenSPI_Transfer(0x00);
+     78c:	80 e0       	ldi	r24, 0x00	; 0
+     78e:	0e 94 22 09 	call	0x1244	; 0x1244 <SenSPI_Transfer>
+     792:	9a e1       	ldi	r25, 0x1A	; 26
+     794:	9a 95       	dec	r25
+     796:	f1 f7       	brne	.-4      	; 0x794 <SenMotionBurstActive+0x16>
+     798:	00 c0       	rjmp	.+0      	; 0x79a <SenMotionBurstActive+0x1c>
+  _delay_us(80);
+  
+  return(value);
+}
+     79a:	08 95       	ret
+
+0000079c <SenRead_SPDR_Byte>:
+char SenRead_SPDR_Byte(void)
+{
+  SPDR = 0x00;
+     79c:	1e bc       	out	0x2e, r1	; 46
+  while(!(SPSR & (1<<SPIF)))	{;}
+     79e:	0d b4       	in	r0, 0x2d	; 45
+     7a0:	07 fe       	sbrs	r0, 7
+     7a2:	fd cf       	rjmp	.-6      	; 0x79e <SenRead_SPDR_Byte+0x2>
+     7a4:	82 e0       	ldi	r24, 0x02	; 2
+     7a6:	8a 95       	dec	r24
+     7a8:	f1 f7       	brne	.-4      	; 0x7a6 <SenRead_SPDR_Byte+0xa>
+     7aa:	00 c0       	rjmp	.+0      	; 0x7ac <SenRead_SPDR_Byte+0x10>
+  _delay_us(8);
+  return SPDR;
+     7ac:	8e b5       	in	r24, 0x2e	; 46
+}
+     7ae:	08 95       	ret
+
+000007b0 <SenContinueMotionBurst>:
+void SenContinueMotionBurst(void){
+     7b0:	2f 92       	push	r2
+     7b2:	3f 92       	push	r3
+     7b4:	4f 92       	push	r4
+     7b6:	5f 92       	push	r5
+     7b8:	6f 92       	push	r6
+     7ba:	7f 92       	push	r7
+     7bc:	8f 92       	push	r8
+     7be:	9f 92       	push	r9
+     7c0:	bf 92       	push	r11
+     7c2:	cf 92       	push	r12
+     7c4:	df 92       	push	r13
+     7c6:	ef 92       	push	r14
+     7c8:	ff 92       	push	r15
+     7ca:	0f 93       	push	r16
+     7cc:	1f 93       	push	r17
+     7ce:	cf 93       	push	r28
+     7d0:	df 93       	push	r29
+  char c = 0;
+  int burstCount = 0;
+  printf245("Ready to Burst:\n\r");
+     7d2:	00 d0       	rcall	.+0      	; 0x7d4 <SenContinueMotionBurst+0x24>
+     7d4:	80 e0       	ldi	r24, 0x00	; 0
+     7d6:	91 e0       	ldi	r25, 0x01	; 1
+     7d8:	ad b7       	in	r26, 0x3d	; 61
+     7da:	be b7       	in	r27, 0x3e	; 62
+     7dc:	12 96       	adiw	r26, 0x02	; 2
+     7de:	9c 93       	st	X, r25
+     7e0:	8e 93       	st	-X, r24
+     7e2:	11 97       	sbiw	r26, 0x01	; 1
+     7e4:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     7e8:	0f 90       	pop	r0
+     7ea:	0f 90       	pop	r0
+  _delay_us(8);
+  return SPDR;
+}
+void SenContinueMotionBurst(void){
+  char c = 0;
+  int burstCount = 0;
+     7ec:	c0 e0       	ldi	r28, 0x00	; 0
+     7ee:	d0 e0       	ldi	r29, 0x00	; 0
+		burstCount=0;
+	  	char productID = SenReadSensorRegister(REG_PRODUCT_ID);
+		printf245("\nProductID = 0x%x\n", productID);
+    }
+    if(++burstCount == 1)   { 
+		  printf245("Motion  Delta  Delta  Surface  Shutter  Shutter  MaxPixelNum\n");
+     7f0:	0f 2e       	mov	r0, r31
+     7f2:	f5 e2       	ldi	r31, 0x25	; 37
+     7f4:	6f 2e       	mov	r6, r31
+     7f6:	f1 e0       	ldi	r31, 0x01	; 1
+     7f8:	7f 2e       	mov	r7, r31
+     7fa:	f0 2d       	mov	r31, r0
+		  printf245(" Y/N     _X     _Y    Quality   _Upper   _Lower   (0 ~ 63)\n");
+     7fc:	0f 2e       	mov	r0, r31
+     7fe:	f3 e6       	ldi	r31, 0x63	; 99
+     800:	4f 2e       	mov	r4, r31
+     802:	f1 e0       	ldi	r31, 0x01	; 1
+     804:	5f 2e       	mov	r5, r31
+     806:	f0 2d       	mov	r31, r0
+	_delay_us(50);
+	
+    if(burstCount == 50)  { 
+		burstCount=0;
+	  	char productID = SenReadSensorRegister(REG_PRODUCT_ID);
+		printf245("\nProductID = 0x%x\n", productID);
+     808:	0f 2e       	mov	r0, r31
+     80a:	f2 e1       	ldi	r31, 0x12	; 18
+     80c:	2f 2e       	mov	r2, r31
+     80e:	f1 e0       	ldi	r31, 0x01	; 1
+     810:	3f 2e       	mov	r3, r31
+     812:	f0 2d       	mov	r31, r0
+    if(++burstCount == 1)   { 
+		  printf245("Motion  Delta  Delta  Surface  Shutter  Shutter  MaxPixelNum\n");
+		  printf245(" Y/N     _X     _Y    Quality   _Upper   _Lower   (0 ~ 63)\n");
+    }
+
+	printf245(" 0x%x     %d     %d       %d       %d       %d        %d\n", my_1_Motion,my_2_Delta_X,my_3_Delta_Y,my_4_SQUAL,my_5_UpperShutter,my_6_LowerShutter,my_7_MaximumPixel);
+     814:	0f 2e       	mov	r0, r31
+     816:	ff e9       	ldi	r31, 0x9F	; 159
+     818:	8f 2e       	mov	r8, r31
+     81a:	f1 e0       	ldi	r31, 0x01	; 1
+     81c:	9f 2e       	mov	r9, r31
+     81e:	f0 2d       	mov	r31, r0
+  int burstCount = 0;
+  printf245("Ready to Burst:\n\r");
+  
+  while(c != 49)
+  {
+	select();
+     820:	0e 94 fd 08 	call	0x11fa	; 0x11fa <select>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+     824:	87 ed       	ldi	r24, 0xD7	; 215
+     826:	96 ed       	ldi	r25, 0xD6	; 214
+     828:	a0 e0       	ldi	r26, 0x00	; 0
+     82a:	81 50       	subi	r24, 0x01	; 1
+     82c:	90 40       	sbci	r25, 0x00	; 0
+     82e:	a0 40       	sbci	r26, 0x00	; 0
+     830:	e1 f7       	brne	.-8      	; 0x82a <SenContinueMotionBurst+0x7a>
+     832:	00 c0       	rjmp	.+0      	; 0x834 <SenContinueMotionBurst+0x84>
+     834:	00 00       	nop
+	_delay_ms(275);
+    char my_1_Motion = SenMotionBurstActive();
+     836:	0e 94 bf 03 	call	0x77e	; 0x77e <SenMotionBurstActive>
+     83a:	08 2f       	mov	r16, r24
+    char my_2_Delta_X = SenRead_SPDR_Byte();
+     83c:	0e 94 ce 03 	call	0x79c	; 0x79c <SenRead_SPDR_Byte>
+     840:	18 2f       	mov	r17, r24
+    char my_3_Delta_Y = SenRead_SPDR_Byte();
+     842:	0e 94 ce 03 	call	0x79c	; 0x79c <SenRead_SPDR_Byte>
+     846:	f8 2e       	mov	r15, r24
+   
+    char my_4_SQUAL = SenRead_SPDR_Byte();
+     848:	0e 94 ce 03 	call	0x79c	; 0x79c <SenRead_SPDR_Byte>
+     84c:	e8 2e       	mov	r14, r24
+    char my_5_UpperShutter = SenRead_SPDR_Byte();
+     84e:	0e 94 ce 03 	call	0x79c	; 0x79c <SenRead_SPDR_Byte>
+     852:	d8 2e       	mov	r13, r24
+    char my_6_LowerShutter = SenRead_SPDR_Byte();
+     854:	0e 94 ce 03 	call	0x79c	; 0x79c <SenRead_SPDR_Byte>
+     858:	c8 2e       	mov	r12, r24
+    char my_7_MaximumPixel = SenRead_SPDR_Byte();
+     85a:	0e 94 ce 03 	call	0x79c	; 0x79c <SenRead_SPDR_Byte>
+     85e:	b8 2e       	mov	r11, r24
+	deselect();
+     860:	0e 94 ff 08 	call	0x11fe	; 0x11fe <deselect>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+     864:	90 e1       	ldi	r25, 0x10	; 16
+     866:	9a 95       	dec	r25
+     868:	f1 f7       	brne	.-4      	; 0x866 <SenContinueMotionBurst+0xb6>
+     86a:	00 c0       	rjmp	.+0      	; 0x86c <SenContinueMotionBurst+0xbc>
+	_delay_us(50);
+	
+    if(burstCount == 50)  { 
+     86c:	c2 33       	cpi	r28, 0x32	; 50
+     86e:	d1 05       	cpc	r29, r1
+     870:	c9 f4       	brne	.+50     	; 0x8a4 <SenContinueMotionBurst+0xf4>
+		burstCount=0;
+	  	char productID = SenReadSensorRegister(REG_PRODUCT_ID);
+     872:	80 e0       	ldi	r24, 0x00	; 0
+     874:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+		printf245("\nProductID = 0x%x\n", productID);
+     878:	00 d0       	rcall	.+0      	; 0x87a <SenContinueMotionBurst+0xca>
+     87a:	00 d0       	rcall	.+0      	; 0x87c <SenContinueMotionBurst+0xcc>
+     87c:	ed b7       	in	r30, 0x3d	; 61
+     87e:	fe b7       	in	r31, 0x3e	; 62
+     880:	31 96       	adiw	r30, 0x01	; 1
+     882:	ad b7       	in	r26, 0x3d	; 61
+     884:	be b7       	in	r27, 0x3e	; 62
+     886:	12 96       	adiw	r26, 0x02	; 2
+     888:	3c 92       	st	X, r3
+     88a:	2e 92       	st	-X, r2
+     88c:	11 97       	sbiw	r26, 0x01	; 1
+     88e:	82 83       	std	Z+2, r24	; 0x02
+     890:	13 82       	std	Z+3, r1	; 0x03
+     892:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     896:	0f 90       	pop	r0
+     898:	0f 90       	pop	r0
+     89a:	0f 90       	pop	r0
+     89c:	0f 90       	pop	r0
+    }
+    if(++burstCount == 1)   { 
+     89e:	c1 e0       	ldi	r28, 0x01	; 1
+     8a0:	d0 e0       	ldi	r29, 0x00	; 0
+     8a2:	04 c0       	rjmp	.+8      	; 0x8ac <SenContinueMotionBurst+0xfc>
+     8a4:	21 96       	adiw	r28, 0x01	; 1
+     8a6:	c1 30       	cpi	r28, 0x01	; 1
+     8a8:	d1 05       	cpc	r29, r1
+     8aa:	89 f4       	brne	.+34     	; 0x8ce <SenContinueMotionBurst+0x11e>
+		  printf245("Motion  Delta  Delta  Surface  Shutter  Shutter  MaxPixelNum\n");
+     8ac:	00 d0       	rcall	.+0      	; 0x8ae <SenContinueMotionBurst+0xfe>
+     8ae:	ed b7       	in	r30, 0x3d	; 61
+     8b0:	fe b7       	in	r31, 0x3e	; 62
+     8b2:	72 82       	std	Z+2, r7	; 0x02
+     8b4:	61 82       	std	Z+1, r6	; 0x01
+     8b6:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+		  printf245(" Y/N     _X     _Y    Quality   _Upper   _Lower   (0 ~ 63)\n");
+     8ba:	ad b7       	in	r26, 0x3d	; 61
+     8bc:	be b7       	in	r27, 0x3e	; 62
+     8be:	12 96       	adiw	r26, 0x02	; 2
+     8c0:	5c 92       	st	X, r5
+     8c2:	4e 92       	st	-X, r4
+     8c4:	11 97       	sbiw	r26, 0x01	; 1
+     8c6:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     8ca:	0f 90       	pop	r0
+     8cc:	0f 90       	pop	r0
+    }
+
+	printf245(" 0x%x     %d     %d       %d       %d       %d        %d\n", my_1_Motion,my_2_Delta_X,my_3_Delta_Y,my_4_SQUAL,my_5_UpperShutter,my_6_LowerShutter,my_7_MaximumPixel);
+     8ce:	ed b7       	in	r30, 0x3d	; 61
+     8d0:	fe b7       	in	r31, 0x3e	; 62
+     8d2:	70 97       	sbiw	r30, 0x10	; 16
+     8d4:	0f b6       	in	r0, 0x3f	; 63
+     8d6:	f8 94       	cli
+     8d8:	fe bf       	out	0x3e, r31	; 62
+     8da:	0f be       	out	0x3f, r0	; 63
+     8dc:	ed bf       	out	0x3d, r30	; 61
+     8de:	31 96       	adiw	r30, 0x01	; 1
+     8e0:	ad b7       	in	r26, 0x3d	; 61
+     8e2:	be b7       	in	r27, 0x3e	; 62
+     8e4:	12 96       	adiw	r26, 0x02	; 2
+     8e6:	9c 92       	st	X, r9
+     8e8:	8e 92       	st	-X, r8
+     8ea:	11 97       	sbiw	r26, 0x01	; 1
+     8ec:	02 83       	std	Z+2, r16	; 0x02
+     8ee:	13 82       	std	Z+3, r1	; 0x03
+     8f0:	14 83       	std	Z+4, r17	; 0x04
+     8f2:	15 82       	std	Z+5, r1	; 0x05
+     8f4:	f6 82       	std	Z+6, r15	; 0x06
+     8f6:	17 82       	std	Z+7, r1	; 0x07
+     8f8:	e0 86       	std	Z+8, r14	; 0x08
+     8fa:	11 86       	std	Z+9, r1	; 0x09
+     8fc:	d2 86       	std	Z+10, r13	; 0x0a
+     8fe:	13 86       	std	Z+11, r1	; 0x0b
+     900:	c4 86       	std	Z+12, r12	; 0x0c
+     902:	15 86       	std	Z+13, r1	; 0x0d
+     904:	b6 86       	std	Z+14, r11	; 0x0e
+     906:	17 86       	std	Z+15, r1	; 0x0f
+     908:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+  
+    c = getchar245();
+     90c:	ed b7       	in	r30, 0x3d	; 61
+     90e:	fe b7       	in	r31, 0x3e	; 62
+     910:	70 96       	adiw	r30, 0x10	; 16
+     912:	0f b6       	in	r0, 0x3f	; 63
+     914:	f8 94       	cli
+     916:	fe bf       	out	0x3e, r31	; 62
+     918:	0f be       	out	0x3f, r0	; 63
+     91a:	ed bf       	out	0x3d, r30	; 61
+     91c:	0e 94 bb 07 	call	0xf76	; 0xf76 <getchar245>
+void SenContinueMotionBurst(void){
+  char c = 0;
+  int burstCount = 0;
+  printf245("Ready to Burst:\n\r");
+  
+  while(c != 49)
+     920:	81 33       	cpi	r24, 0x31	; 49
+     922:	09 f0       	breq	.+2      	; 0x926 <__stack+0x27>
+     924:	7d cf       	rjmp	.-262    	; 0x820 <SenContinueMotionBurst+0x70>
+
+	printf245(" 0x%x     %d     %d       %d       %d       %d        %d\n", my_1_Motion,my_2_Delta_X,my_3_Delta_Y,my_4_SQUAL,my_5_UpperShutter,my_6_LowerShutter,my_7_MaximumPixel);
+  
+    c = getchar245();
+  }
+}
+     926:	df 91       	pop	r29
+     928:	cf 91       	pop	r28
+     92a:	1f 91       	pop	r17
+     92c:	0f 91       	pop	r16
+     92e:	ff 90       	pop	r15
+     930:	ef 90       	pop	r14
+     932:	df 90       	pop	r13
+     934:	cf 90       	pop	r12
+     936:	bf 90       	pop	r11
+     938:	9f 90       	pop	r9
+     93a:	8f 90       	pop	r8
+     93c:	7f 90       	pop	r7
+     93e:	6f 90       	pop	r6
+     940:	5f 90       	pop	r5
+     942:	4f 90       	pop	r4
+     944:	3f 90       	pop	r3
+     946:	2f 90       	pop	r2
+     948:	08 95       	ret
+
+0000094a <SenBurstMotionMenu>:
+  printf245("\n");
+}
+
+/*********** Sen Motion-Burst Mode **************/
+void SenBurstMotionMenu(void){
+		SenContinueMotionBurst();
+     94a:	0e 94 d8 03 	call	0x7b0	; 0x7b0 <SenContinueMotionBurst>
+}
+     94e:	08 95       	ret
+
+00000950 <SenSerialFlush>:
+}
+
+void SenSerialFlush( void )
+{
+	unsigned char dummy = 0;
+	setDataInputs();
+     950:	0e 94 97 07 	call	0xf2e	; 0xf2e <setDataInputs>
+	while(USBreadAllowed()){		//If RX Flag is low, lets get the data from the FIFO
+     954:	33 99       	sbic	0x06, 3	; 6
+     956:	09 c0       	rjmp	.+18     	; 0x96a <SenSerialFlush+0x1a>
+		clearRD();			//Clock the next FIFO data onto the D0-D7 lines
+     958:	40 98       	cbi	0x08, 0	; 8
+     95a:	86 e0       	ldi	r24, 0x06	; 6
+     95c:	8a 95       	dec	r24
+     95e:	f1 f7       	brne	.-4      	; 0x95c <SenSerialFlush+0xc>
+     960:	00 c0       	rjmp	.+0      	; 0x962 <SenSerialFlush+0x12>
+		_delay_us(HOLD_TIME);//	delay_micro(HOLD_TIME);
+		dummy = PIND;		//Get data from FT245		
+     962:	89 b1       	in	r24, 0x09	; 9
+		setRD();			//Relinquish control of the Data lines
+     964:	40 9a       	sbi	0x08, 0	; 8
+
+void SenSerialFlush( void )
+{
+	unsigned char dummy = 0;
+	setDataInputs();
+	while(USBreadAllowed()){		//If RX Flag is low, lets get the data from the FIFO
+     966:	33 9b       	sbis	0x06, 3	; 6
+     968:	f7 cf       	rjmp	.-18     	; 0x958 <SenSerialFlush+0x8>
+     96a:	08 95       	ret
+
+0000096c <SenReadCoodinataData>:
+		printf245("\n");
+		_delay_ms(100);//delay_ms(100);		
+	}
+}
+/*********** Sen Read Coordinate Mode ************/
+void SenReadCoodinataData(void){
+     96c:	ef 92       	push	r14
+     96e:	ff 92       	push	r15
+     970:	0f 93       	push	r16
+     972:	1f 93       	push	r17
+     974:	cf 93       	push	r28
+     976:	df 93       	push	r29
+  bool noStop = true;
+  char myMotion;
+  char myDelta_X;
+  char myDelta_Y;
+
+	setDataOutputs();
+     978:	0e 94 91 07 	call	0xf22	; 0xf22 <setDataOutputs>
+	
+  do  {
+    myMotion = SenReadSensorRegister(MOTION);
+     97c:	82 e0       	ldi	r24, 0x02	; 2
+     97e:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+    myDelta_X = SenReadSensorRegister(DELTA_X);
+     982:	83 e0       	ldi	r24, 0x03	; 3
+     984:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     988:	08 2f       	mov	r16, r24
+    myDelta_Y = SenReadSensorRegister(DELTA_Y);
+     98a:	84 e0       	ldi	r24, 0x04	; 4
+     98c:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     990:	18 2f       	mov	r17, r24
+    
+	SenPrint245Byte(myDelta_X);
+     992:	80 2f       	mov	r24, r16
+     994:	0e 94 9d 07 	call	0xf3a	; 0xf3a <SenPrint245Byte>
+	SenPrint245Byte(myDelta_Y);
+     998:	81 2f       	mov	r24, r17
+     99a:	0e 94 9d 07 	call	0xf3a	; 0xf3a <SenPrint245Byte>
+
+    if (++sycSample >= SEN_SYNC_SAMPLE_NUM)  {
+     99e:	c1 e0       	ldi	r28, 0x01	; 1
+     9a0:	d0 e0       	ldi	r29, 0x00	; 0
+		  SenPrint245Byte(0xAA);
+          noStop = false;
+        }else  {
+		  SenPrint245Byte(0x55);
+        }
+        sycSample = 0;
+     9a2:	ee 24       	eor	r14, r14
+     9a4:	ff 24       	eor	r15, r15
+     9a6:	1f c0       	rjmp	.+62     	; 0x9e6 <SenReadCoodinataData+0x7a>
+    
+	SenPrint245Byte(myDelta_X);
+	SenPrint245Byte(myDelta_Y);
+
+    if (++sycSample >= SEN_SYNC_SAMPLE_NUM)  {
+         if (SenSerialAvailableCheck())  {
+     9a8:	0e 94 a7 07 	call	0xf4e	; 0xf4e <SenSerialAvailableCheck>
+     9ac:	00 97       	sbiw	r24, 0x00	; 0
+     9ae:	b9 f0       	breq	.+46     	; 0x9de <SenReadCoodinataData+0x72>
+		  SenPrint245Byte(0xAA);
+     9b0:	8a ea       	ldi	r24, 0xAA	; 170
+     9b2:	0e 94 9d 07 	call	0xf3a	; 0xf3a <SenPrint245Byte>
+        sycSample = 0;
+    }
+	//_delay_ms(8);
+  }while (noStop);
+  
+  SenSerialFlush();
+     9b6:	0e 94 a8 04 	call	0x950	; 0x950 <SenSerialFlush>
+  printf245("\n");
+     9ba:	00 d0       	rcall	.+0      	; 0x9bc <SenReadCoodinataData+0x50>
+     9bc:	89 ed       	ldi	r24, 0xD9	; 217
+     9be:	91 e0       	ldi	r25, 0x01	; 1
+     9c0:	ed b7       	in	r30, 0x3d	; 61
+     9c2:	fe b7       	in	r31, 0x3e	; 62
+     9c4:	92 83       	std	Z+2, r25	; 0x02
+     9c6:	81 83       	std	Z+1, r24	; 0x01
+     9c8:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+}
+     9cc:	0f 90       	pop	r0
+     9ce:	0f 90       	pop	r0
+     9d0:	df 91       	pop	r29
+     9d2:	cf 91       	pop	r28
+     9d4:	1f 91       	pop	r17
+     9d6:	0f 91       	pop	r16
+     9d8:	ff 90       	pop	r15
+     9da:	ef 90       	pop	r14
+     9dc:	08 95       	ret
+    if (++sycSample >= SEN_SYNC_SAMPLE_NUM)  {
+         if (SenSerialAvailableCheck())  {
+		  SenPrint245Byte(0xAA);
+          noStop = false;
+        }else  {
+		  SenPrint245Byte(0x55);
+     9de:	85 e5       	ldi	r24, 0x55	; 85
+     9e0:	0e 94 9d 07 	call	0xf3a	; 0xf3a <SenPrint245Byte>
+        }
+        sycSample = 0;
+     9e4:	e7 01       	movw	r28, r14
+  char myDelta_Y;
+
+	setDataOutputs();
+	
+  do  {
+    myMotion = SenReadSensorRegister(MOTION);
+     9e6:	82 e0       	ldi	r24, 0x02	; 2
+     9e8:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+    myDelta_X = SenReadSensorRegister(DELTA_X);
+     9ec:	83 e0       	ldi	r24, 0x03	; 3
+     9ee:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     9f2:	08 2f       	mov	r16, r24
+    myDelta_Y = SenReadSensorRegister(DELTA_Y);
+     9f4:	84 e0       	ldi	r24, 0x04	; 4
+     9f6:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     9fa:	18 2f       	mov	r17, r24
+    
+	SenPrint245Byte(myDelta_X);
+     9fc:	80 2f       	mov	r24, r16
+     9fe:	0e 94 9d 07 	call	0xf3a	; 0xf3a <SenPrint245Byte>
+	SenPrint245Byte(myDelta_Y);
+     a02:	81 2f       	mov	r24, r17
+     a04:	0e 94 9d 07 	call	0xf3a	; 0xf3a <SenPrint245Byte>
+
+    if (++sycSample >= SEN_SYNC_SAMPLE_NUM)  {
+     a08:	21 96       	adiw	r28, 0x01	; 1
+     a0a:	c4 36       	cpi	r28, 0x64	; 100
+     a0c:	d1 05       	cpc	r29, r1
+     a0e:	5c f3       	brlt	.-42     	; 0x9e6 <SenReadCoodinataData+0x7a>
+     a10:	cb cf       	rjmp	.-106    	; 0x9a8 <SenReadCoodinataData+0x3c>
+
+00000a12 <SenPixelsShowUp>:
+    }
+	
+    SenSerialFlush();
+}
+void SenPixelsShowUp(void)
+{
+     a12:	cf 92       	push	r12
+     a14:	df 92       	push	r13
+     a16:	ef 92       	push	r14
+     a18:	ff 92       	push	r15
+     a1a:	1f 93       	push	r17
+     a1c:	cf 93       	push	r28
+     a1e:	df 93       	push	r29
+    bool isFirstPixel = true;
+    unsigned char regValue;
+    unsigned char pixelValue;
+
+    // write to frame capture register to force capture of frame
+    SenWriteReg(FRAME_CAPTURE,0x83);
+     a20:	83 e1       	ldi	r24, 0x13	; 19
+     a22:	63 e8       	ldi	r22, 0x83	; 131
+     a24:	0e 94 28 09 	call	0x1250	; 0x1250 <SenWriteReg>
+     a28:	8b e7       	ldi	r24, 0x7B	; 123
+     a2a:	91 e0       	ldi	r25, 0x01	; 1
+     a2c:	01 97       	sbiw	r24, 0x01	; 1
+     a2e:	f1 f7       	brne	.-4      	; 0xa2c <SenPixelsShowUp+0x1a>
+     a30:	00 c0       	rjmp	.+0      	; 0xa32 <SenPixelsShowUp+0x20>
+     a32:	00 00       	nop
+	_delay_us(1520);//delay_micro(1550); // min frame speed is 2000 frames/second so 1 frame = 500 nano seconds.  so 500 x 3 + 10 = 1510
+
+    // display the pixel data
+    for( i=0; i<30; i++ ) {
+        for( j=0; j<30; j++ ) {
+            regValue = SenReadSensorRegister(FRAME_CAPTURE);
+     a34:	83 e1       	ldi	r24, 0x13	; 19
+     a36:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     a3a:	18 2f       	mov	r17, r24
+            if( isFirstPixel && (regValue & 0x40) == 0 ) {
+     a3c:	86 fd       	sbrc	r24, 6
+     a3e:	0e c0       	rjmp	.+28     	; 0xa5c <SenPixelsShowUp+0x4a>
+				printf245("failed to find first pixel\n");
+     a40:	00 d0       	rcall	.+0      	; 0xa42 <SenPixelsShowUp+0x30>
+     a42:	8b ed       	ldi	r24, 0xDB	; 219
+     a44:	91 e0       	ldi	r25, 0x01	; 1
+     a46:	ed b7       	in	r30, 0x3d	; 61
+     a48:	fe b7       	in	r31, 0x3e	; 62
+     a4a:	92 83       	std	Z+2, r25	; 0x02
+     a4c:	81 83       	std	Z+1, r24	; 0x01
+     a4e:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     a52:	0f 90       	pop	r0
+     a54:	0f 90       	pop	r0
+
+    // wait 3 frame periods + 10 nanoseconds for frame to be captured
+	_delay_us(1520);//delay_micro(1550); // min frame speed is 2000 frames/second so 1 frame = 500 nano seconds.  so 500 x 3 + 10 = 1510
+
+    // display the pixel data
+    for( i=0; i<30; i++ ) {
+     a56:	ee 24       	eor	r14, r14
+     a58:	ff 24       	eor	r15, r15
+     a5a:	02 c0       	rjmp	.+4      	; 0xa60 <SenPixelsShowUp+0x4e>
+     a5c:	ee 24       	eor	r14, r14
+     a5e:	ff 24       	eor	r15, r15
+     a60:	0f 2e       	mov	r0, r31
+     a62:	fe e1       	ldi	r31, 0x1E	; 30
+     a64:	cf 2e       	mov	r12, r31
+     a66:	dd 24       	eor	r13, r13
+     a68:	f0 2d       	mov	r31, r0
+     a6a:	e6 01       	movw	r28, r12
+            if( isFirstPixel && (regValue & 0x40) == 0 ) {
+				printf245("failed to find first pixel\n");
+            }
+            isFirstPixel = false;
+            pixelValue = ( regValue << 2);
+			SenPrint245Byte(pixelValue);
+     a6c:	81 2f       	mov	r24, r17
+     a6e:	88 0f       	add	r24, r24
+     a70:	88 0f       	add	r24, r24
+     a72:	0e 94 9d 07 	call	0xf3a	; 0xf3a <SenPrint245Byte>
+     a76:	f9 e1       	ldi	r31, 0x19	; 25
+     a78:	fa 95       	dec	r31
+     a7a:	f1 f7       	brne	.-4      	; 0xa78 <SenPixelsShowUp+0x66>
+     a7c:	21 97       	sbiw	r28, 0x01	; 1
+    // wait 3 frame periods + 10 nanoseconds for frame to be captured
+	_delay_us(1520);//delay_micro(1550); // min frame speed is 2000 frames/second so 1 frame = 500 nano seconds.  so 500 x 3 + 10 = 1510
+
+    // display the pixel data
+    for( i=0; i<30; i++ ) {
+        for( j=0; j<30; j++ ) {
+     a7e:	89 f4       	brne	.+34     	; 0xaa2 <SenPixelsShowUp+0x90>
+
+    // wait 3 frame periods + 10 nanoseconds for frame to be captured
+	_delay_us(1520);//delay_micro(1550); // min frame speed is 2000 frames/second so 1 frame = 500 nano seconds.  so 500 x 3 + 10 = 1510
+
+    // display the pixel data
+    for( i=0; i<30; i++ ) {
+     a80:	08 94       	sec
+     a82:	e1 1c       	adc	r14, r1
+     a84:	f1 1c       	adc	r15, r1
+     a86:	8e e1       	ldi	r24, 0x1E	; 30
+     a88:	e8 16       	cp	r14, r24
+     a8a:	f1 04       	cpc	r15, r1
+     a8c:	79 f4       	brne	.+30     	; 0xaac <SenPixelsShowUp+0x9a>
+        }
+        //printf245("\n");
+    }
+
+    // hardware reset to restore sensor to normal operation
+    SenReset();
+     a8e:	0e 94 53 09 	call	0x12a6	; 0x12a6 <SenReset>
+}
+     a92:	df 91       	pop	r29
+     a94:	cf 91       	pop	r28
+     a96:	1f 91       	pop	r17
+     a98:	ff 90       	pop	r15
+     a9a:	ef 90       	pop	r14
+     a9c:	df 90       	pop	r13
+     a9e:	cf 90       	pop	r12
+     aa0:	08 95       	ret
+	_delay_us(1520);//delay_micro(1550); // min frame speed is 2000 frames/second so 1 frame = 500 nano seconds.  so 500 x 3 + 10 = 1510
+
+    // display the pixel data
+    for( i=0; i<30; i++ ) {
+        for( j=0; j<30; j++ ) {
+            regValue = SenReadSensorRegister(FRAME_CAPTURE);
+     aa2:	83 e1       	ldi	r24, 0x13	; 19
+     aa4:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     aa8:	18 2f       	mov	r17, r24
+     aaa:	e0 cf       	rjmp	.-64     	; 0xa6c <SenPixelsShowUp+0x5a>
+     aac:	83 e1       	ldi	r24, 0x13	; 19
+     aae:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     ab2:	18 2f       	mov	r17, r24
+     ab4:	da cf       	rjmp	.-76     	; 0xa6a <SenPixelsShowUp+0x58>
+
+00000ab6 <SenImageDisplay>:
+  }
+}
+
+void SenImageDisplay(void)
+{
+	printf245("image data\n");
+     ab6:	00 d0       	rcall	.+0      	; 0xab8 <SenImageDisplay+0x2>
+     ab8:	87 ef       	ldi	r24, 0xF7	; 247
+     aba:	91 e0       	ldi	r25, 0x01	; 1
+     abc:	ed b7       	in	r30, 0x3d	; 61
+     abe:	fe b7       	in	r31, 0x3e	; 62
+     ac0:	92 83       	std	Z+2, r25	; 0x02
+     ac2:	81 83       	std	Z+1, r24	; 0x01
+     ac4:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+    SenPixelsShowUp();
+     ac8:	0f 90       	pop	r0
+     aca:	0f 90       	pop	r0
+     acc:	0e 94 09 05 	call	0xa12	; 0xa12 <SenPixelsShowUp>
+	printf245("----------\n");
+     ad0:	00 d0       	rcall	.+0      	; 0xad2 <SenImageDisplay+0x1c>
+     ad2:	83 e0       	ldi	r24, 0x03	; 3
+     ad4:	92 e0       	ldi	r25, 0x02	; 2
+     ad6:	ed b7       	in	r30, 0x3d	; 61
+     ad8:	fe b7       	in	r31, 0x3e	; 62
+     ada:	92 83       	std	Z+2, r25	; 0x02
+     adc:	81 83       	std	Z+1, r24	; 0x01
+     ade:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     ae2:	0f 90       	pop	r0
+     ae4:	0f 90       	pop	r0
+}
+     ae6:	08 95       	ret
+
+00000ae8 <SenContinuousImageDisplay>:
+}
+
+void SenContinuousImageDisplay(void)
+{
+    int i;
+    SenSerialFlush();
+     ae8:	0e 94 a8 04 	call	0x950	; 0x950 <SenSerialFlush>
+		
+    while( !SenSerialAvailableCheck() ) {
+     aec:	08 c0       	rjmp	.+16     	; 0xafe <SenContinuousImageDisplay+0x16>
+        SenImageDisplay();
+     aee:	0e 94 5b 05 	call	0xab6	; 0xab6 <SenImageDisplay>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+     af2:	83 ed       	ldi	r24, 0xD3	; 211
+     af4:	90 e3       	ldi	r25, 0x30	; 48
+     af6:	01 97       	sbiw	r24, 0x01	; 1
+     af8:	f1 f7       	brne	.-4      	; 0xaf6 <SenContinuousImageDisplay+0xe>
+     afa:	00 c0       	rjmp	.+0      	; 0xafc <SenContinuousImageDisplay+0x14>
+     afc:	00 00       	nop
+void SenContinuousImageDisplay(void)
+{
+    int i;
+    SenSerialFlush();
+		
+    while( !SenSerialAvailableCheck() ) {
+     afe:	0e 94 a7 07 	call	0xf4e	; 0xf4e <SenSerialAvailableCheck>
+     b02:	00 97       	sbiw	r24, 0x00	; 0
+     b04:	a1 f3       	breq	.-24     	; 0xaee <SenContinuousImageDisplay+0x6>
+			_delay_ms(50);//  delay_ms(50);          // give the viewer a bit of time to catchup
+            i++;
+        }
+    }
+	
+    SenSerialFlush();
+     b06:	0e 94 a8 04 	call	0x950	; 0x950 <SenSerialFlush>
+}
+     b0a:	08 95       	ret
+
+00000b0c <firstCoordinateRetrieve>:
+	char productID = SenReadSensorRegister(REG_PRODUCT_ID);
+	my_printf(welcom_menu); // Print menu
+	printf245("ProductID = 0x%x\n", productID);
+}
+
+void firstCoordinateRetrieve(void){
+     b0c:	0f 93       	push	r16
+     b0e:	1f 93       	push	r17
+	char myMotion = SenReadSensorRegister(MOTION);
+     b10:	82 e0       	ldi	r24, 0x02	; 2
+     b12:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+	char myDeltaX = SenReadSensorRegister(DELTA_X);
+     b16:	83 e0       	ldi	r24, 0x03	; 3
+     b18:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     b1c:	08 2f       	mov	r16, r24
+	char myDeltaY = SenReadSensorRegister(DELTA_Y);
+     b1e:	84 e0       	ldi	r24, 0x04	; 4
+     b20:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     b24:	18 2f       	mov	r17, r24
+	
+	printf245("Accumulation %d Times:   ", ++n);	
+     b26:	80 91 12 06 	lds	r24, 0x0612
+     b2a:	90 91 13 06 	lds	r25, 0x0613
+     b2e:	01 96       	adiw	r24, 0x01	; 1
+     b30:	90 93 13 06 	sts	0x0613, r25
+     b34:	80 93 12 06 	sts	0x0612, r24
+     b38:	00 d0       	rcall	.+0      	; 0xb3a <firstCoordinateRetrieve+0x2e>
+     b3a:	00 d0       	rcall	.+0      	; 0xb3c <firstCoordinateRetrieve+0x30>
+     b3c:	2f e0       	ldi	r18, 0x0F	; 15
+     b3e:	32 e0       	ldi	r19, 0x02	; 2
+     b40:	ad b7       	in	r26, 0x3d	; 61
+     b42:	be b7       	in	r27, 0x3e	; 62
+     b44:	12 96       	adiw	r26, 0x02	; 2
+     b46:	3c 93       	st	X, r19
+     b48:	2e 93       	st	-X, r18
+     b4a:	11 97       	sbiw	r26, 0x01	; 1
+     b4c:	14 96       	adiw	r26, 0x04	; 4
+     b4e:	9c 93       	st	X, r25
+     b50:	8e 93       	st	-X, r24
+     b52:	13 97       	sbiw	r26, 0x03	; 3
+     b54:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	printf245("  Delta_X = %d, ", myDeltaX);
+     b58:	ed b7       	in	r30, 0x3d	; 61
+     b5a:	fe b7       	in	r31, 0x3e	; 62
+     b5c:	31 96       	adiw	r30, 0x01	; 1
+     b5e:	89 e2       	ldi	r24, 0x29	; 41
+     b60:	92 e0       	ldi	r25, 0x02	; 2
+     b62:	ad b7       	in	r26, 0x3d	; 61
+     b64:	be b7       	in	r27, 0x3e	; 62
+     b66:	12 96       	adiw	r26, 0x02	; 2
+     b68:	9c 93       	st	X, r25
+     b6a:	8e 93       	st	-X, r24
+     b6c:	11 97       	sbiw	r26, 0x01	; 1
+     b6e:	02 83       	std	Z+2, r16	; 0x02
+     b70:	13 82       	std	Z+3, r1	; 0x03
+     b72:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	printf245("	 Delta_Y = %d\n\r", myDeltaY);
+     b76:	ed b7       	in	r30, 0x3d	; 61
+     b78:	fe b7       	in	r31, 0x3e	; 62
+     b7a:	31 96       	adiw	r30, 0x01	; 1
+     b7c:	8a e3       	ldi	r24, 0x3A	; 58
+     b7e:	92 e0       	ldi	r25, 0x02	; 2
+     b80:	ad b7       	in	r26, 0x3d	; 61
+     b82:	be b7       	in	r27, 0x3e	; 62
+     b84:	12 96       	adiw	r26, 0x02	; 2
+     b86:	9c 93       	st	X, r25
+     b88:	8e 93       	st	-X, r24
+     b8a:	11 97       	sbiw	r26, 0x01	; 1
+     b8c:	12 83       	std	Z+2, r17	; 0x02
+     b8e:	13 82       	std	Z+3, r1	; 0x03
+     b90:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     b94:	0f 90       	pop	r0
+     b96:	0f 90       	pop	r0
+     b98:	0f 90       	pop	r0
+     b9a:	0f 90       	pop	r0
+}
+     b9c:	1f 91       	pop	r17
+     b9e:	0f 91       	pop	r16
+     ba0:	08 95       	ret
+
+00000ba2 <getc245_blocking>:
+//}
+//
+char getc245_blocking()
+{
+	char c = 0;
+	while(c == 0){ c = getchar245(); }
+     ba2:	0e 94 bb 07 	call	0xf76	; 0xf76 <getchar245>
+     ba6:	88 23       	and	r24, r24
+     ba8:	e1 f3       	breq	.-8      	; 0xba2 <getc245_blocking>
+	return c;
+}
+     baa:	08 95       	ret
+
+00000bac <my_printf>:
+
+void my_printf(uint8_t string_num)
+{
+     bac:	cf 93       	push	r28
+     bae:	df 93       	push	r29
+	strcpy_P(buffer, (PGM_P)pgm_read_word(&(string_table[string_num])));
+     bb0:	e8 2f       	mov	r30, r24
+     bb2:	f0 e0       	ldi	r31, 0x00	; 0
+     bb4:	ee 0f       	add	r30, r30
+     bb6:	ff 1f       	adc	r31, r31
+     bb8:	e5 5f       	subi	r30, 0xF5	; 245
+     bba:	f8 4f       	sbci	r31, 0xF8	; 248
+     bbc:	25 91       	lpm	r18, Z+
+     bbe:	34 91       	lpm	r19, Z+
+     bc0:	c7 e1       	ldi	r28, 0x17	; 23
+     bc2:	d6 e0       	ldi	r29, 0x06	; 6
+     bc4:	ce 01       	movw	r24, r28
+     bc6:	62 2f       	mov	r22, r18
+     bc8:	73 2f       	mov	r23, r19
+     bca:	0e 94 89 09 	call	0x1312	; 0x1312 <strcpy_P>
+	printf245(buffer);
+     bce:	00 d0       	rcall	.+0      	; 0xbd0 <my_printf+0x24>
+     bd0:	ed b7       	in	r30, 0x3d	; 61
+     bd2:	fe b7       	in	r31, 0x3e	; 62
+     bd4:	d2 83       	std	Z+2, r29	; 0x02
+     bd6:	c1 83       	std	Z+1, r28	; 0x01
+     bd8:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     bdc:	0f 90       	pop	r0
+     bde:	0f 90       	pop	r0
+}
+     be0:	df 91       	pop	r29
+     be2:	cf 91       	pop	r28
+     be4:	08 95       	ret
+
+00000be6 <SenShowSetupData>:
+    // hardware reset to restore sensor to normal operation
+    SenReset();
+}
+
+/****************** Sen Action *********************/
+void SenShowSetupData(void){
+     be6:	1f 93       	push	r17
+	printf245("\n\rSetting up...\n\r");
+     be8:	00 d0       	rcall	.+0      	; 0xbea <SenShowSetupData+0x4>
+     bea:	8b e4       	ldi	r24, 0x4B	; 75
+     bec:	92 e0       	ldi	r25, 0x02	; 2
+     bee:	ad b7       	in	r26, 0x3d	; 61
+     bf0:	be b7       	in	r27, 0x3e	; 62
+     bf2:	12 96       	adiw	r26, 0x02	; 2
+     bf4:	9c 93       	st	X, r25
+     bf6:	8e 93       	st	-X, r24
+     bf8:	11 97       	sbiw	r26, 0x01	; 1
+     bfa:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	printf245("DDRB = 0x%x\n\r", DDRB);
+     bfe:	24 b1       	in	r18, 0x04	; 4
+     c00:	00 d0       	rcall	.+0      	; 0xc02 <SenShowSetupData+0x1c>
+     c02:	ed b7       	in	r30, 0x3d	; 61
+     c04:	fe b7       	in	r31, 0x3e	; 62
+     c06:	31 96       	adiw	r30, 0x01	; 1
+     c08:	8d e5       	ldi	r24, 0x5D	; 93
+     c0a:	92 e0       	ldi	r25, 0x02	; 2
+     c0c:	ad b7       	in	r26, 0x3d	; 61
+     c0e:	be b7       	in	r27, 0x3e	; 62
+     c10:	12 96       	adiw	r26, 0x02	; 2
+     c12:	9c 93       	st	X, r25
+     c14:	8e 93       	st	-X, r24
+     c16:	11 97       	sbiw	r26, 0x01	; 1
+     c18:	22 83       	std	Z+2, r18	; 0x02
+     c1a:	13 82       	std	Z+3, r1	; 0x03
+     c1c:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	printf245("PORTB = 0x%x\n\r", PORTB);
+     c20:	25 b1       	in	r18, 0x05	; 5
+     c22:	ed b7       	in	r30, 0x3d	; 61
+     c24:	fe b7       	in	r31, 0x3e	; 62
+     c26:	31 96       	adiw	r30, 0x01	; 1
+     c28:	8b e6       	ldi	r24, 0x6B	; 107
+     c2a:	92 e0       	ldi	r25, 0x02	; 2
+     c2c:	ad b7       	in	r26, 0x3d	; 61
+     c2e:	be b7       	in	r27, 0x3e	; 62
+     c30:	12 96       	adiw	r26, 0x02	; 2
+     c32:	9c 93       	st	X, r25
+     c34:	8e 93       	st	-X, r24
+     c36:	11 97       	sbiw	r26, 0x01	; 1
+     c38:	22 83       	std	Z+2, r18	; 0x02
+     c3a:	13 82       	std	Z+3, r1	; 0x03
+     c3c:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	printf245("SPCR = 0x%x\n\r", SPCR);
+     c40:	2c b5       	in	r18, 0x2c	; 44
+     c42:	ed b7       	in	r30, 0x3d	; 61
+     c44:	fe b7       	in	r31, 0x3e	; 62
+     c46:	31 96       	adiw	r30, 0x01	; 1
+     c48:	8a e7       	ldi	r24, 0x7A	; 122
+     c4a:	92 e0       	ldi	r25, 0x02	; 2
+     c4c:	ad b7       	in	r26, 0x3d	; 61
+     c4e:	be b7       	in	r27, 0x3e	; 62
+     c50:	12 96       	adiw	r26, 0x02	; 2
+     c52:	9c 93       	st	X, r25
+     c54:	8e 93       	st	-X, r24
+     c56:	11 97       	sbiw	r26, 0x01	; 1
+     c58:	22 83       	std	Z+2, r18	; 0x02
+     c5a:	13 82       	std	Z+3, r1	; 0x03
+     c5c:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	printf245("SPSR = 0x%x\n\r", SPSR);
+     c60:	2d b5       	in	r18, 0x2d	; 45
+     c62:	ed b7       	in	r30, 0x3d	; 61
+     c64:	fe b7       	in	r31, 0x3e	; 62
+     c66:	31 96       	adiw	r30, 0x01	; 1
+     c68:	88 e8       	ldi	r24, 0x88	; 136
+     c6a:	92 e0       	ldi	r25, 0x02	; 2
+     c6c:	ad b7       	in	r26, 0x3d	; 61
+     c6e:	be b7       	in	r27, 0x3e	; 62
+     c70:	12 96       	adiw	r26, 0x02	; 2
+     c72:	9c 93       	st	X, r25
+     c74:	8e 93       	st	-X, r24
+     c76:	11 97       	sbiw	r26, 0x01	; 1
+     c78:	22 83       	std	Z+2, r18	; 0x02
+     c7a:	13 82       	std	Z+3, r1	; 0x03
+     c7c:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+  
+	char productID = SenReadSensorRegister(REG_PRODUCT_ID);
+     c80:	0f 90       	pop	r0
+     c82:	0f 90       	pop	r0
+     c84:	0f 90       	pop	r0
+     c86:	0f 90       	pop	r0
+     c88:	80 e0       	ldi	r24, 0x00	; 0
+     c8a:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     c8e:	18 2f       	mov	r17, r24
+	my_printf(welcom_menu); // Print menu
+     c90:	88 e6       	ldi	r24, 0x68	; 104
+     c92:	90 e0       	ldi	r25, 0x00	; 0
+     c94:	0e 94 d6 05 	call	0xbac	; 0xbac <my_printf>
+	printf245("ProductID = 0x%x\n", productID);
+     c98:	00 d0       	rcall	.+0      	; 0xc9a <SenShowSetupData+0xb4>
+     c9a:	00 d0       	rcall	.+0      	; 0xc9c <SenShowSetupData+0xb6>
+     c9c:	ed b7       	in	r30, 0x3d	; 61
+     c9e:	fe b7       	in	r31, 0x3e	; 62
+     ca0:	31 96       	adiw	r30, 0x01	; 1
+     ca2:	86 e9       	ldi	r24, 0x96	; 150
+     ca4:	92 e0       	ldi	r25, 0x02	; 2
+     ca6:	ad b7       	in	r26, 0x3d	; 61
+     ca8:	be b7       	in	r27, 0x3e	; 62
+     caa:	12 96       	adiw	r26, 0x02	; 2
+     cac:	9c 93       	st	X, r25
+     cae:	8e 93       	st	-X, r24
+     cb0:	11 97       	sbiw	r26, 0x01	; 1
+     cb2:	12 83       	std	Z+2, r17	; 0x02
+     cb4:	13 82       	std	Z+3, r1	; 0x03
+     cb6:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     cba:	0f 90       	pop	r0
+     cbc:	0f 90       	pop	r0
+     cbe:	0f 90       	pop	r0
+     cc0:	0f 90       	pop	r0
+}
+     cc2:	1f 91       	pop	r17
+     cc4:	08 95       	ret
+
+00000cc6 <SenBurstPixelMenu>:
+    c = getchar245();
+  }
+}
+
+/*********** Sen Pixel-Burst Mode **************/
+void SenBurstPixelMenu(void){
+     cc6:	0f 93       	push	r16
+     cc8:	1f 93       	push	r17
+     cca:	cf 93       	push	r28
+     ccc:	df 93       	push	r29
+  char input = 0;
+  while(1)
+  {
+	printf245("Input 2 for PixelBurst once; 0 for Continuous PixelBurst, 1 to stop.\n\r");
+     cce:	c8 ea       	ldi	r28, 0xA8	; 168
+     cd0:	d2 e0       	ldi	r29, 0x02	; 2
+	my_printf(ARROW);
+    input = getc245_blocking();
+	
+    if(input == 48)    { // Num. 0 to start
+      char c = 0;
+	  printf245("Ready to Burst:\n");
+     cd2:	0f ee       	ldi	r16, 0xEF	; 239
+     cd4:	12 e0       	ldi	r17, 0x02	; 2
+/*********** Sen Pixel-Burst Mode **************/
+void SenBurstPixelMenu(void){
+  char input = 0;
+  while(1)
+  {
+	printf245("Input 2 for PixelBurst once; 0 for Continuous PixelBurst, 1 to stop.\n\r");
+     cd6:	00 d0       	rcall	.+0      	; 0xcd8 <SenBurstPixelMenu+0x12>
+     cd8:	ed b7       	in	r30, 0x3d	; 61
+     cda:	fe b7       	in	r31, 0x3e	; 62
+     cdc:	d2 83       	std	Z+2, r29	; 0x02
+     cde:	c1 83       	std	Z+1, r28	; 0x01
+     ce0:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	my_printf(ARROW);
+     ce4:	0f 90       	pop	r0
+     ce6:	0f 90       	pop	r0
+     ce8:	81 e0       	ldi	r24, 0x01	; 1
+     cea:	0e 94 d6 05 	call	0xbac	; 0xbac <my_printf>
+    input = getc245_blocking();
+     cee:	0e 94 d1 05 	call	0xba2	; 0xba2 <getc245_blocking>
+	
+    if(input == 48)    { // Num. 0 to start
+     cf2:	80 33       	cpi	r24, 0x30	; 48
+     cf4:	71 f4       	brne	.+28     	; 0xd12 <SenBurstPixelMenu+0x4c>
+      char c = 0;
+	  printf245("Ready to Burst:\n");
+     cf6:	00 d0       	rcall	.+0      	; 0xcf8 <SenBurstPixelMenu+0x32>
+     cf8:	ed b7       	in	r30, 0x3d	; 61
+     cfa:	fe b7       	in	r31, 0x3e	; 62
+     cfc:	12 83       	std	Z+2, r17	; 0x02
+     cfe:	01 83       	std	Z+1, r16	; 0x01
+     d00:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	  select();
+     d04:	0f 90       	pop	r0
+     d06:	0f 90       	pop	r0
+     d08:	0e 94 fd 08 	call	0x11fa	; 0x11fa <select>
+	  SenContinuousImageDisplay();
+     d0c:	0e 94 74 05 	call	0xae8	; 0xae8 <SenContinuousImageDisplay>
+     d10:	e2 cf       	rjmp	.-60     	; 0xcd6 <SenBurstPixelMenu+0x10>
+    }	else if (input == 50)    {
+     d12:	82 33       	cpi	r24, 0x32	; 50
+     d14:	01 f7       	brne	.-64     	; 0xcd6 <SenBurstPixelMenu+0x10>
+	  select();
+     d16:	0e 94 fd 08 	call	0x11fa	; 0x11fa <select>
+      SenImageDisplay();
+     d1a:	0e 94 5b 05 	call	0xab6	; 0xab6 <SenImageDisplay>
+     d1e:	87 ea       	ldi	r24, 0xA7	; 167
+     d20:	91 e6       	ldi	r25, 0x61	; 97
+     d22:	01 97       	sbiw	r24, 0x01	; 1
+     d24:	f1 f7       	brne	.-4      	; 0xd22 <SenBurstPixelMenu+0x5c>
+     d26:	00 c0       	rjmp	.+0      	; 0xd28 <SenBurstPixelMenu+0x62>
+     d28:	00 00       	nop
+     d2a:	d5 cf       	rjmp	.-86     	; 0xcd6 <SenBurstPixelMenu+0x10>
+
+00000d2c <main>:
+int initialing = 0;    // 1: yes;  0: No
+int initialNeeded = -1; // Re-Connection Initial is needed only at the point that "initialing" changed from 1 to 0
+
+
+int main(void)
+{
+     d2c:	af 92       	push	r10
+     d2e:	bf 92       	push	r11
+     d30:	cf 92       	push	r12
+     d32:	df 92       	push	r13
+     d34:	ef 92       	push	r14
+     d36:	ff 92       	push	r15
+     d38:	0f 93       	push	r16
+     d3a:	1f 93       	push	r17
+     d3c:	cf 93       	push	r28
+     d3e:	df 93       	push	r29
+	DDRB |= (1<<LED);
+     d40:	21 9a       	sbi	0x04, 1	; 4
+	DDRC |= ((1<<SDA) | (1<<SCL));
+     d42:	87 b1       	in	r24, 0x07	; 7
+     d44:	80 63       	ori	r24, 0x30	; 48
+     d46:	87 b9       	out	0x07, r24	; 7
+	PORTB |= (1<<LED);
+     d48:	29 9a       	sbi	0x05, 1	; 5
+		//PORTC &= ~(1<<SDA);
+		//PORTC |= (1<<SCL);
+		//delay_ms(5);
+		//PORTC &= ~(1<<SCL);
+	}
+	ioinit();
+     d4a:	0e 94 69 07 	call	0xed2	; 0xed2 <ioinit>
+	spi_init();// MOSI, SCK, CS pins all Output,  MISO pin Input | SPI enable  | master mode 
+     d4e:	0e 94 f1 08 	call	0x11e2	; 0x11e2 <spi_init>
+	//menu();
+	
+	/***** Sen Action *****/
+	PORTC |= ((1<<SCL) | (1<<SDA));
+     d52:	88 b1       	in	r24, 0x08	; 8
+     d54:	80 63       	ori	r24, 0x30	; 48
+     d56:	88 b9       	out	0x08, r24	; 8
+	PORTC &= ~(1<<RESET);// SDA = RESET, Output, ==0
+     d58:	44 98       	cbi	0x08, 4	; 8
+	
+	SenSPI_Init();// SPI_Mode_3 |  SPI_CLOCK_DIV8, 2MB | MSB_First
+     d5a:	0e 94 16 09 	call	0x122c	; 0x122c <SenSPI_Init>
+	deselect();	
+     d5e:	0e 94 ff 08 	call	0x11fe	; 0x11fe <deselect>
+	//SenShowSetupData();
+	select();
+     d62:	0e 94 fd 08 	call	0x11fa	; 0x11fa <select>
+	char productID = SenReadSensorRegister(REG_PRODUCT_ID);
+     d66:	80 e0       	ldi	r24, 0x00	; 0
+     d68:	0e 94 3e 09 	call	0x127c	; 0x127c <SenReadSensorRegister>
+     d6c:	08 2f       	mov	r16, r24
+	my_printf(welcom_menu); // Print menu
+     d6e:	88 e6       	ldi	r24, 0x68	; 104
+     d70:	90 e0       	ldi	r25, 0x00	; 0
+     d72:	0e 94 d6 05 	call	0xbac	; 0xbac <my_printf>
+	printf245("ProductID = 0x%x\n\r", productID);
+     d76:	00 d0       	rcall	.+0      	; 0xd78 <main+0x4c>
+     d78:	00 d0       	rcall	.+0      	; 0xd7a <main+0x4e>
+     d7a:	ed b7       	in	r30, 0x3d	; 61
+     d7c:	fe b7       	in	r31, 0x3e	; 62
+     d7e:	31 96       	adiw	r30, 0x01	; 1
+     d80:	80 e0       	ldi	r24, 0x00	; 0
+     d82:	93 e0       	ldi	r25, 0x03	; 3
+     d84:	ad b7       	in	r26, 0x3d	; 61
+     d86:	be b7       	in	r27, 0x3e	; 62
+     d88:	12 96       	adiw	r26, 0x02	; 2
+     d8a:	9c 93       	st	X, r25
+     d8c:	8e 93       	st	-X, r24
+     d8e:	11 97       	sbiw	r26, 0x01	; 1
+     d90:	02 83       	std	Z+2, r16	; 0x02
+     d92:	13 82       	std	Z+3, r1	; 0x03
+     d94:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	printf245("\r*************************************************************\n");
+     d98:	0f 90       	pop	r0
+     d9a:	0f 90       	pop	r0
+     d9c:	83 e1       	ldi	r24, 0x13	; 19
+     d9e:	93 e0       	ldi	r25, 0x03	; 3
+     da0:	ed b7       	in	r30, 0x3d	; 61
+     da2:	fe b7       	in	r31, 0x3e	; 62
+     da4:	92 83       	std	Z+2, r25	; 0x02
+     da6:	81 83       	std	Z+1, r24	; 0x01
+     da8:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	printf245("\tWelcome to Sen Arduino Optical-Flow World \n");
+     dac:	83 e5       	ldi	r24, 0x53	; 83
+     dae:	93 e0       	ldi	r25, 0x03	; 3
+     db0:	ad b7       	in	r26, 0x3d	; 61
+     db2:	be b7       	in	r27, 0x3e	; 62
+     db4:	12 96       	adiw	r26, 0x02	; 2
+     db6:	9c 93       	st	X, r25
+     db8:	8e 93       	st	-X, r24
+     dba:	11 97       	sbiw	r26, 0x01	; 1
+     dbc:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	printf245("*************************************************************\n");	
+     dc0:	80 e8       	ldi	r24, 0x80	; 128
+     dc2:	93 e0       	ldi	r25, 0x03	; 3
+     dc4:	ed b7       	in	r30, 0x3d	; 61
+     dc6:	fe b7       	in	r31, 0x3e	; 62
+     dc8:	92 83       	std	Z+2, r25	; 0x02
+     dca:	81 83       	std	Z+1, r24	; 0x01
+     dcc:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+	n=0;
+     dd0:	10 92 13 06 	sts	0x0613, r1
+     dd4:	10 92 12 06 	sts	0x0612, r1
+     dd8:	0f 90       	pop	r0
+     dda:	0f 90       	pop	r0
+		}else if (input == 51)	{						// MotionBurst                  Num. 3 to start
+			SenContinueMotionBurst();
+		}else if (input == 113)	{						// Quit Request                 Letter q to quit, disconnected
+			printf245("I'm Sen Stop Request!\n");
+		}else	{
+			printf245("now the input is: 0x%d\n", input);
+     ddc:	0c ee       	ldi	r16, 0xEC	; 236
+     dde:	13 e0       	ldi	r17, 0x03	; 3
+			printf245("\nSenMotionSprouting:\n");
+			SenReadCoodinataData();
+		}else if (input == 51)	{						// MotionBurst                  Num. 3 to start
+			SenContinueMotionBurst();
+		}else if (input == 113)	{						// Quit Request                 Letter q to quit, disconnected
+			printf245("I'm Sen Stop Request!\n");
+     de0:	0f 2e       	mov	r0, r31
+     de2:	f5 ed       	ldi	r31, 0xD5	; 213
+     de4:	ef 2e       	mov	r14, r31
+     de6:	f3 e0       	ldi	r31, 0x03	; 3
+     de8:	ff 2e       	mov	r15, r31
+     dea:	f0 2d       	mov	r31, r0
+		}else if (input == 49)    {						// One Frame Pixels             Num. 1 to start
+			select();
+			SenImageDisplay();
+			_delay_ms(100);		
+		}else if (input == 50)	{						// MotionTracking               Num. 2 to start
+			printf245("\nSenMotionSprouting:\n");
+     dec:	0f 2e       	mov	r0, r31
+     dee:	ff eb       	ldi	r31, 0xBF	; 191
+     df0:	af 2e       	mov	r10, r31
+     df2:	f3 e0       	ldi	r31, 0x03	; 3
+     df4:	bf 2e       	mov	r11, r31
+     df6:	f0 2d       	mov	r31, r0
+	while(1)
+	{		
+		input = getc245_blocking();
+		
+	    if(input == 48)    {							// Continuous Frames Pixels      Num. 0 to start
+			printf245("Ready to Burst:\n");
+     df8:	0f 2e       	mov	r0, r31
+     dfa:	ff ee       	ldi	r31, 0xEF	; 239
+     dfc:	cf 2e       	mov	r12, r31
+     dfe:	f2 e0       	ldi	r31, 0x02	; 2
+     e00:	df 2e       	mov	r13, r31
+     e02:	f0 2d       	mov	r31, r0
+			printf245("I'm Sen Stop Request!\n");
+		}else	{
+			printf245("now the input is: 0x%d\n", input);
+		}
+		
+		printf245("\n");
+     e04:	c9 ed       	ldi	r28, 0xD9	; 217
+     e06:	d1 e0       	ldi	r29, 0x01	; 1
+	char input = 0;
+
+		
+	while(1)
+	{		
+		input = getc245_blocking();
+     e08:	0e 94 d1 05 	call	0xba2	; 0xba2 <getc245_blocking>
+		
+	    if(input == 48)    {							// Continuous Frames Pixels      Num. 0 to start
+     e0c:	80 33       	cpi	r24, 0x30	; 48
+     e0e:	81 f4       	brne	.+32     	; 0xe30 <main+0x104>
+			printf245("Ready to Burst:\n");
+     e10:	00 d0       	rcall	.+0      	; 0xe12 <main+0xe6>
+     e12:	ad b7       	in	r26, 0x3d	; 61
+     e14:	be b7       	in	r27, 0x3e	; 62
+     e16:	12 96       	adiw	r26, 0x02	; 2
+     e18:	dc 92       	st	X, r13
+     e1a:	ce 92       	st	-X, r12
+     e1c:	11 97       	sbiw	r26, 0x01	; 1
+     e1e:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+			select();
+     e22:	0f 90       	pop	r0
+     e24:	0f 90       	pop	r0
+     e26:	0e 94 fd 08 	call	0x11fa	; 0x11fa <select>
+			SenContinuousImageDisplay();
+     e2a:	0e 94 74 05 	call	0xae8	; 0xae8 <SenContinuousImageDisplay>
+     e2e:	41 c0       	rjmp	.+130    	; 0xeb2 <main+0x186>
+		}else if (input == 49)    {						// One Frame Pixels             Num. 1 to start
+     e30:	81 33       	cpi	r24, 0x31	; 49
+     e32:	59 f4       	brne	.+22     	; 0xe4a <main+0x11e>
+			select();
+     e34:	0e 94 fd 08 	call	0x11fa	; 0x11fa <select>
+			SenImageDisplay();
+     e38:	0e 94 5b 05 	call	0xab6	; 0xab6 <SenImageDisplay>
+     e3c:	e7 ea       	ldi	r30, 0xA7	; 167
+     e3e:	f1 e6       	ldi	r31, 0x61	; 97
+     e40:	31 97       	sbiw	r30, 0x01	; 1
+     e42:	f1 f7       	brne	.-4      	; 0xe40 <main+0x114>
+     e44:	00 c0       	rjmp	.+0      	; 0xe46 <main+0x11a>
+     e46:	00 00       	nop
+     e48:	34 c0       	rjmp	.+104    	; 0xeb2 <main+0x186>
+			_delay_ms(100);		
+		}else if (input == 50)	{						// MotionTracking               Num. 2 to start
+     e4a:	82 33       	cpi	r24, 0x32	; 50
+     e4c:	71 f4       	brne	.+28     	; 0xe6a <main+0x13e>
+			printf245("\nSenMotionSprouting:\n");
+     e4e:	00 d0       	rcall	.+0      	; 0xe50 <main+0x124>
+     e50:	ad b7       	in	r26, 0x3d	; 61
+     e52:	be b7       	in	r27, 0x3e	; 62
+     e54:	12 96       	adiw	r26, 0x02	; 2
+     e56:	bc 92       	st	X, r11
+     e58:	ae 92       	st	-X, r10
+     e5a:	11 97       	sbiw	r26, 0x01	; 1
+     e5c:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+			SenReadCoodinataData();
+     e60:	0f 90       	pop	r0
+     e62:	0f 90       	pop	r0
+     e64:	0e 94 b6 04 	call	0x96c	; 0x96c <SenReadCoodinataData>
+     e68:	24 c0       	rjmp	.+72     	; 0xeb2 <main+0x186>
+		}else if (input == 51)	{						// MotionBurst                  Num. 3 to start
+     e6a:	83 33       	cpi	r24, 0x33	; 51
+     e6c:	19 f4       	brne	.+6      	; 0xe74 <main+0x148>
+			SenContinueMotionBurst();
+     e6e:	0e 94 d8 03 	call	0x7b0	; 0x7b0 <SenContinueMotionBurst>
+     e72:	1f c0       	rjmp	.+62     	; 0xeb2 <main+0x186>
+		}else if (input == 113)	{						// Quit Request                 Letter q to quit, disconnected
+     e74:	81 37       	cpi	r24, 0x71	; 113
+     e76:	51 f4       	brne	.+20     	; 0xe8c <main+0x160>
+			printf245("I'm Sen Stop Request!\n");
+     e78:	00 d0       	rcall	.+0      	; 0xe7a <main+0x14e>
+     e7a:	ed b7       	in	r30, 0x3d	; 61
+     e7c:	fe b7       	in	r31, 0x3e	; 62
+     e7e:	f2 82       	std	Z+2, r15	; 0x02
+     e80:	e1 82       	std	Z+1, r14	; 0x01
+     e82:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     e86:	0f 90       	pop	r0
+     e88:	0f 90       	pop	r0
+     e8a:	13 c0       	rjmp	.+38     	; 0xeb2 <main+0x186>
+		}else	{
+			printf245("now the input is: 0x%d\n", input);
+     e8c:	00 d0       	rcall	.+0      	; 0xe8e <main+0x162>
+     e8e:	00 d0       	rcall	.+0      	; 0xe90 <main+0x164>
+     e90:	ed b7       	in	r30, 0x3d	; 61
+     e92:	fe b7       	in	r31, 0x3e	; 62
+     e94:	31 96       	adiw	r30, 0x01	; 1
+     e96:	ad b7       	in	r26, 0x3d	; 61
+     e98:	be b7       	in	r27, 0x3e	; 62
+     e9a:	12 96       	adiw	r26, 0x02	; 2
+     e9c:	1c 93       	st	X, r17
+     e9e:	0e 93       	st	-X, r16
+     ea0:	11 97       	sbiw	r26, 0x01	; 1
+     ea2:	82 83       	std	Z+2, r24	; 0x02
+     ea4:	13 82       	std	Z+3, r1	; 0x03
+     ea6:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     eaa:	0f 90       	pop	r0
+     eac:	0f 90       	pop	r0
+     eae:	0f 90       	pop	r0
+     eb0:	0f 90       	pop	r0
+		}
+		
+		printf245("\n");
+     eb2:	00 d0       	rcall	.+0      	; 0xeb4 <main+0x188>
+     eb4:	ed b7       	in	r30, 0x3d	; 61
+     eb6:	fe b7       	in	r31, 0x3e	; 62
+     eb8:	d2 83       	std	Z+2, r29	; 0x02
+     eba:	c1 83       	std	Z+1, r28	; 0x01
+     ebc:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+     ec0:	87 ea       	ldi	r24, 0xA7	; 167
+     ec2:	91 e6       	ldi	r25, 0x61	; 97
+     ec4:	01 97       	sbiw	r24, 0x01	; 1
+     ec6:	f1 f7       	brne	.-4      	; 0xec4 <main+0x198>
+     ec8:	00 c0       	rjmp	.+0      	; 0xeca <main+0x19e>
+     eca:	00 00       	nop
+     ecc:	0f 90       	pop	r0
+     ece:	0f 90       	pop	r0
+     ed0:	9b cf       	rjmp	.-202    	; 0xe08 <main+0xdc>
+
+00000ed2 <ioinit>:
+
+//Initializes the I/O pins, the interrupts and the system parameters
+void ioinit (void)
+{
+    //1 = output, 0 = input   
+	DDRC |= WR | RD;
+     ed2:	87 b1       	in	r24, 0x07	; 7
+     ed4:	83 60       	ori	r24, 0x03	; 3
+     ed6:	87 b9       	out	0x07, r24	; 7
+	DDRC &= ~(RXF | TXE);
+     ed8:	87 b1       	in	r24, 0x07	; 7
+     eda:	83 7f       	andi	r24, 0xF3	; 243
+     edc:	87 b9       	out	0x07, r24	; 7
+	DDRB &= ~(PWREN);
+     ede:	20 98       	cbi	0x04, 0	; 4
+	PORTC |= (RXF | TXE);
+     ee0:	88 b1       	in	r24, 0x08	; 8
+     ee2:	8c 60       	ori	r24, 0x0C	; 12
+     ee4:	88 b9       	out	0x08, r24	; 8
+	PORTB |= (PWREN);
+     ee6:	28 9a       	sbi	0x05, 0	; 5
+	
+	DDRD &= ~(D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7);
+     ee8:	8a b1       	in	r24, 0x0a	; 10
+     eea:	1a b8       	out	0x0a, r1	; 10
+	PORTD |= (D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7);
+     eec:	8b b1       	in	r24, 0x0b	; 11
+     eee:	8f ef       	ldi	r24, 0xFF	; 255
+     ef0:	8b b9       	out	0x0b, r24	; 11
+	
+}   
+     ef2:	08 95       	ret
+
+00000ef4 <delay_ms>:
+
+void delay_ms(uint16_t x)
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+     ef4:	0a c0       	rjmp	.+20     	; 0xf0a <delay_ms+0x16>
+    for ( y = 0;  y < 40 ; y++){
+      for ( z = 0 ; z < 40 ; z++){
+        asm volatile ("nop");
+     ef6:	00 00       	nop
+     ef8:	21 50       	subi	r18, 0x01	; 1
+void delay_ms(uint16_t x)
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+    for ( y = 0;  y < 40 ; y++){
+      for ( z = 0 ; z < 40 ; z++){
+     efa:	e9 f7       	brne	.-6      	; 0xef6 <delay_ms+0x2>
+     efc:	31 50       	subi	r19, 0x01	; 1
+
+void delay_ms(uint16_t x)
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+    for ( y = 0;  y < 40 ; y++){
+     efe:	11 f4       	brne	.+4      	; 0xf04 <delay_ms+0x10>
+     f00:	03 c0       	rjmp	.+6      	; 0xf08 <delay_ms+0x14>
+}   
+
+void delay_ms(uint16_t x)
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+     f02:	38 e2       	ldi	r19, 0x28	; 40
+	PORTD |= (D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7);
+	
+}   
+
+void delay_ms(uint16_t x)
+{
+     f04:	28 e2       	ldi	r18, 0x28	; 40
+     f06:	f7 cf       	rjmp	.-18     	; 0xef6 <delay_ms+0x2>
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+     f08:	01 97       	sbiw	r24, 0x01	; 1
+     f0a:	00 97       	sbiw	r24, 0x00	; 0
+     f0c:	d1 f7       	brne	.-12     	; 0xf02 <delay_ms+0xe>
+      for ( z = 0 ; z < 40 ; z++){
+        asm volatile ("nop");
+      }
+    }
+  }
+}
+     f0e:	08 95       	ret
+
+00000f10 <delay_micro>:
+
+//General short delays
+void delay_micro(uint16_t x)
+{
+  uint8_t y;
+  for ( ; x > 0 ; x--){
+     f10:	00 97       	sbiw	r24, 0x00	; 0
+     f12:	31 f0       	breq	.+12     	; 0xf20 <delay_micro+0x10>
+	...
+     f1c:	01 97       	sbiw	r24, 0x01	; 1
+     f1e:	d1 f7       	brne	.-12     	; 0xf14 <delay_micro+0x4>
+     f20:	08 95       	ret
+
+00000f22 <setDataOutputs>:
+}
+
+//Configures the I/O pins to output to the FT245
+void setDataOutputs(void){
+    //1 = output, 0 = input
+	PORTD &= ~(D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7); //Disable Pullups (Intermediate Step)
+     f22:	8b b1       	in	r24, 0x0b	; 11
+     f24:	1b b8       	out	0x0b, r1	; 11
+	DDRD |= (D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7);
+     f26:	8a b1       	in	r24, 0x0a	; 10
+     f28:	8f ef       	ldi	r24, 0xFF	; 255
+     f2a:	8a b9       	out	0x0a, r24	; 10
+}
+     f2c:	08 95       	ret
+
+00000f2e <setDataInputs>:
+
+//Configures the I/O pins to input from the FT245
+void setDataInputs(void){
+    //1 = output, 0 = input	
+	DDRD &= ~(D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7);
+     f2e:	8a b1       	in	r24, 0x0a	; 10
+     f30:	1a b8       	out	0x0a, r1	; 10
+	PORTD |= (D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7); //Enable Pullups
+     f32:	8b b1       	in	r24, 0x0b	; 11
+     f34:	8f ef       	ldi	r24, 0xFF	; 255
+     f36:	8b b9       	out	0x0b, r24	; 11
+}
+     f38:	08 95       	ret
+
+00000f3a <SenPrint245Byte>:
+
+//Printf a Byte to the FT245. Works Serial.Write
+void SenPrint245Byte(const unsigned char mybyte){
+	//char character=0, temp=0;
+	//setDataOutputs();
+	if(USBwriteAllowed()){
+     f3a:	32 99       	sbic	0x06, 2	; 6
+     f3c:	07 c0       	rjmp	.+14     	; 0xf4c <SenPrint245Byte+0x12>
+		PORTD = mybyte;				
+     f3e:	8b b9       	out	0x0b, r24	; 11
+		clearWR();
+     f40:	41 98       	cbi	0x08, 1	; 8
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+     f42:	86 e0       	ldi	r24, 0x06	; 6
+     f44:	8a 95       	dec	r24
+     f46:	f1 f7       	brne	.-4      	; 0xf44 <SenPrint245Byte+0xa>
+     f48:	00 c0       	rjmp	.+0      	; 0xf4a <SenPrint245Byte+0x10>
+		_delay_us(HOLD_TIME);//_delay_ms(1);//	delay_ms(1);
+		setWR();
+     f4a:	41 9a       	sbi	0x08, 1	; 8
+     f4c:	08 95       	ret
+
+00000f4e <SenSerialAvailableCheck>:
+	}
+}
+
+int SenSerialAvailableCheck(void)
+{
+     f4e:	1f 93       	push	r17
+	char character=0;
+	setDataInputs();
+     f50:	0e 94 97 07 	call	0xf2e	; 0xf2e <setDataInputs>
+	if(USBreadAllowed()){		//If RX Flag is low, lets get the data from the FIFO
+     f54:	33 99       	sbic	0x06, 3	; 6
+     f56:	08 c0       	rjmp	.+16     	; 0xf68 <SenSerialAvailableCheck+0x1a>
+		clearRD();			//Clock the next FIFO data onto the D0-D7 lines
+     f58:	40 98       	cbi	0x08, 0	; 8
+     f5a:	86 e0       	ldi	r24, 0x06	; 6
+     f5c:	8a 95       	dec	r24
+     f5e:	f1 f7       	brne	.-4      	; 0xf5c <SenSerialAvailableCheck+0xe>
+     f60:	00 c0       	rjmp	.+0      	; 0xf62 <SenSerialAvailableCheck+0x14>
+		_delay_us(HOLD_TIME);//	delay_micro(HOLD_TIME);
+		character = PIND;		//Get data from FT245		
+     f62:	19 b1       	in	r17, 0x09	; 9
+		setRD();			//Relinquish control of the Data lines
+     f64:	40 9a       	sbi	0x08, 0	; 8
+     f66:	01 c0       	rjmp	.+2      	; 0xf6a <SenSerialAvailableCheck+0x1c>
+	}
+}
+
+int SenSerialAvailableCheck(void)
+{
+	char character=0;
+     f68:	10 e0       	ldi	r17, 0x00	; 0
+		clearRD();			//Clock the next FIFO data onto the D0-D7 lines
+		_delay_us(HOLD_TIME);//	delay_micro(HOLD_TIME);
+		character = PIND;		//Get data from FT245		
+		setRD();			//Relinquish control of the Data lines
+	}
+	setDataOutputs();
+     f6a:	0e 94 91 07 	call	0xf22	; 0xf22 <setDataOutputs>
+	//if(character != 0)
+		//character = 1;
+//
+	return character;
+}
+     f6e:	81 2f       	mov	r24, r17
+     f70:	90 e0       	ldi	r25, 0x00	; 0
+     f72:	1f 91       	pop	r17
+     f74:	08 95       	ret
+
+00000f76 <getchar245>:
+
+//Returns a character from the FT245
+char getchar245(void){
+	char character=0;
+	
+	setDataInputs();
+     f76:	0e 94 97 07 	call	0xf2e	; 0xf2e <setDataInputs>
+	if(USBreadAllowed()){		//If RX Flag is low, lets get the data from the FIFO
+     f7a:	33 99       	sbic	0x06, 3	; 6
+     f7c:	08 c0       	rjmp	.+16     	; 0xf8e <getchar245+0x18>
+		clearRD();			//Clock the next FIFO data onto the D0-D7 lines
+     f7e:	40 98       	cbi	0x08, 0	; 8
+     f80:	86 e0       	ldi	r24, 0x06	; 6
+     f82:	8a 95       	dec	r24
+     f84:	f1 f7       	brne	.-4      	; 0xf82 <getchar245+0xc>
+     f86:	00 c0       	rjmp	.+0      	; 0xf88 <getchar245+0x12>
+		_delay_us(HOLD_TIME);//	delay_micro(HOLD_TIME);
+		character = PIND;		//Get data from FT245		
+     f88:	89 b1       	in	r24, 0x09	; 9
+		setRD();			//Relinquish control of the Data lines
+     f8a:	40 9a       	sbi	0x08, 0	; 8
+     f8c:	08 95       	ret
+	return character;
+}
+
+//Returns a character from the FT245
+char getchar245(void){
+	char character=0;
+     f8e:	80 e0       	ldi	r24, 0x00	; 0
+		_delay_us(HOLD_TIME);//	delay_micro(HOLD_TIME);
+		character = PIND;		//Get data from FT245		
+		setRD();			//Relinquish control of the Data lines
+	}
+	return character;
+}
+     f90:	08 95       	ret
+
+00000f92 <reverse>:
+
+/* reverse:  reverse string s in place */
+void reverse(char s[])
+{
+     f92:	ef 92       	push	r14
+     f94:	ff 92       	push	r15
+     f96:	cf 93       	push	r28
+     f98:	df 93       	push	r29
+    int c, i, j;
+
+    for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+     f9a:	e8 2e       	mov	r14, r24
+     f9c:	e7 01       	movw	r28, r14
+     f9e:	7e 01       	movw	r14, r28
+     fa0:	f9 2e       	mov	r15, r25
+     fa2:	d7 01       	movw	r26, r14
+     fa4:	0d 90       	ld	r0, X+
+     fa6:	00 20       	and	r0, r0
+     fa8:	e9 f7       	brne	.-6      	; 0xfa4 <reverse+0x12>
+     faa:	11 97       	sbiw	r26, 0x01	; 1
+     fac:	ae 19       	sub	r26, r14
+     fae:	bf 09       	sbc	r27, r15
+     fb0:	ad 01       	movw	r20, r26
+     fb2:	41 50       	subi	r20, 0x01	; 1
+     fb4:	50 40       	sbci	r21, 0x00	; 0
+     fb6:	14 16       	cp	r1, r20
+     fb8:	15 06       	cpc	r1, r21
+     fba:	8c f4       	brge	.+34     	; 0xfde <reverse+0x4c>
+	}
+	return character;
+}
+
+/* reverse:  reverse string s in place */
+void reverse(char s[])
+     fbc:	a8 0f       	add	r26, r24
+     fbe:	b9 1f       	adc	r27, r25
+{
+    int c, i, j;
+
+    for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+     fc0:	fc 01       	movw	r30, r24
+     fc2:	20 e0       	ldi	r18, 0x00	; 0
+     fc4:	30 e0       	ldi	r19, 0x00	; 0
+        c = s[i];
+     fc6:	80 81       	ld	r24, Z
+        s[i] = s[j];
+     fc8:	9e 91       	ld	r25, -X
+     fca:	91 93       	st	Z+, r25
+        s[j] = c;
+     fcc:	8c 93       	st	X, r24
+/* reverse:  reverse string s in place */
+void reverse(char s[])
+{
+    int c, i, j;
+
+    for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+     fce:	2f 5f       	subi	r18, 0xFF	; 255
+     fd0:	3f 4f       	sbci	r19, 0xFF	; 255
+	}
+	return character;
+}
+
+/* reverse:  reverse string s in place */
+void reverse(char s[])
+     fd2:	ca 01       	movw	r24, r20
+     fd4:	82 1b       	sub	r24, r18
+     fd6:	93 0b       	sbc	r25, r19
+{
+    int c, i, j;
+
+    for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+     fd8:	28 17       	cp	r18, r24
+     fda:	39 07       	cpc	r19, r25
+     fdc:	a4 f3       	brlt	.-24     	; 0xfc6 <reverse+0x34>
+        c = s[i];
+        s[i] = s[j];
+        s[j] = c;
+    }
+}
+     fde:	df 91       	pop	r29
+     fe0:	cf 91       	pop	r28
+     fe2:	ff 90       	pop	r15
+     fe4:	ef 90       	pop	r14
+     fe6:	08 95       	ret
+
+00000fe8 <itoa2>:
+
+/* itoa:  convert n to characters in s */
+void itoa2(int n, char s[])
+{
+     fe8:	0f 93       	push	r16
+     fea:	1f 93       	push	r17
+     fec:	cf 93       	push	r28
+     fee:	df 93       	push	r29
+     ff0:	8b 01       	movw	r16, r22
+    int i=0;
+     ff2:	fb 01       	movw	r30, r22
+     ff4:	20 e0       	ldi	r18, 0x00	; 0
+     ff6:	30 e0       	ldi	r19, 0x00	; 0
+
+    do {       /* generate digits in reverse order */
+        s[i++] = n % 10 + '0';   /* get next digit */
+     ff8:	ca e0       	ldi	r28, 0x0A	; 10
+     ffa:	d0 e0       	ldi	r29, 0x00	; 0
+     ffc:	be 01       	movw	r22, r28
+     ffe:	0e 94 62 09 	call	0x12c4	; 0x12c4 <__divmodhi4>
+    1002:	80 5d       	subi	r24, 0xD0	; 208
+    1004:	81 93       	st	Z+, r24
+    1006:	2f 5f       	subi	r18, 0xFF	; 255
+    1008:	3f 4f       	sbci	r19, 0xFF	; 255
+    } while ((n /= 10) > 0);     /* delete it */
+    100a:	86 2f       	mov	r24, r22
+    100c:	97 2f       	mov	r25, r23
+    100e:	18 16       	cp	r1, r24
+    1010:	19 06       	cpc	r1, r25
+    1012:	a4 f3       	brlt	.-24     	; 0xffc <itoa2+0x14>
+
+    s[i] = '\0';
+    1014:	20 0f       	add	r18, r16
+    1016:	31 1f       	adc	r19, r17
+    1018:	f9 01       	movw	r30, r18
+    101a:	10 82       	st	Z, r1
+    reverse(s);
+    101c:	c8 01       	movw	r24, r16
+    101e:	0e 94 c9 07 	call	0xf92	; 0xf92 <reverse>
+}
+    1022:	df 91       	pop	r29
+    1024:	cf 91       	pop	r28
+    1026:	1f 91       	pop	r17
+    1028:	0f 91       	pop	r16
+    102a:	08 95       	ret
+
+0000102c <printf245>:
+	DDRD &= ~(D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7);
+	PORTD |= (D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7); //Enable Pullups
+}
+
+//Printf a string to the FT245. Works like printf
+void printf245(const char *text, ...){
+    102c:	4f 92       	push	r4
+    102e:	5f 92       	push	r5
+    1030:	6f 92       	push	r6
+    1032:	7f 92       	push	r7
+    1034:	8f 92       	push	r8
+    1036:	9f 92       	push	r9
+    1038:	af 92       	push	r10
+    103a:	bf 92       	push	r11
+    103c:	cf 92       	push	r12
+    103e:	df 92       	push	r13
+    1040:	ef 92       	push	r14
+    1042:	ff 92       	push	r15
+    1044:	0f 93       	push	r16
+    1046:	1f 93       	push	r17
+    1048:	df 93       	push	r29
+    104a:	cf 93       	push	r28
+    104c:	00 d0       	rcall	.+0      	; 0x104e <printf245+0x22>
+    104e:	00 d0       	rcall	.+0      	; 0x1050 <printf245+0x24>
+    1050:	00 d0       	rcall	.+0      	; 0x1052 <printf245+0x26>
+    1052:	cd b7       	in	r28, 0x3d	; 61
+    1054:	de b7       	in	r29, 0x3e	; 62
+    1056:	0f 2e       	mov	r0, r31
+    1058:	f9 e1       	ldi	r31, 0x19	; 25
+    105a:	ef 2e       	mov	r14, r31
+    105c:	ff 24       	eor	r15, r15
+    105e:	f0 2d       	mov	r31, r0
+    1060:	ec 0e       	add	r14, r28
+    1062:	fd 1e       	adc	r15, r29
+    1064:	d7 01       	movw	r26, r14
+    1066:	cd 90       	ld	r12, X+
+    1068:	dd 90       	ld	r13, X+
+    106a:	7d 01       	movw	r14, r26
+	int index=0;
+	
+	va_list next_argument;		//Create a pointer for the variable argument
+	va_start(next_argument, text);	//Initialize the pointer to the next argument in the list
+	
+	setDataOutputs();
+    106c:	0e 94 91 07 	call	0xf22	; 0xf22 <setDataOutputs>
+	character=text[index];
+    1070:	f6 01       	movw	r30, r12
+    1072:	80 81       	ld	r24, Z
+
+//Printf a string to the FT245. Works like printf
+void printf245(const char *text, ...){
+	char character=0, temp=0;
+	char decimal[6];
+	int index=0;
+    1074:	00 e0       	ldi	r16, 0x00	; 0
+    1076:	10 e0       	ldi	r17, 0x00	; 0
+				else if(text[index+1]=='x'){
+					temp=character;
+					temp=temp>>4;
+					if(temp>9)temp+=('A'-10);
+					else temp+='0';
+					printf245("%c", temp);
+    1078:	0f 2e       	mov	r0, r31
+    107a:	fa e0       	ldi	r31, 0x0A	; 10
+    107c:	af 2e       	mov	r10, r31
+    107e:	f4 e0       	ldi	r31, 0x04	; 4
+    1080:	bf 2e       	mov	r11, r31
+    1082:	f0 2d       	mov	r31, r0
+		if(USBwriteAllowed()){
+			if(character=='%'){	//Need to access an argument value!
+				character = (char)va_arg(next_argument, int);	//Get the value of the current argument
+				
+				if(text[index+1]=='d'){
+					itoa2(character, decimal);
+    1084:	3e 01       	movw	r6, r28
+    1086:	08 94       	sec
+    1088:	61 1c       	adc	r6, r1
+    108a:	71 1c       	adc	r7, r1
+					for(int i=0; decimal[i]!='\0'; i++)printf245("%c", decimal[i]);
+    108c:	44 24       	eor	r4, r4
+    108e:	55 24       	eor	r5, r5
+    1090:	68 94       	set
+    1092:	41 f8       	bld	r4, 1
+    1094:	4c 0e       	add	r4, r28
+    1096:	5d 1e       	adc	r5, r29
+	va_list next_argument;		//Create a pointer for the variable argument
+	va_start(next_argument, text);	//Initialize the pointer to the next argument in the list
+	
+	setDataOutputs();
+	character=text[index];
+	while(character!='\0'){
+    1098:	88 c0       	rjmp	.+272    	; 0x11aa <printf245+0x17e>
+		if(USBwriteAllowed()){
+    109a:	32 99       	sbic	0x06, 2	; 6
+    109c:	fe cf       	rjmp	.-4      	; 0x109a <printf245+0x6e>
+			if(character=='%'){	//Need to access an argument value!
+    109e:	85 32       	cpi	r24, 0x25	; 37
+    10a0:	09 f0       	breq	.+2      	; 0x10a4 <printf245+0x78>
+    10a2:	76 c0       	rjmp	.+236    	; 0x1190 <printf245+0x164>
+				character = (char)va_arg(next_argument, int);	//Get the value of the current argument
+    10a4:	f7 01       	movw	r30, r14
+    10a6:	82 e0       	ldi	r24, 0x02	; 2
+    10a8:	90 e0       	ldi	r25, 0x00	; 0
+    10aa:	e8 0e       	add	r14, r24
+    10ac:	f9 1e       	adc	r15, r25
+    10ae:	90 80       	ld	r9, Z
+				
+				if(text[index+1]=='d'){
+    10b0:	f6 01       	movw	r30, r12
+    10b2:	e0 0f       	add	r30, r16
+    10b4:	f1 1f       	adc	r31, r17
+    10b6:	81 81       	ldd	r24, Z+1	; 0x01
+    10b8:	84 36       	cpi	r24, 0x64	; 100
+    10ba:	21 f5       	brne	.+72     	; 0x1104 <printf245+0xd8>
+					itoa2(character, decimal);
+    10bc:	89 2d       	mov	r24, r9
+    10be:	90 e0       	ldi	r25, 0x00	; 0
+    10c0:	b3 01       	movw	r22, r6
+    10c2:	0e 94 f4 07 	call	0xfe8	; 0xfe8 <itoa2>
+					for(int i=0; decimal[i]!='\0'; i++)printf245("%c", decimal[i]);
+    10c6:	89 81       	ldd	r24, Y+1	; 0x01
+    10c8:	88 23       	and	r24, r24
+    10ca:	c9 f0       	breq	.+50     	; 0x10fe <printf245+0xd2>
+    10cc:	42 01       	movw	r8, r4
+    10ce:	00 d0       	rcall	.+0      	; 0x10d0 <printf245+0xa4>
+    10d0:	00 d0       	rcall	.+0      	; 0x10d2 <printf245+0xa6>
+    10d2:	ed b7       	in	r30, 0x3d	; 61
+    10d4:	fe b7       	in	r31, 0x3e	; 62
+    10d6:	31 96       	adiw	r30, 0x01	; 1
+    10d8:	ad b7       	in	r26, 0x3d	; 61
+    10da:	be b7       	in	r27, 0x3e	; 62
+    10dc:	12 96       	adiw	r26, 0x02	; 2
+    10de:	bc 92       	st	X, r11
+    10e0:	ae 92       	st	-X, r10
+    10e2:	11 97       	sbiw	r26, 0x01	; 1
+    10e4:	82 83       	std	Z+2, r24	; 0x02
+    10e6:	13 82       	std	Z+3, r1	; 0x03
+    10e8:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+    10ec:	f4 01       	movw	r30, r8
+    10ee:	81 91       	ld	r24, Z+
+    10f0:	4f 01       	movw	r8, r30
+    10f2:	0f 90       	pop	r0
+    10f4:	0f 90       	pop	r0
+    10f6:	0f 90       	pop	r0
+    10f8:	0f 90       	pop	r0
+    10fa:	88 23       	and	r24, r24
+    10fc:	41 f7       	brne	.-48     	; 0x10ce <printf245+0xa2>
+					index+=1;
+    10fe:	0f 5f       	subi	r16, 0xFF	; 255
+    1100:	1f 4f       	sbci	r17, 0xFF	; 255
+    1102:	4d c0       	rjmp	.+154    	; 0x119e <printf245+0x172>
+				}
+				else if(text[index+1]=='x'){
+    1104:	88 37       	cpi	r24, 0x78	; 120
+    1106:	c1 f5       	brne	.+112    	; 0x1178 <printf245+0x14c>
+					temp=character;
+					temp=temp>>4;
+    1108:	89 2d       	mov	r24, r9
+    110a:	82 95       	swap	r24
+    110c:	8f 70       	andi	r24, 0x0F	; 15
+					if(temp>9)temp+=('A'-10);
+    110e:	8a 30       	cpi	r24, 0x0A	; 10
+    1110:	10 f0       	brcs	.+4      	; 0x1116 <printf245+0xea>
+    1112:	89 5c       	subi	r24, 0xC9	; 201
+    1114:	01 c0       	rjmp	.+2      	; 0x1118 <printf245+0xec>
+					else temp+='0';
+    1116:	80 5d       	subi	r24, 0xD0	; 208
+					printf245("%c", temp);
+    1118:	00 d0       	rcall	.+0      	; 0x111a <printf245+0xee>
+    111a:	00 d0       	rcall	.+0      	; 0x111c <printf245+0xf0>
+    111c:	ed b7       	in	r30, 0x3d	; 61
+    111e:	fe b7       	in	r31, 0x3e	; 62
+    1120:	31 96       	adiw	r30, 0x01	; 1
+    1122:	ad b7       	in	r26, 0x3d	; 61
+    1124:	be b7       	in	r27, 0x3e	; 62
+    1126:	12 96       	adiw	r26, 0x02	; 2
+    1128:	bc 92       	st	X, r11
+    112a:	ae 92       	st	-X, r10
+    112c:	11 97       	sbiw	r26, 0x01	; 1
+    112e:	82 83       	std	Z+2, r24	; 0x02
+    1130:	13 82       	std	Z+3, r1	; 0x03
+    1132:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+					character=character&0x0f;
+    1136:	89 2d       	mov	r24, r9
+    1138:	8f 70       	andi	r24, 0x0F	; 15
+					if(character>9)character+=('A'-10);
+    113a:	0f 90       	pop	r0
+    113c:	0f 90       	pop	r0
+    113e:	0f 90       	pop	r0
+    1140:	0f 90       	pop	r0
+    1142:	8a 30       	cpi	r24, 0x0A	; 10
+    1144:	10 f0       	brcs	.+4      	; 0x114a <printf245+0x11e>
+    1146:	89 5c       	subi	r24, 0xC9	; 201
+    1148:	01 c0       	rjmp	.+2      	; 0x114c <printf245+0x120>
+					else character+='0';
+    114a:	80 5d       	subi	r24, 0xD0	; 208
+					printf245("%c", character);
+    114c:	00 d0       	rcall	.+0      	; 0x114e <printf245+0x122>
+    114e:	00 d0       	rcall	.+0      	; 0x1150 <printf245+0x124>
+    1150:	ed b7       	in	r30, 0x3d	; 61
+    1152:	fe b7       	in	r31, 0x3e	; 62
+    1154:	31 96       	adiw	r30, 0x01	; 1
+    1156:	ad b7       	in	r26, 0x3d	; 61
+    1158:	be b7       	in	r27, 0x3e	; 62
+    115a:	12 96       	adiw	r26, 0x02	; 2
+    115c:	bc 92       	st	X, r11
+    115e:	ae 92       	st	-X, r10
+    1160:	11 97       	sbiw	r26, 0x01	; 1
+    1162:	82 83       	std	Z+2, r24	; 0x02
+    1164:	13 82       	std	Z+3, r1	; 0x03
+    1166:	0e 94 16 08 	call	0x102c	; 0x102c <printf245>
+					index+=1;
+    116a:	0f 5f       	subi	r16, 0xFF	; 255
+    116c:	1f 4f       	sbci	r17, 0xFF	; 255
+    116e:	0f 90       	pop	r0
+    1170:	0f 90       	pop	r0
+    1172:	0f 90       	pop	r0
+    1174:	0f 90       	pop	r0
+    1176:	13 c0       	rjmp	.+38     	; 0x119e <printf245+0x172>
+				}
+				else if(text[index+1]=='c'){
+    1178:	83 36       	cpi	r24, 0x63	; 99
+    117a:	89 f4       	brne	.+34     	; 0x119e <printf245+0x172>
+					PORTD = character;				
+    117c:	9b b8       	out	0x0b, r9	; 11
+					clearWR();
+    117e:	41 98       	cbi	0x08, 1	; 8
+    1180:	b6 e0       	ldi	r27, 0x06	; 6
+    1182:	ba 95       	dec	r27
+    1184:	f1 f7       	brne	.-4      	; 0x1182 <printf245+0x156>
+    1186:	00 c0       	rjmp	.+0      	; 0x1188 <printf245+0x15c>
+					_delay_us(HOLD_TIME);//delay_ms(1);
+					setWR();
+    1188:	41 9a       	sbi	0x08, 1	; 8
+					index+=1;
+    118a:	0f 5f       	subi	r16, 0xFF	; 255
+    118c:	1f 4f       	sbci	r17, 0xFF	; 255
+    118e:	07 c0       	rjmp	.+14     	; 0x119e <printf245+0x172>
+				}				
+			}
+			else{
+				PORTD = character;				
+    1190:	8b b9       	out	0x0b, r24	; 11
+				clearWR();
+    1192:	41 98       	cbi	0x08, 1	; 8
+    1194:	e6 e0       	ldi	r30, 0x06	; 6
+    1196:	ea 95       	dec	r30
+    1198:	f1 f7       	brne	.-4      	; 0x1196 <printf245+0x16a>
+    119a:	00 c0       	rjmp	.+0      	; 0x119c <printf245+0x170>
+				_delay_us(HOLD_TIME);//delay_ms(1);
+				setWR();
+    119c:	41 9a       	sbi	0x08, 1	; 8
+			}
+			character=text[++index];
+    119e:	0f 5f       	subi	r16, 0xFF	; 255
+    11a0:	1f 4f       	sbci	r17, 0xFF	; 255
+    11a2:	f6 01       	movw	r30, r12
+    11a4:	e0 0f       	add	r30, r16
+    11a6:	f1 1f       	adc	r31, r17
+    11a8:	80 81       	ld	r24, Z
+	va_list next_argument;		//Create a pointer for the variable argument
+	va_start(next_argument, text);	//Initialize the pointer to the next argument in the list
+	
+	setDataOutputs();
+	character=text[index];
+	while(character!='\0'){
+    11aa:	88 23       	and	r24, r24
+    11ac:	19 f0       	breq	.+6      	; 0x11b4 <printf245+0x188>
+		if(USBwriteAllowed()){
+    11ae:	32 99       	sbic	0x06, 2	; 6
+    11b0:	74 cf       	rjmp	.-280    	; 0x109a <printf245+0x6e>
+    11b2:	75 cf       	rjmp	.-278    	; 0x109e <printf245+0x72>
+			}
+			character=text[++index];
+		}
+	}
+	va_end(next_argument);	//Relinquish the pointer to system memory
+}
+    11b4:	26 96       	adiw	r28, 0x06	; 6
+    11b6:	0f b6       	in	r0, 0x3f	; 63
+    11b8:	f8 94       	cli
+    11ba:	de bf       	out	0x3e, r29	; 62
+    11bc:	0f be       	out	0x3f, r0	; 63
+    11be:	cd bf       	out	0x3d, r28	; 61
+    11c0:	cf 91       	pop	r28
+    11c2:	df 91       	pop	r29
+    11c4:	1f 91       	pop	r17
+    11c6:	0f 91       	pop	r16
+    11c8:	ff 90       	pop	r15
+    11ca:	ef 90       	pop	r14
+    11cc:	df 90       	pop	r13
+    11ce:	cf 90       	pop	r12
+    11d0:	bf 90       	pop	r11
+    11d2:	af 90       	pop	r10
+    11d4:	9f 90       	pop	r9
+    11d6:	8f 90       	pop	r8
+    11d8:	7f 90       	pop	r7
+    11da:	6f 90       	pop	r6
+    11dc:	5f 90       	pop	r5
+    11de:	4f 90       	pop	r4
+    11e0:	08 95       	ret
+
+000011e2 <spi_init>:
+#include <util/delay.h>
+
+void spi_init()
+{
+	// Setup SPI master for programming	
+	DDRB = (1<<MOSI) | (1<<SCK);
+    11e2:	88 e2       	ldi	r24, 0x28	; 40
+    11e4:	84 b9       	out	0x04, r24	; 4
+    DDRB |= (1<<CS);
+    11e6:	22 9a       	sbi	0x04, 2	; 4
+	DDRC |= (1<<4);
+    11e8:	3c 9a       	sbi	0x07, 4	; 7
+	DDRB &= ~(1<<MISO);
+    11ea:	24 98       	cbi	0x04, 4	; 4
+	/** Sen fixed as Serial.Begin() **/
+	PORTB |= ((1<<CS));// | (1<<MISO));
+    11ec:	2a 9a       	sbi	0x05, 2	; 5
+	PORTB &= ~((1<<MOSI) | (1<<SCK));
+    11ee:	85 b1       	in	r24, 0x05	; 5
+    11f0:	87 7d       	andi	r24, 0xD7	; 215
+    11f2:	85 b9       	out	0x05, r24	; 5
+	
+	SPCR = (1<<SPE) | (1<<MSTR) | (1<<CPHA);// | (1<<SPIE) | (1<<SPR1)
+    11f4:	84 e5       	ldi	r24, 0x54	; 84
+    11f6:	8c bd       	out	0x2c, r24	; 44
+}
+    11f8:	08 95       	ret
+
+000011fa <select>:
+
+void select(void){ cbi(PORTB, CS); } //cbi(PORTB, PB2); }
+    11fa:	2a 98       	cbi	0x05, 2	; 5
+    11fc:	08 95       	ret
+
+000011fe <deselect>:
+
+void reselect(void) { deselect(); _delay_ms(10); select(); }
+
+void deselect(void) { sbi(PORTB, CS); } //sbi(PORTB, PB2); }
+    11fe:	2a 9a       	sbi	0x05, 2	; 5
+    1200:	08 95       	ret
+
+00001202 <reselect>:
+	SPCR = (1<<SPE) | (1<<MSTR) | (1<<CPHA);// | (1<<SPIE) | (1<<SPR1)
+}
+
+void select(void){ cbi(PORTB, CS); } //cbi(PORTB, PB2); }
+
+void reselect(void) { deselect(); _delay_ms(10); select(); }
+    1202:	0e 94 ff 08 	call	0x11fe	; 0x11fe <deselect>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+    1206:	83 ec       	ldi	r24, 0xC3	; 195
+    1208:	99 e0       	ldi	r25, 0x09	; 9
+    120a:	01 97       	sbiw	r24, 0x01	; 1
+    120c:	f1 f7       	brne	.-4      	; 0x120a <reselect+0x8>
+    120e:	00 c0       	rjmp	.+0      	; 0x1210 <reselect+0xe>
+    1210:	00 00       	nop
+    1212:	0e 94 fd 08 	call	0x11fa	; 0x11fa <select>
+    1216:	08 95       	ret
+
+00001218 <send_spi_byte>:
+
+void deselect(void) { sbi(PORTB, CS); } //sbi(PORTB, PB2); }
+
+void send_spi_byte(char c)
+{
+	SPDR = c;
+    1218:	8e bd       	out	0x2e, r24	; 46
+	while(!(SPSR & (1<<SPIF)));
+    121a:	0d b4       	in	r0, 0x2d	; 45
+    121c:	07 fe       	sbrs	r0, 7
+    121e:	fd cf       	rjmp	.-6      	; 0x121a <send_spi_byte+0x2>
+}
+    1220:	08 95       	ret
+
+00001222 <read_spi_byte>:
+
+
+char read_spi_byte(void)
+{
+	while(!(SPSR & (1<<SPIF)));
+    1222:	0d b4       	in	r0, 0x2d	; 45
+    1224:	07 fe       	sbrs	r0, 7
+    1226:	fd cf       	rjmp	.-6      	; 0x1222 <read_spi_byte>
+	return SPDR;
+    1228:	8e b5       	in	r24, 0x2e	; 46
+}
+    122a:	08 95       	ret
+
+0000122c <SenSPI_Init>:
+  SenSPI_Transfer(dataValue);             // send data
+  deselect();
+}
+
+void SenSPI_Init(void){
+	SPCR = (1<<SPE) | (1<<MSTR) | (1<<CPHA) | (1<<SPR0) | (1<<CPOL);// 1101 1101, master mode, SPI_Mode_3,  | (1<<SPIE)  
+    122c:	8d e5       	ldi	r24, 0x5D	; 93
+    122e:	8c bd       	out	0x2c, r24	; 44
+
+	//SPCR &= ~((1<<SPR1) | (1<<SPR0));
+	//SPSR |= (0x01);// SPI_CLOCK_DIV2, not 2MB, as fast as possible
+	
+	SPCR &= ~((1<<SPR1) | (1<<SPR0));
+    1230:	8c b5       	in	r24, 0x2c	; 44
+    1232:	8c 7f       	andi	r24, 0xFC	; 252
+    1234:	8c bd       	out	0x2c, r24	; 44
+	SPSR &= ~(1<<SPI2X); // SPI_CLOCK_DIV4, 2MB
+    1236:	8d b5       	in	r24, 0x2d	; 45
+    1238:	8e 7f       	andi	r24, 0xFE	; 254
+    123a:	8d bd       	out	0x2d, r24	; 45
+	
+	SPCR &= ~((1<<DORD));// MSB_First
+    123c:	8c b5       	in	r24, 0x2c	; 44
+    123e:	8f 7d       	andi	r24, 0xDF	; 223
+    1240:	8c bd       	out	0x2c, r24	; 44
+}
+    1242:	08 95       	ret
+
+00001244 <SenSPI_Transfer>:
+
+char SenSPI_Transfer(char fixedAddress){
+  SPDR = fixedAddress;
+    1244:	8e bd       	out	0x2e, r24	; 46
+  while (!(SPSR & _BV(SPIF)))
+    1246:	0d b4       	in	r0, 0x2d	; 45
+    1248:	07 fe       	sbrs	r0, 7
+    124a:	fd cf       	rjmp	.-6      	; 0x1246 <SenSPI_Transfer+0x2>
+    ;
+  return SPDR;
+    124c:	8e b5       	in	r24, 0x2e	; 46
+}  
+    124e:	08 95       	ret
+
+00001250 <SenWriteReg>:
+	//_delay_us(50);//	delay_micro(75);
+	
+	return (regValue);
+}
+
+void SenWriteReg(char fixedAddress, char dataValue){
+    1250:	0f 93       	push	r16
+    1252:	1f 93       	push	r17
+    1254:	08 2f       	mov	r16, r24
+    1256:	16 2f       	mov	r17, r22
+  select();
+    1258:	0e 94 fd 08 	call	0x11fa	; 0x11fa <select>
+  SenSPI_Transfer(fixedAddress | 0x80 );   // send register address
+    125c:	80 2f       	mov	r24, r16
+    125e:	80 68       	ori	r24, 0x80	; 128
+    1260:	0e 94 22 09 	call	0x1244	; 0x1244 <SenSPI_Transfer>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+    1264:	80 e1       	ldi	r24, 0x10	; 16
+    1266:	8a 95       	dec	r24
+    1268:	f1 f7       	brne	.-4      	; 0x1266 <SenWriteReg+0x16>
+    126a:	00 c0       	rjmp	.+0      	; 0x126c <SenWriteReg+0x1c>
+  _delay_us(50);// delay_micro(75);                  // small delay
+  SenSPI_Transfer(dataValue);             // send data
+    126c:	81 2f       	mov	r24, r17
+    126e:	0e 94 22 09 	call	0x1244	; 0x1244 <SenSPI_Transfer>
+  deselect();
+    1272:	0e 94 ff 08 	call	0x11fe	; 0x11fe <deselect>
+}
+    1276:	1f 91       	pop	r17
+    1278:	0f 91       	pop	r16
+    127a:	08 95       	ret
+
+0000127c <SenReadSensorRegister>:
+
+
+/****************** Sen Shortcut Sensor Control *********************/
+
+
+char SenReadSensorRegister(char fixedAddress){
+    127c:	1f 93       	push	r17
+    127e:	18 2f       	mov	r17, r24
+	char regValue;
+			
+	//printf245("\nBefore, fixedAddress = 0x%x\n\r", fixedAddress);
+	fixedAddress &= (uint8_t)~(1 << 7);
+	
+	select();
+    1280:	0e 94 fd 08 	call	0x11fa	; 0x11fa <select>
+	SenSPI_Transfer(fixedAddress);
+    1284:	81 2f       	mov	r24, r17
+    1286:	8f 77       	andi	r24, 0x7F	; 127
+    1288:	0e 94 22 09 	call	0x1244	; 0x1244 <SenSPI_Transfer>
+    128c:	80 e1       	ldi	r24, 0x10	; 16
+    128e:	8a 95       	dec	r24
+    1290:	f1 f7       	brne	.-4      	; 0x128e <SenReadSensorRegister+0x12>
+    1292:	00 c0       	rjmp	.+0      	; 0x1294 <SenReadSensorRegister+0x18>
+	_delay_us(50);//	delay_micro(75);
+	regValue = SenSPI_Transfer(0x00);
+    1294:	80 e0       	ldi	r24, 0x00	; 0
+    1296:	0e 94 22 09 	call	0x1244	; 0x1244 <SenSPI_Transfer>
+    129a:	18 2f       	mov	r17, r24
+	deselect();
+    129c:	0e 94 ff 08 	call	0x11fe	; 0x11fe <deselect>
+	//_delay_us(50);//	delay_micro(75);
+	
+	return (regValue);
+}
+    12a0:	81 2f       	mov	r24, r17
+    12a2:	1f 91       	pop	r17
+    12a4:	08 95       	ret
+
+000012a6 <SenReset>:
+    ;
+  return SPDR;
+}  
+
+void SenReset(void){
+    sbi(PORTC, RESET);                 // reset sensor
+    12a6:	44 9a       	sbi	0x08, 4	; 8
+    12a8:	80 e1       	ldi	r24, 0x10	; 16
+    12aa:	8a 95       	dec	r24
+    12ac:	f1 f7       	brne	.-4      	; 0x12aa <SenReset+0x4>
+    12ae:	00 c0       	rjmp	.+0      	; 0x12b0 <SenReset+0xa>
+	_delay_us(50);//   delay_micro(50);
+    cbi(PORTC, RESET);                      // return sensor to normal
+    12b0:	44 98       	cbi	0x08, 4	; 8
+	
+	deselect();
+    12b2:	0e 94 ff 08 	call	0x11fe	; 0x11fe <deselect>
+    12b6:	83 e0       	ldi	r24, 0x03	; 3
+    12b8:	8a 95       	dec	r24
+    12ba:	f1 f7       	brne	.-4      	; 0x12b8 <SenReset+0x12>
+    12bc:	00 00       	nop
+	_delay_us(10);//	delay_micro(10);
+	select();
+    12be:	0e 94 fd 08 	call	0x11fa	; 0x11fa <select>
+    12c2:	08 95       	ret
+
+000012c4 <__divmodhi4>:
+    12c4:	97 fb       	bst	r25, 7
+    12c6:	09 2e       	mov	r0, r25
+    12c8:	07 26       	eor	r0, r23
+    12ca:	0a d0       	rcall	.+20     	; 0x12e0 <__divmodhi4_neg1>
+    12cc:	77 fd       	sbrc	r23, 7
+    12ce:	04 d0       	rcall	.+8      	; 0x12d8 <__divmodhi4_neg2>
+    12d0:	0c d0       	rcall	.+24     	; 0x12ea <__udivmodhi4>
+    12d2:	06 d0       	rcall	.+12     	; 0x12e0 <__divmodhi4_neg1>
+    12d4:	00 20       	and	r0, r0
+    12d6:	1a f4       	brpl	.+6      	; 0x12de <__divmodhi4_exit>
+
+000012d8 <__divmodhi4_neg2>:
+    12d8:	70 95       	com	r23
+    12da:	61 95       	neg	r22
+    12dc:	7f 4f       	sbci	r23, 0xFF	; 255
+
+000012de <__divmodhi4_exit>:
+    12de:	08 95       	ret
+
+000012e0 <__divmodhi4_neg1>:
+    12e0:	f6 f7       	brtc	.-4      	; 0x12de <__divmodhi4_exit>
+    12e2:	90 95       	com	r25
+    12e4:	81 95       	neg	r24
+    12e6:	9f 4f       	sbci	r25, 0xFF	; 255
+    12e8:	08 95       	ret
+
+000012ea <__udivmodhi4>:
+    12ea:	aa 1b       	sub	r26, r26
+    12ec:	bb 1b       	sub	r27, r27
+    12ee:	51 e1       	ldi	r21, 0x11	; 17
+    12f0:	07 c0       	rjmp	.+14     	; 0x1300 <__udivmodhi4_ep>
+
+000012f2 <__udivmodhi4_loop>:
+    12f2:	aa 1f       	adc	r26, r26
+    12f4:	bb 1f       	adc	r27, r27
+    12f6:	a6 17       	cp	r26, r22
+    12f8:	b7 07       	cpc	r27, r23
+    12fa:	10 f0       	brcs	.+4      	; 0x1300 <__udivmodhi4_ep>
+    12fc:	a6 1b       	sub	r26, r22
+    12fe:	b7 0b       	sbc	r27, r23
+
+00001300 <__udivmodhi4_ep>:
+    1300:	88 1f       	adc	r24, r24
+    1302:	99 1f       	adc	r25, r25
+    1304:	5a 95       	dec	r21
+    1306:	a9 f7       	brne	.-22     	; 0x12f2 <__udivmodhi4_loop>
+    1308:	80 95       	com	r24
+    130a:	90 95       	com	r25
+    130c:	bc 01       	movw	r22, r24
+    130e:	cd 01       	movw	r24, r26
+    1310:	08 95       	ret
+
+00001312 <strcpy_P>:
+    1312:	fb 01       	movw	r30, r22
+    1314:	dc 01       	movw	r26, r24
+    1316:	05 90       	lpm	r0, Z+
+    1318:	0d 92       	st	X+, r0
+    131a:	00 20       	and	r0, r0
+    131c:	e1 f7       	brne	.-8      	; 0x1316 <strcpy_P+0x4>
+    131e:	08 95       	ret
+
+00001320 <_exit>:
+    1320:	f8 94       	cli
+
+00001322 <__stop_program>:
+    1322:	ff cf       	rjmp	.-2      	; 0x1322 <__stop_program>

@@ -1,0 +1,5263 @@
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.SenContinueMotionBurst,"ax",%progbits
+  18              		.align	2
+  19              		.global	SenContinueMotionBurst
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	SenContinueMotionBurst, %function
+  23              	SenContinueMotionBurst:
+  24              	.LFB35:
+  25              		.file 1 ".\\main.h"
+   1:.\main.h      **** /* ========================================
+   2:.\main.h      ****  *
+   3:.\main.h      ****  * Copyright Sen Li, Dec 2015
+   4:.\main.h      ****  * All Rights Reserved
+   5:.\main.h      ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\main.h      ****  *
+   7:.\main.h      ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\main.h      ****  * WHICH IS THE PROPERTY OF your company.
+   9:.\main.h      ****  *
+  10:.\main.h      ****  * ========================================
+  11:.\main.h      **** */
+  12:.\main.h      **** #include "LED_Control.h"
+  13:.\main.h      **** #include "BLE_Process.h"
+  14:.\main.h      **** #include "Sen_SPI_OF.h"
+  15:.\main.h      **** 
+  16:.\main.h      **** 
+  17:.\main.h      **** extern uint8 deviceConnected;
+  18:.\main.h      **** extern uint8 motionBurstStartNotification;
+  19:.\main.h      **** extern uint8 imageBurstStartNotification;
+  20:.\main.h      **** extern int8 motionReadTimes;
+  21:.\main.h      **** 
+  22:.\main.h      **** void Initialize_BLE_ISR_RGBLED_System(void);
+  23:.\main.h      **** void SenMotionBurstHandler();
+  24:.\main.h      **** 
+  25:.\main.h      **** /* motionBurst Functions*/
+  26:.\main.h      **** uint8 motionAccumulation = 0;
+  27:.\main.h      **** 
+  28:.\main.h      **** 
+  29:.\main.h      **** 
+  30:.\main.h      **** uint8 SenSerialReadBlocking(void);
+  31:.\main.h      **** uint8 UART_ReadAvailableCheck(void);
+  32:.\main.h      **** void loop(void);
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 2
+
+
+  33:.\main.h      **** void SenImageDisplay();
+  34:.\main.h      **** void SenContinuousImageDisplay();
+  35:.\main.h      **** void SenPixelsShowUp(void);
+  36:.\main.h      **** 
+  37:.\main.h      **** void SenReadCoodinataData(void);
+  38:.\main.h      **** 
+  39:.\main.h      **** void SenContinueMotionBurst(void)   {;}
+  26              		.loc 1 39 0
+  27              		.cfi_startproc
+  28              		.loc 1 39 0
+  29              		@ sp needed
+  30 0000 7047     		bx	lr
+  31              		.cfi_endproc
+  32              	.LFE35:
+  33              		.size	SenContinueMotionBurst, .-SenContinueMotionBurst
+  34 0002 C046     		.section	.text.SenPixelsShowUp,"ax",%progbits
+  35              		.align	2
+  36              		.global	SenPixelsShowUp
+  37              		.code	16
+  38              		.thumb_func
+  39              		.type	SenPixelsShowUp, %function
+  40              	SenPixelsShowUp:
+  41              	.LFB38:
+  42              		.file 2 ".\\main.c"
+   1:.\main.c      **** /* ========================================
+   2:.\main.c      ****  *
+   3:.\main.c      ****  * Copyright Sen Li, Dec 2015
+   4:.\main.c      ****  * All Rights Reserved
+   5:.\main.c      ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\main.c      ****  *
+   7:.\main.c      ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\main.c      ****  * WHICH IS THE PROPERTY OF your company.
+   9:.\main.c      ****  *
+  10:.\main.c      ****  * ========================================
+  11:.\main.c      **** */
+  12:.\main.c      **** 
+  13:.\main.c      **** #include "main.h"
+  14:.\main.c      **** 
+  15:.\main.c      **** uint32 InterruptHpn;
+  16:.\main.c      **** 
+  17:.\main.c      **** int8 delta_X = 0;
+  18:.\main.c      **** int8 delta_Y = 0;
+  19:.\main.c      **** uint8 motionUpdateNeeded = FALSE;
+  20:.\main.c      **** 
+  21:.\main.c      **** 
+  22:.\main.c      **** //uint8 first300Pixels[301];
+  23:.\main.c      **** //uint8 second300Pixels[301];
+  24:.\main.c      **** //uint8 third300Pixels[301];
+  25:.\main.c      **** uint8 Pixels18Array[301];
+  26:.\main.c      **** 
+  27:.\main.c      **** int n=0, motionBurstCount=0;
+  28:.\main.c      **** int initialing = 0;    // 1: yes;  0: No
+  29:.\main.c      **** int initialNeeded = -1; // Re-Connection Initial is needed only at the point that "initialing" chan
+  30:.\main.c      **** 
+  31:.\main.c      **** CY_ISR(InterruptHandler)
+  32:.\main.c      **** {
+  33:.\main.c      ****     /* Check interrupt source and clear Inerrupt */
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 3
+
+
+  34:.\main.c      ****  	InterruptHpn = SenTimer_GetInterruptSourceMasked();
+  35:.\main.c      ****    	if (InterruptHpn == SenTimer_INTR_MASK_TC)
+  36:.\main.c      ****     {
+  37:.\main.c      ****         SenTimer_ClearInterrupt(SenTimer_INTR_MASK_TC);
+  38:.\main.c      **** 		
+  39:.\main.c      **** 			/* Send Motion Burst data when respective notification is enabled */
+  40:.\main.c      **** 			if(motionBurstStartNotification & NOTIFY_BIT_MASK)
+  41:.\main.c      **** 			{
+  42:.\main.c      **** //				SenReset();
+  43:.\main.c      **** 				SenReadCoodinataData();
+  44:.\main.c      **** 				
+  45:.\main.c      **** //				if(TRUE == oneSecondPassed && TRUE == motionUpdateNeeded)
+  46:.\main.c      **** 				if(motionReadTimes >= 20 && TRUE == motionUpdateNeeded)
+  47:.\main.c      **** 				{
+  48:.\main.c      **** 					motionUpdateNeeded = FALSE;
+  49:.\main.c      **** 					/* Check for CapSense slider swipe and send data accordingly */
+  50:.\main.c      **** 					SenMotionBurstHandler();
+  51:.\main.c      **** 					motionReadTimes = 0;
+  52:.\main.c      **** 				}
+  53:.\main.c      **** 			}else {	delta_X = 0; delta_Y = 0;	}
+  54:.\main.c      ****     }
+  55:.\main.c      **** }
+  56:.\main.c      **** 
+  57:.\main.c      **** int main()
+  58:.\main.c      **** {
+  59:.\main.c      ****     CyGlobalIntEnable; /* Enable global interrupts. */
+  60:.\main.c      **** 
+  61:.\main.c      **** 	/* Start the components */
+  62:.\main.c      **** 	Initialize_BLE_ISR_RGBLED_System();
+  63:.\main.c      **** 	SPI_Master_Enable();
+  64:.\main.c      **** 	initialNeeded = 1;
+  65:.\main.c      ****     SPI_Master_Start();
+  66:.\main.c      **** 
+  67:.\main.c      **** 	Reset_Write(0);
+  68:.\main.c      **** //	Reset2_Write(0);
+  69:.\main.c      **** //	SenChipSelect();
+  70:.\main.c      **** //	SenShowSetupData();
+  71:.\main.c      ****        
+  72:.\main.c      **** 	for(;;) {
+  73:.\main.c      **** 		/* Process BLE Events. This generates events in the callback function */
+  74:.\main.c      **** 		CyBle_ProcessEvents(); //***********************************************************
+  75:.\main.c      **** 
+  76:.\main.c      **** 		if(TRUE == deviceConnected)
+  77:.\main.c      **** 		{			
+  78:.\main.c      **** 			/* Send Image Burst data when respective notification is enabled */
+  79:.\main.c      **** 			if(imageBurstStartNotification & NOTIFY_BIT_MASK)
+  80:.\main.c      **** 			{
+  81:.\main.c      **** //				Reset_Write(1);
+  82:.\main.c      **** 				SenPixelsShowUp();// Read and save 900 Pixels
+  83:.\main.c      **** //				imageBurstStartNotification = FALSE;
+  84:.\main.c      **** 			}			
+  85:.\main.c      **** 		}
+  86:.\main.c      **** 	}
+  87:.\main.c      **** }
+  88:.\main.c      **** 
+  89:.\main.c      **** void SenPixelsShowUp(void)
+  90:.\main.c      **** {
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 4
+
+
+  43              		.loc 2 90 0
+  44              		.cfi_startproc
+  45 0000 38B5     		push	{r3, r4, r5, lr}
+  46              		.cfi_def_cfa_offset 16
+  47              		.cfi_offset 3, -16
+  48              		.cfi_offset 4, -12
+  49              		.cfi_offset 5, -8
+  50              		.cfi_offset 14, -4
+  51              	.LVL0:
+  91:.\main.c      ****     int i,j,k;
+  92:.\main.c      ****     int isFirstPixel = TRUE;
+  93:.\main.c      ****     unsigned char regValue;
+  94:.\main.c      ****     unsigned char pixelValue;
+  95:.\main.c      **** 
+  96:.\main.c      **** 	SenReset();
+  52              		.loc 2 96 0
+  53 0002 FFF7FEFF 		bl	SenReset
+  54              	.LVL1:
+  97:.\main.c      **** //	Reset_Write(0);
+  98:.\main.c      ****     // write to frame capture register to force capture of frame
+  99:.\main.c      ****     SenWriteReg(FRAME_CAPTURE,0x83);
+  55              		.loc 2 99 0
+  56 0006 1320     		mov	r0, #19
+  57 0008 8321     		mov	r1, #131
+  58 000a FFF7FEFF 		bl	SenWriteReg
+  59              	.LVL2:
+ 100:.\main.c      **** 
+ 101:.\main.c      ****     // wait 3 frame periods + 10 nanoseconds for frame to be captured
+ 102:.\main.c      ****     CyDelayUs(1550);      // min frame speed is 2000 frames/second so 1 frame = 500 nano seconds.  
+  60              		.loc 2 102 0
+  61 000e 1248     		ldr	r0, .L7
+  62 0010 FFF7FEFF 		bl	CyDelayUs
+  63              	.LVL3:
+ 103:.\main.c      **** 		
+ 104:.\main.c      **** 		for(i=1; i<=3; i++)	{
+  64              		.loc 2 104 0
+  65 0014 0125     		mov	r5, #1
+  66 0016 19E0     		b	.L3
+  67              	.LVL4:
+  68              	.L6:
+ 105:.\main.c      **** 			Pixels18Array[0] = i;
+  69              		.loc 2 105 0
+  70 0018 104B     		ldr	r3, .L7+4
+  71 001a 1D70     		strb	r5, [r3]
+  72              	.LVL5:
+ 106:.\main.c      **** 			for(j=1; j<=300; j++)	{
+  73              		.loc 2 106 0
+  74 001c 0124     		mov	r4, #1
+  75 001e 0BE0     		b	.L4
+  76              	.LVL6:
+  77              	.L5:
+ 107:.\main.c      **** 				regValue = SenReadReg(FRAME_CAPTURE);
+  78              		.loc 2 107 0 discriminator 3
+  79 0020 1320     		mov	r0, #19
+  80 0022 FFF7FEFF 		bl	SenReadReg
+  81              	.LVL7:
+ 108:.\main.c      **** //	            if( isFirstPixel && (regValue & 0x40) == 0 ) {
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 5
+
+
+ 109:.\main.c      **** //	                j = 18;	i = 50;
+ 110:.\main.c      **** //	            }
+ 111:.\main.c      **** 	            isFirstPixel = FALSE;
+ 112:.\main.c      **** 				
+ 113:.\main.c      **** 	            pixelValue = ( regValue << 2);
+  82              		.loc 2 113 0 discriminator 3
+  83 0026 8000     		lsl	r0, r0, #2
+  84              	.LVL8:
+ 114:.\main.c      **** 				Pixels18Array[j] = pixelValue;
+  85              		.loc 2 114 0 discriminator 3
+  86 0028 0C4B     		ldr	r3, .L7+4
+  87 002a 1855     		strb	r0, [r3, r4]
+ 115:.\main.c      **** 	            CyDelayUs(20);
+  88              		.loc 2 115 0 discriminator 3
+  89 002c 1420     		mov	r0, #20
+  90              	.LVL9:
+  91 002e FFF7FEFF 		bl	CyDelayUs
+  92              	.LVL10:
+ 116:.\main.c      **** 				CyBle_ProcessEvents();
+  93              		.loc 2 116 0 discriminator 3
+  94 0032 FFF7FEFF 		bl	CyBle_ProcessEvents
+  95              	.LVL11:
+ 106:.\main.c      **** 				regValue = SenReadReg(FRAME_CAPTURE);
+  96              		.loc 2 106 0 discriminator 3
+  97 0036 0134     		add	r4, r4, #1
+  98              	.LVL12:
+  99              	.L4:
+ 106:.\main.c      **** 				regValue = SenReadReg(FRAME_CAPTURE);
+ 100              		.loc 2 106 0 is_stmt 0 discriminator 1
+ 101 0038 9623     		mov	r3, #150
+ 102 003a 5B00     		lsl	r3, r3, #1
+ 103 003c 9C42     		cmp	r4, r3
+ 104 003e EFDD     		ble	.L5
+ 117:.\main.c      **** 			}
+ 118:.\main.c      **** 			Send18ArrayDataOverSenImageBurstNotification((uint8 *) Pixels18Array);
+ 105              		.loc 2 118 0 is_stmt 1 discriminator 2
+ 106 0040 0648     		ldr	r0, .L7+4
+ 107 0042 FFF7FEFF 		bl	Send18ArrayDataOverSenImageBurstNotification
+ 108              	.LVL13:
+ 119:.\main.c      **** 			CyBle_ProcessEvents();
+ 109              		.loc 2 119 0 discriminator 2
+ 110 0046 FFF7FEFF 		bl	CyBle_ProcessEvents
+ 111              	.LVL14:
+ 104:.\main.c      **** 			Pixels18Array[0] = i;
+ 112              		.loc 2 104 0 discriminator 2
+ 113 004a 0135     		add	r5, r5, #1
+ 114              	.LVL15:
+ 115              	.L3:
+ 104:.\main.c      **** 			Pixels18Array[0] = i;
+ 116              		.loc 2 104 0 is_stmt 0 discriminator 1
+ 117 004c 032D     		cmp	r5, #3
+ 118 004e E3DD     		ble	.L6
+ 120:.\main.c      **** 		}
+ 121:.\main.c      **** 		
+ 122:.\main.c      ****     // hardware reset to restore sensor to normal operation
+ 123:.\main.c      ****     SenReset();
+ 119              		.loc 2 123 0 is_stmt 1
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 6
+
+
+ 120 0050 FFF7FEFF 		bl	SenReset
+ 121              	.LVL16:
+ 124:.\main.c      **** }
+ 122              		.loc 2 124 0
+ 123              		@ sp needed
+ 124              	.LVL17:
+ 125 0054 38BD     		pop	{r3, r4, r5, pc}
+ 126              	.L8:
+ 127 0056 C046     		.align	2
+ 128              	.L7:
+ 129 0058 0E060000 		.word	1550
+ 130 005c 00000000 		.word	Pixels18Array
+ 131              		.cfi_endproc
+ 132              	.LFE38:
+ 133              		.size	SenPixelsShowUp, .-SenPixelsShowUp
+ 134              		.section	.text.SenReadCoodinataData,"ax",%progbits
+ 135              		.align	2
+ 136              		.global	SenReadCoodinataData
+ 137              		.code	16
+ 138              		.thumb_func
+ 139              		.type	SenReadCoodinataData, %function
+ 140              	SenReadCoodinataData:
+ 141              	.LFB39:
+ 125:.\main.c      **** 
+ 126:.\main.c      **** /*********** Sen Motion-Tracking Mode **************/
+ 127:.\main.c      **** void SenReadCoodinataData(void){
+ 142              		.loc 2 127 0
+ 143              		.cfi_startproc
+ 144 0000 38B5     		push	{r3, r4, r5, lr}
+ 145              		.cfi_def_cfa_offset 16
+ 146              		.cfi_offset 3, -16
+ 147              		.cfi_offset 4, -12
+ 148              		.cfi_offset 5, -8
+ 149              		.cfi_offset 14, -4
+ 128:.\main.c      **** 
+ 129:.\main.c      ****     uint8 newMotion = SenReadReg(MOTION);
+ 150              		.loc 2 129 0
+ 151 0002 0220     		mov	r0, #2
+ 152 0004 FFF7FEFF 		bl	SenReadReg
+ 153              	.LVL18:
+ 130:.\main.c      ****     int8 newDelta_X = SenReadReg(DELTA_X);
+ 154              		.loc 2 130 0
+ 155 0008 0320     		mov	r0, #3
+ 156 000a FFF7FEFF 		bl	SenReadReg
+ 157              	.LVL19:
+ 158 000e 041C     		mov	r4, r0
+ 159 0010 C5B2     		uxtb	r5, r0
+ 160              	.LVL20:
+ 131:.\main.c      ****     int8 newDelta_Y = SenReadReg(DELTA_Y);
+ 161              		.loc 2 131 0
+ 162 0012 0420     		mov	r0, #4
+ 163 0014 FFF7FEFF 		bl	SenReadReg
+ 164              	.LVL21:
+ 165 0018 C3B2     		uxtb	r3, r0
+ 166              	.LVL22:
+ 132:.\main.c      ****     
+ 133:.\main.c      **** 	if (newDelta_X != 0 || newDelta_Y !=0)	{
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 7
+
+
+ 167              		.loc 2 133 0
+ 168 001a 2B43     		orr	r3, r5
+ 169              	.LVL23:
+ 170 001c 08D0     		beq	.L10
+ 134:.\main.c      **** 		delta_X = delta_X + newDelta_X;
+ 171              		.loc 2 134 0
+ 172 001e 074B     		ldr	r3, .L11
+ 173 0020 1A78     		ldrb	r2, [r3]
+ 174 0022 A418     		add	r4, r4, r2
+ 175 0024 1C70     		strb	r4, [r3]
+ 135:.\main.c      **** 		delta_Y = delta_Y + newDelta_Y;
+ 176              		.loc 2 135 0
+ 177 0026 5A78     		ldrb	r2, [r3, #1]
+ 178 0028 8018     		add	r0, r0, r2
+ 179              	.LVL24:
+ 180 002a 5870     		strb	r0, [r3, #1]
+ 136:.\main.c      **** 		motionUpdateNeeded = TRUE;
+ 181              		.loc 2 136 0
+ 182 002c 0122     		mov	r2, #1
+ 183 002e 9A70     		strb	r2, [r3, #2]
+ 184              	.L10:
+ 137:.\main.c      **** 	}
+ 138:.\main.c      **** 	motionReadTimes = motionReadTimes + 1;
+ 185              		.loc 2 138 0
+ 186 0030 034A     		ldr	r2, .L11+4
+ 187 0032 1378     		ldrb	r3, [r2]
+ 188 0034 0133     		add	r3, r3, #1
+ 189 0036 1370     		strb	r3, [r2]
+ 139:.\main.c      **** }
+ 190              		.loc 2 139 0
+ 191              		@ sp needed
+ 192              	.LVL25:
+ 193 0038 38BD     		pop	{r3, r4, r5, pc}
+ 194              	.L12:
+ 195 003a C046     		.align	2
+ 196              	.L11:
+ 197 003c 00000000 		.word	.LANCHOR0
+ 198 0040 00000000 		.word	motionReadTimes
+ 199              		.cfi_endproc
+ 200              	.LFE39:
+ 201              		.size	SenReadCoodinataData, .-SenReadCoodinataData
+ 202              		.section	.text.SenMotionBurstHandler,"ax",%progbits
+ 203              		.align	2
+ 204              		.global	SenMotionBurstHandler
+ 205              		.code	16
+ 206              		.thumb_func
+ 207              		.type	SenMotionBurstHandler, %function
+ 208              	SenMotionBurstHandler:
+ 209              	.LFB40:
+ 140:.\main.c      **** 
+ 141:.\main.c      **** 
+ 142:.\main.c      **** void SenMotionBurstHandler() {
+ 210              		.loc 2 142 0
+ 211              		.cfi_startproc
+ 212 0000 10B5     		push	{r4, lr}
+ 213              		.cfi_def_cfa_offset 8
+ 214              		.cfi_offset 4, -8
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 8
+
+
+ 215              		.cfi_offset 14, -4
+ 143:.\main.c      **** 		SendDataOverSenMotionBurstNotification((uint8)delta_X, (uint8)delta_Y);
+ 216              		.loc 2 143 0
+ 217 0002 044C     		ldr	r4, .L14
+ 218 0004 2078     		ldrb	r0, [r4]
+ 219 0006 6178     		ldrb	r1, [r4, #1]
+ 220 0008 FFF7FEFF 		bl	SendDataOverSenMotionBurstNotification
+ 221              	.LVL26:
+ 144:.\main.c      **** 		delta_X = 0;
+ 222              		.loc 2 144 0
+ 223 000c 0023     		mov	r3, #0
+ 224 000e 2370     		strb	r3, [r4]
+ 145:.\main.c      **** 		delta_Y = 0;
+ 225              		.loc 2 145 0
+ 226 0010 6370     		strb	r3, [r4, #1]
+ 146:.\main.c      **** }
+ 227              		.loc 2 146 0
+ 228              		@ sp needed
+ 229 0012 10BD     		pop	{r4, pc}
+ 230              	.L15:
+ 231              		.align	2
+ 232              	.L14:
+ 233 0014 00000000 		.word	.LANCHOR0
+ 234              		.cfi_endproc
+ 235              	.LFE40:
+ 236              		.size	SenMotionBurstHandler, .-SenMotionBurstHandler
+ 237              		.section	.text.InterruptHandler,"ax",%progbits
+ 238              		.align	2
+ 239              		.global	InterruptHandler
+ 240              		.code	16
+ 241              		.thumb_func
+ 242              		.type	InterruptHandler, %function
+ 243              	InterruptHandler:
+ 244              	.LFB36:
+  32:.\main.c      ****     /* Check interrupt source and clear Inerrupt */
+ 245              		.loc 2 32 0
+ 246              		.cfi_startproc
+ 247 0000 10B5     		push	{r4, lr}
+ 248              		.cfi_def_cfa_offset 8
+ 249              		.cfi_offset 4, -8
+ 250              		.cfi_offset 14, -4
+  34:.\main.c      ****    	if (InterruptHpn == SenTimer_INTR_MASK_TC)
+ 251              		.loc 2 34 0
+ 252 0002 FFF7FEFF 		bl	SenTimer_GetInterruptSourceMasked
+ 253              	.LVL27:
+ 254 0006 114B     		ldr	r3, .L19
+ 255 0008 1860     		str	r0, [r3]
+  35:.\main.c      ****     {
+ 256              		.loc 2 35 0
+ 257 000a 0128     		cmp	r0, #1
+ 258 000c 1CD1     		bne	.L16
+  37:.\main.c      **** 		
+ 259              		.loc 2 37 0
+ 260 000e FFF7FEFF 		bl	SenTimer_ClearInterrupt
+ 261              	.LVL28:
+  40:.\main.c      **** 			{
+ 262              		.loc 2 40 0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 9
+
+
+ 263 0012 0F4B     		ldr	r3, .L19+4
+ 264 0014 1B78     		ldrb	r3, [r3]
+ 265 0016 DB07     		lsl	r3, r3, #31
+ 266 0018 12D5     		bpl	.L18
+  43:.\main.c      **** 				
+ 267              		.loc 2 43 0
+ 268 001a FFF7FEFF 		bl	SenReadCoodinataData
+ 269              	.LVL29:
+  46:.\main.c      **** 				{
+ 270              		.loc 2 46 0
+ 271 001e 0D4B     		ldr	r3, .L19+8
+ 272 0020 1B78     		ldrb	r3, [r3]
+ 273 0022 5BB2     		sxtb	r3, r3
+ 274 0024 132B     		cmp	r3, #19
+ 275 0026 0FDD     		ble	.L16
+  46:.\main.c      **** 				{
+ 276              		.loc 2 46 0 is_stmt 0 discriminator 1
+ 277 0028 0B4B     		ldr	r3, .L19+12
+ 278 002a 9B78     		ldrb	r3, [r3, #2]
+ 279 002c 012B     		cmp	r3, #1
+ 280 002e 0BD1     		bne	.L16
+  48:.\main.c      **** 					/* Check for CapSense slider swipe and send data accordingly */
+ 281              		.loc 2 48 0 is_stmt 1
+ 282 0030 0024     		mov	r4, #0
+ 283 0032 094B     		ldr	r3, .L19+12
+ 284 0034 9C70     		strb	r4, [r3, #2]
+  50:.\main.c      **** 					motionReadTimes = 0;
+ 285              		.loc 2 50 0
+ 286 0036 FFF7FEFF 		bl	SenMotionBurstHandler
+ 287              	.LVL30:
+  51:.\main.c      **** 				}
+ 288              		.loc 2 51 0
+ 289 003a 064B     		ldr	r3, .L19+8
+ 290 003c 1C70     		strb	r4, [r3]
+ 291 003e 03E0     		b	.L16
+ 292              	.L18:
+  53:.\main.c      ****     }
+ 293              		.loc 2 53 0
+ 294 0040 054B     		ldr	r3, .L19+12
+ 295 0042 0022     		mov	r2, #0
+ 296 0044 1A70     		strb	r2, [r3]
+ 297 0046 5A70     		strb	r2, [r3, #1]
+ 298              	.L16:
+  55:.\main.c      **** 
+ 299              		.loc 2 55 0
+ 300              		@ sp needed
+ 301 0048 10BD     		pop	{r4, pc}
+ 302              	.L20:
+ 303 004a C046     		.align	2
+ 304              	.L19:
+ 305 004c 00000000 		.word	InterruptHpn
+ 306 0050 00000000 		.word	motionBurstStartNotification
+ 307 0054 00000000 		.word	motionReadTimes
+ 308 0058 00000000 		.word	.LANCHOR0
+ 309              		.cfi_endproc
+ 310              	.LFE36:
+ 311              		.size	InterruptHandler, .-InterruptHandler
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 10
+
+
+ 312              		.section	.text.Initialize_BLE_ISR_RGBLED_System,"ax",%progbits
+ 313              		.align	2
+ 314              		.global	Initialize_BLE_ISR_RGBLED_System
+ 315              		.code	16
+ 316              		.thumb_func
+ 317              		.type	Initialize_BLE_ISR_RGBLED_System, %function
+ 318              	Initialize_BLE_ISR_RGBLED_System:
+ 319              	.LFB41:
+ 147:.\main.c      **** 
+ 148:.\main.c      **** void Initialize_BLE_ISR_RGBLED_System(void) { 
+ 320              		.loc 2 148 0
+ 321              		.cfi_startproc
+ 322 0000 08B5     		push	{r3, lr}
+ 323              		.cfi_def_cfa_offset 8
+ 324              		.cfi_offset 3, -8
+ 325              		.cfi_offset 14, -4
+ 149:.\main.c      **** 	/* Enable Global Interrupt Mask */ 
+ 150:.\main.c      **** 	CyGlobalIntEnable; 
+ 326              		.loc 2 150 0
+ 327              	@ 150 ".\main.c" 1
+ 328 0002 62B6     		CPSIE   i
+ 329              	@ 0 "" 2
+ 151:.\main.c      **** 	
+ 152:.\main.c      **** 	/* Enable the Interrupt component connected to interrupt */
+ 153:.\main.c      ****     SenTimerISR_StartEx(InterruptHandler);
+ 330              		.loc 2 153 0
+ 331              		.code	16
+ 332 0004 0F48     		ldr	r0, .L22
+ 333 0006 FFF7FEFF 		bl	SenTimerISR_StartEx
+ 334              	.LVL31:
+ 154:.\main.c      **** 
+ 155:.\main.c      **** 	/* Start the components */
+ 156:.\main.c      ****     SenTimer_Start();
+ 335              		.loc 2 156 0
+ 336 000a FFF7FEFF 		bl	SenTimer_Start
+ 337              	.LVL32:
+ 157:.\main.c      **** 	
+ 158:.\main.c      **** 	/* Start BLE stack and register the event callback function.*/ 
+ 159:.\main.c      **** 	CyBle_Start(GeneralEventHandler); 
+ 338              		.loc 2 159 0
+ 339 000e 0E48     		ldr	r0, .L22+4
+ 340 0010 FFF7FEFF 		bl	CyBle_Start
+ 341              	.LVL33:
+ 160:.\main.c      **** 	
+ 161:.\main.c      **** 	/* Start PrISM modules for LED control */ 
+ 162:.\main.c      **** 	PrISM_1_Start(); 
+ 342              		.loc 2 162 0
+ 343 0014 FFF7FEFF 		bl	PrISM_1_Start
+ 344              	.LVL34:
+ 163:.\main.c      **** 	PrISM_2_Start(); 
+ 345              		.loc 2 163 0
+ 346 0018 FFF7FEFF 		bl	PrISM_2_Start
+ 347              	.LVL35:
+ 164:.\main.c      **** 	
+ 165:.\main.c      **** 	/* Switch off the RGB LEDs through PrISM modules */ 
+ 166:.\main.c      **** 	PrISM_1_WritePulse0(RGB_LED_OFF); 
+ 348              		.loc 2 166 0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 11
+
+
+ 349 001c FF20     		mov	r0, #255
+ 350 001e FFF7FEFF 		bl	PrISM_1_WritePulse0
+ 351              	.LVL36:
+ 167:.\main.c      **** 	PrISM_1_WritePulse1(RGB_LED_OFF); 
+ 352              		.loc 2 167 0
+ 353 0022 FF20     		mov	r0, #255
+ 354 0024 FFF7FEFF 		bl	PrISM_1_WritePulse1
+ 355              	.LVL37:
+ 168:.\main.c      **** 	PrISM_2_WritePulse0(RGB_LED_OFF); 
+ 356              		.loc 2 168 0
+ 357 0028 FF20     		mov	r0, #255
+ 358 002a FFF7FEFF 		bl	PrISM_2_WritePulse0
+ 359              	.LVL38:
+ 169:.\main.c      **** 	
+ 170:.\main.c      **** 	/* Set Drive modes of the output pins to Strong drive */ 
+ 171:.\main.c      **** 	RED_SetDriveMode(RED_DM_STRONG); 
+ 360              		.loc 2 171 0
+ 361 002e 0620     		mov	r0, #6
+ 362 0030 FFF7FEFF 		bl	RED_SetDriveMode
+ 363              	.LVL39:
+ 172:.\main.c      **** 	GREEN_SetDriveMode(GREEN_DM_STRONG); 
+ 364              		.loc 2 172 0
+ 365 0034 0620     		mov	r0, #6
+ 366 0036 FFF7FEFF 		bl	GREEN_SetDriveMode
+ 367              	.LVL40:
+ 173:.\main.c      **** 	BLUE_SetDriveMode(BLUE_DM_STRONG); 
+ 368              		.loc 2 173 0
+ 369 003a 0620     		mov	r0, #6
+ 370 003c FFF7FEFF 		bl	BLUE_SetDriveMode
+ 371              	.LVL41:
+ 174:.\main.c      **** }
+ 372              		.loc 2 174 0
+ 373              		@ sp needed
+ 374 0040 08BD     		pop	{r3, pc}
+ 375              	.L23:
+ 376 0042 C046     		.align	2
+ 377              	.L22:
+ 378 0044 00000000 		.word	InterruptHandler
+ 379 0048 00000000 		.word	GeneralEventHandler
+ 380              		.cfi_endproc
+ 381              	.LFE41:
+ 382              		.size	Initialize_BLE_ISR_RGBLED_System, .-Initialize_BLE_ISR_RGBLED_System
+ 383              		.section	.text.main,"ax",%progbits
+ 384              		.align	2
+ 385              		.global	main
+ 386              		.code	16
+ 387              		.thumb_func
+ 388              		.type	main, %function
+ 389              	main:
+ 390              	.LFB37:
+  58:.\main.c      ****     CyGlobalIntEnable; /* Enable global interrupts. */
+ 391              		.loc 2 58 0
+ 392              		.cfi_startproc
+ 393 0000 08B5     		push	{r3, lr}
+ 394              		.cfi_def_cfa_offset 8
+ 395              		.cfi_offset 3, -8
+ 396              		.cfi_offset 14, -4
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 12
+
+
+  59:.\main.c      **** 
+ 397              		.loc 2 59 0
+ 398              	@ 59 ".\main.c" 1
+ 399 0002 62B6     		CPSIE   i
+ 400              	@ 0 "" 2
+  62:.\main.c      **** 	SPI_Master_Enable();
+ 401              		.loc 2 62 0
+ 402              		.code	16
+ 403 0004 FFF7FEFF 		bl	Initialize_BLE_ISR_RGBLED_System
+ 404              	.LVL42:
+  63:.\main.c      **** 	initialNeeded = 1;
+ 405              		.loc 2 63 0
+ 406 0008 FFF7FEFF 		bl	SPI_Master_Enable
+ 407              	.LVL43:
+  64:.\main.c      ****     SPI_Master_Start();
+ 408              		.loc 2 64 0
+ 409 000c 0122     		mov	r2, #1
+ 410 000e 0A4B     		ldr	r3, .L27
+ 411 0010 1A60     		str	r2, [r3]
+  65:.\main.c      **** 
+ 412              		.loc 2 65 0
+ 413 0012 FFF7FEFF 		bl	SPI_Master_Start
+ 414              	.LVL44:
+  67:.\main.c      **** //	Reset2_Write(0);
+ 415              		.loc 2 67 0
+ 416 0016 0020     		mov	r0, #0
+ 417 0018 FFF7FEFF 		bl	Reset_Write
+ 418              	.LVL45:
+ 419              	.L25:
+  74:.\main.c      **** 
+ 420              		.loc 2 74 0
+ 421 001c FFF7FEFF 		bl	CyBle_ProcessEvents
+ 422              	.LVL46:
+  76:.\main.c      **** 		{			
+ 423              		.loc 2 76 0
+ 424 0020 064B     		ldr	r3, .L27+4
+ 425 0022 1B78     		ldrb	r3, [r3]
+ 426 0024 012B     		cmp	r3, #1
+ 427 0026 F9D1     		bne	.L25
+  79:.\main.c      **** 			{
+ 428              		.loc 2 79 0
+ 429 0028 054B     		ldr	r3, .L27+8
+ 430 002a 1B78     		ldrb	r3, [r3]
+ 431 002c DB07     		lsl	r3, r3, #31
+ 432 002e F5D5     		bpl	.L25
+  82:.\main.c      **** //				imageBurstStartNotification = FALSE;
+ 433              		.loc 2 82 0
+ 434 0030 FFF7FEFF 		bl	SenPixelsShowUp
+ 435              	.LVL47:
+ 436 0034 F2E7     		b	.L25
+ 437              	.L28:
+ 438 0036 C046     		.align	2
+ 439              	.L27:
+ 440 0038 00000000 		.word	.LANCHOR1
+ 441 003c 00000000 		.word	deviceConnected
+ 442 0040 00000000 		.word	imageBurstStartNotification
+ 443              		.cfi_endproc
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 13
+
+
+ 444              	.LFE37:
+ 445              		.size	main, .-main
+ 446              		.section	.text.SenShowSetupData,"ax",%progbits
+ 447              		.align	2
+ 448              		.global	SenShowSetupData
+ 449              		.code	16
+ 450              		.thumb_func
+ 451              		.type	SenShowSetupData, %function
+ 452              	SenShowSetupData:
+ 453              	.LFB45:
+ 175:.\main.c      **** 
+ 176:.\main.c      **** 
+ 177:.\main.c      **** void loop(void) {
+ 178:.\main.c      ****    for(;;)
+ 179:.\main.c      ****    {
+ 180:.\main.c      **** //                SenEcho();
+ 181:.\main.c      ****         
+ 182:.\main.c      ****             if (initialNeeded == 0)  {
+ 183:.\main.c      ****               UART_UartPutString("Please Input:\r 0, Continuous Frames Pixels-Burst;\r 1, Only One 
+ 184:.\main.c      ****             }
+ 185:.\main.c      ****               //***********************************************************************************
+ 186:.\main.c      ****             if (initialNeeded == 1)  {
+ 187:.\main.c      ****                 UART_UartPutString("\r*************************************************************
+ 188:.\main.c      ****                 UART_UartPutString("                  Welcome to Sen PSoC Optical-Flow World\n"); 
+ 189:.\main.c      ****                 UART_UartPutString("*************************************************************\n
+ 190:.\main.c      ****                 SenShowSetupData();
+ 191:.\main.c      ****                 UART_UartPutString("Please Input:\r 0, Continuous Frames Pixels-Burst;\r 1, Only On
+ 192:.\main.c      ****                 initialNeeded = 0;
+ 193:.\main.c      ****             }
+ 194:.\main.c      ****             //*************************************************************************************
+ 195:.\main.c      ****           
+ 196:.\main.c      ****             uint8 input = 0;
+ 197:.\main.c      ****             input = SenSerialReadBlocking();
+ 198:.\main.c      ****             
+ 199:.\main.c      ****             if(input == 48)    {      // Continuous Frames Pixels      Num. 0 to start
+ 200:.\main.c      ****                 UART_UartPutString("Ready to Burst:\n");
+ 201:.\main.c      ****                 SenContinuousImageDisplay();
+ 202:.\main.c      ****             }else if (input == 49)    {// One Frame Pixels             Num. 1 to start
+ 203:.\main.c      ****                 SenChipSelect();
+ 204:.\main.c      ****                 SenImageDisplay();
+ 205:.\main.c      ****                 CyDelay(100);
+ 206:.\main.c      ****             }else if (input == 50)    {// MotionTracking               Num. 2 to start
+ 207:.\main.c      ****                 UART_UartPutString("\n");
+ 208:.\main.c      ****                 UART_UartPutString("SenMotionSprouting:\n");
+ 209:.\main.c      ****                 SenReset();
+ 210:.\main.c      ****                 SenReadCoodinataData();
+ 211:.\main.c      ****             }else if (input == 51)    {// MotionBurst                  Num. 3 to start
+ 212:.\main.c      ****                 SenContinueMotionBurst();
+ 213:.\main.c      ****             }else if (input == 113)    {// Quit Request                 Letter q to quit, disconnec
+ 214:.\main.c      ****                UART_UartPutString("I'm Sen Stop Request!\n");
+ 215:.\main.c      ****                UART_UartPutString("Now the input is: ");
+ 216:.\main.c      ****                UART_UartPutChar(input);
+ 217:.\main.c      ****                UART_UartPutString("\n");
+ 218:.\main.c      ****             }else  {
+ 219:.\main.c      ****                	UART_UartPutString("Now the input is: ");
+ 220:.\main.c      **** 				UART_UartPutChar(input);
+ 221:.\main.c      ****             }
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 14
+
+
+ 222:.\main.c      ****             UART_UartPutString("\n");
+ 223:.\main.c      ****             CyDelay(500);
+ 224:.\main.c      **** 
+ 225:.\main.c      ****    }
+ 226:.\main.c      **** }
+ 227:.\main.c      **** 
+ 228:.\main.c      **** 
+ 229:.\main.c      **** 
+ 230:.\main.c      **** uint8 SenSerialReadBlocking(void){
+ 231:.\main.c      ****     uint8 input = (uint8)-1;
+ 232:.\main.c      ****     int initialConfirmCount = 0;
+ 233:.\main.c      ****     
+ 234:.\main.c      ****     if (initialing == 0)  {     
+ 235:.\main.c      ****       //  while(input == -1 || input < 0)  { 
+ 236:.\main.c      ****         while(input == (uint8)-1)  { 
+ 237:.\main.c      ****           if (initialNeeded == 1)  {
+ 238:.\main.c      ****               if (++initialConfirmCount >= SEN_RECONNECTION_CONFIRM_NUM)
+ 239:.\main.c      ****                   loop();             
+ 240:.\main.c      ****           }else   {
+ 241:.\main.c      ****               initialConfirmCount = 0;
+ 242:.\main.c      ****           }
+ 243:.\main.c      ****           input = UART_UartGetByte();
+ 244:.\main.c      ****           if (input == (uint8)-2)  {
+ 245:.\main.c      ****               initialing = 1;      
+ 246:.\main.c      ****           }
+ 247:.\main.c      ****         }
+ 248:.\main.c      ****     }
+ 249:.\main.c      ****     
+ 250:.\main.c      ****     /*****************  For Re-Connection detection  **************************/
+ 251:.\main.c      ****     if (initialing == 1)  {
+ 252:.\main.c      ****           initialConfirmCount = 0;
+ 253:.\main.c      ****           if (input == (uint8)-1)  {  // Nothing been read, initialing finished
+ 254:.\main.c      ****               initialing = 0;
+ 255:.\main.c      ****               initialNeeded = 1;
+ 256:.\main.c      ****           }
+ 257:.\main.c      ****           SenSerialReadBlocking();    
+ 258:.\main.c      ****     }        
+ 259:.\main.c      ****     /*****************  For Re-Connection detection  **************************/
+ 260:.\main.c      ****     
+ 261:.\main.c      ****     return input;
+ 262:.\main.c      **** }
+ 263:.\main.c      **** 
+ 264:.\main.c      **** void SenEcho(void)      {
+ 265:.\main.c      ****        uint8 input = SenSerialReadBlocking();
+ 266:.\main.c      ****        UART_UartPutChar(input);
+ 267:.\main.c      ****        UART_UartPutString("\n");
+ 268:.\main.c      ****        CyDelayUs(50);
+ 269:.\main.c      **** }
+ 270:.\main.c      **** 
+ 271:.\main.c      **** void SenShowSetupData(void){
+ 454              		.loc 2 271 0
+ 455              		.cfi_startproc
+ 456 0000 38B5     		push	{r3, r4, r5, lr}
+ 457              		.cfi_def_cfa_offset 16
+ 458              		.cfi_offset 3, -16
+ 459              		.cfi_offset 4, -12
+ 460              		.cfi_offset 5, -8
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 15
+
+
+ 461              		.cfi_offset 14, -4
+ 272:.\main.c      ****        uint8 productID = SenReadReg(REG_PRODUCT_ID);
+ 462              		.loc 2 272 0
+ 463 0002 0020     		mov	r0, #0
+ 464 0004 FFF7FEFF 		bl	SenReadReg
+ 465              	.LVL48:
+ 466 0008 041C     		mov	r4, r0
+ 467              	.LVL49:
+ 273:.\main.c      ****        UART_UartPutString("ProductID = 0x");
+ 468              		.loc 2 273 0
+ 469 000a 0848     		ldr	r0, .L32
+ 470 000c FFF7FEFF 		bl	UART_UartPutString
+ 471              	.LVL50:
+ 274:.\main.c      ****         if (productID)  {
+ 472              		.loc 2 274 0
+ 473 0010 002C     		cmp	r4, #0
+ 474 0012 03D0     		beq	.L30
+ 275:.\main.c      ****                 SenUartPutHexDecimalByte(productID);
+ 475              		.loc 2 275 0
+ 476 0014 201C     		mov	r0, r4
+ 477 0016 FFF7FEFF 		bl	SenUartPutHexDecimalByte
+ 478              	.LVL51:
+ 479 001a 02E0     		b	.L31
+ 480              	.L30:
+ 276:.\main.c      ****         }else   UART_UartPutString("00");
+ 481              		.loc 2 276 0
+ 482 001c 0448     		ldr	r0, .L32+4
+ 483 001e FFF7FEFF 		bl	UART_UartPutString
+ 484              	.LVL52:
+ 485              	.L31:
+ 277:.\main.c      ****        UART_UartPutString(".\n");
+ 486              		.loc 2 277 0
+ 487 0022 0448     		ldr	r0, .L32+8
+ 488 0024 FFF7FEFF 		bl	UART_UartPutString
+ 489              	.LVL53:
+ 278:.\main.c      **** }
+ 490              		.loc 2 278 0
+ 491              		@ sp needed
+ 492              	.LVL54:
+ 493 0028 38BD     		pop	{r3, r4, r5, pc}
+ 494              	.L33:
+ 495 002a C046     		.align	2
+ 496              	.L32:
+ 497 002c 00000000 		.word	.LC13
+ 498 0030 10000000 		.word	.LC15
+ 499 0034 14000000 		.word	.LC17
+ 500              		.cfi_endproc
+ 501              	.LFE45:
+ 502              		.size	SenShowSetupData, .-SenShowSetupData
+ 503              		.section	.text.SenImageDisplay,"ax",%progbits
+ 504              		.align	2
+ 505              		.global	SenImageDisplay
+ 506              		.code	16
+ 507              		.thumb_func
+ 508              		.type	SenImageDisplay, %function
+ 509              	SenImageDisplay:
+ 510              	.LFB46:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 16
+
+
+ 279:.\main.c      **** 
+ 280:.\main.c      **** 
+ 281:.\main.c      **** /*********** Sen Pixel-Burst Mode **************/
+ 282:.\main.c      **** void SenImageDisplay()
+ 283:.\main.c      **** {
+ 511              		.loc 2 283 0
+ 512              		.cfi_startproc
+ 513 0000 08B5     		push	{r3, lr}
+ 514              		.cfi_def_cfa_offset 8
+ 515              		.cfi_offset 3, -8
+ 516              		.cfi_offset 14, -4
+ 284:.\main.c      ****     UART_UartPutString("image data\n");
+ 517              		.loc 2 284 0
+ 518 0002 0448     		ldr	r0, .L35
+ 519 0004 FFF7FEFF 		bl	UART_UartPutString
+ 520              	.LVL55:
+ 285:.\main.c      ****     SenPixelsShowUp();
+ 521              		.loc 2 285 0
+ 522 0008 FFF7FEFF 		bl	SenPixelsShowUp
+ 523              	.LVL56:
+ 286:.\main.c      ****     UART_UartPutString("----------\n");
+ 524              		.loc 2 286 0
+ 525 000c 0248     		ldr	r0, .L35+4
+ 526 000e FFF7FEFF 		bl	UART_UartPutString
+ 527              	.LVL57:
+ 287:.\main.c      **** }
+ 528              		.loc 2 287 0
+ 529              		@ sp needed
+ 530 0012 08BD     		pop	{r3, pc}
+ 531              	.L36:
+ 532              		.align	2
+ 533              	.L35:
+ 534 0014 18000000 		.word	.LC19
+ 535 0018 24000000 		.word	.LC21
+ 536              		.cfi_endproc
+ 537              	.LFE46:
+ 538              		.size	SenImageDisplay, .-SenImageDisplay
+ 539              		.section	.text.UART_ReadAvailableCheck,"ax",%progbits
+ 540              		.align	2
+ 541              		.global	UART_ReadAvailableCheck
+ 542              		.code	16
+ 543              		.thumb_func
+ 544              		.type	UART_ReadAvailableCheck, %function
+ 545              	UART_ReadAvailableCheck:
+ 546              	.LFB48:
+ 288:.\main.c      **** 
+ 289:.\main.c      **** void SenContinuousImageDisplay()
+ 290:.\main.c      **** {
+ 291:.\main.c      ****     int i, burstCount = 0;
+ 292:.\main.c      ****     SPI_Master_SpiUartClearTxBuffer();// Serial.flush();
+ 293:.\main.c      **** 
+ 294:.\main.c      ****     while( !UART_ReadAvailableCheck() ) {
+ 295:.\main.c      ****         SenImageDisplay();
+ 296:.\main.c      ****     }
+ 297:.\main.c      ****     CyDelay(50);
+ 298:.\main.c      ****     SPI_Master_SpiUartClearTxBuffer();// Serial.flush();
+ 299:.\main.c      **** }
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 17
+
+
+ 300:.\main.c      **** 
+ 301:.\main.c      **** 
+ 302:.\main.c      **** uint8 UART_ReadAvailableCheck(void)
+ 303:.\main.c      **** {
+ 547              		.loc 2 303 0
+ 548              		.cfi_startproc
+ 549 0000 08B5     		push	{r3, lr}
+ 550              		.cfi_def_cfa_offset 8
+ 551              		.cfi_offset 3, -8
+ 552              		.cfi_offset 14, -4
+ 304:.\main.c      ****         return (0u != UART_SpiUartGetRxBufferSize()) ;
+ 553              		.loc 2 304 0
+ 554 0002 FFF7FEFF 		bl	UART_SpiUartGetRxBufferSize
+ 555              	.LVL58:
+ 556 0006 431E     		sub	r3, r0, #1
+ 557 0008 9841     		sbc	r0, r0, r3
+ 558 000a C0B2     		uxtb	r0, r0
+ 305:.\main.c      **** }
+ 559              		.loc 2 305 0
+ 560              		@ sp needed
+ 561 000c 08BD     		pop	{r3, pc}
+ 562              		.cfi_endproc
+ 563              	.LFE48:
+ 564              		.size	UART_ReadAvailableCheck, .-UART_ReadAvailableCheck
+ 565 000e C046     		.section	.text.SenContinuousImageDisplay,"ax",%progbits
+ 566              		.align	2
+ 567              		.global	SenContinuousImageDisplay
+ 568              		.code	16
+ 569              		.thumb_func
+ 570              		.type	SenContinuousImageDisplay, %function
+ 571              	SenContinuousImageDisplay:
+ 572              	.LFB47:
+ 290:.\main.c      ****     int i, burstCount = 0;
+ 573              		.loc 2 290 0
+ 574              		.cfi_startproc
+ 575 0000 08B5     		push	{r3, lr}
+ 576              		.cfi_def_cfa_offset 8
+ 577              		.cfi_offset 3, -8
+ 578              		.cfi_offset 14, -4
+ 579              	.LVL59:
+ 292:.\main.c      **** 
+ 580              		.loc 2 292 0
+ 581 0002 FFF7FEFF 		bl	SPI_Master_SpiUartClearTxBuffer
+ 582              	.LVL60:
+ 294:.\main.c      ****         SenImageDisplay();
+ 583              		.loc 2 294 0
+ 584 0006 01E0     		b	.L39
+ 585              	.L40:
+ 295:.\main.c      ****     }
+ 586              		.loc 2 295 0
+ 587 0008 FFF7FEFF 		bl	SenImageDisplay
+ 588              	.LVL61:
+ 589              	.L39:
+ 294:.\main.c      ****         SenImageDisplay();
+ 590              		.loc 2 294 0
+ 591 000c FFF7FEFF 		bl	UART_ReadAvailableCheck
+ 592              	.LVL62:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 18
+
+
+ 593 0010 0028     		cmp	r0, #0
+ 594 0012 F9D0     		beq	.L40
+ 297:.\main.c      ****     SPI_Master_SpiUartClearTxBuffer();// Serial.flush();
+ 595              		.loc 2 297 0
+ 596 0014 3220     		mov	r0, #50
+ 597 0016 FFF7FEFF 		bl	CyDelay
+ 598              	.LVL63:
+ 298:.\main.c      **** }
+ 599              		.loc 2 298 0
+ 600 001a FFF7FEFF 		bl	SPI_Master_SpiUartClearTxBuffer
+ 601              	.LVL64:
+ 299:.\main.c      **** 
+ 602              		.loc 2 299 0
+ 603              		@ sp needed
+ 604 001e 08BD     		pop	{r3, pc}
+ 605              		.cfi_endproc
+ 606              	.LFE47:
+ 607              		.size	SenContinuousImageDisplay, .-SenContinuousImageDisplay
+ 608              		.section	.text.loop,"ax",%progbits
+ 609              		.align	2
+ 610              		.global	loop
+ 611              		.code	16
+ 612              		.thumb_func
+ 613              		.type	loop, %function
+ 614              	loop:
+ 615              	.LFB42:
+ 177:.\main.c      ****    for(;;)
+ 616              		.loc 2 177 0
+ 617              		.cfi_startproc
+ 618 0000 10B5     		push	{r4, lr}
+ 619              		.cfi_def_cfa_offset 8
+ 620              		.cfi_offset 4, -8
+ 621              		.cfi_offset 14, -4
+ 622              	.L49:
+ 623              	.LBB2:
+ 182:.\main.c      ****               UART_UartPutString("Please Input:\r 0, Continuous Frames Pixels-Burst;\r 1, Only One 
+ 624              		.loc 2 182 0
+ 625 0002 2E4B     		ldr	r3, .L50
+ 626 0004 1B68     		ldr	r3, [r3]
+ 627 0006 002B     		cmp	r3, #0
+ 628 0008 02D1     		bne	.L42
+ 183:.\main.c      ****             }
+ 629              		.loc 2 183 0
+ 630 000a 2D48     		ldr	r0, .L50+4
+ 631 000c FFF7FEFF 		bl	UART_UartPutString
+ 632              	.LVL65:
+ 633              	.L42:
+ 186:.\main.c      ****                 UART_UartPutString("\r*************************************************************
+ 634              		.loc 2 186 0
+ 635 0010 2A4B     		ldr	r3, .L50
+ 636 0012 1B68     		ldr	r3, [r3]
+ 637 0014 012B     		cmp	r3, #1
+ 638 0016 10D1     		bne	.L43
+ 187:.\main.c      ****                 UART_UartPutString("                  Welcome to Sen PSoC Optical-Flow World\n"); 
+ 639              		.loc 2 187 0
+ 640 0018 2A48     		ldr	r0, .L50+8
+ 641 001a FFF7FEFF 		bl	UART_UartPutString
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 19
+
+
+ 642              	.LVL66:
+ 188:.\main.c      ****                 UART_UartPutString("*************************************************************\n
+ 643              		.loc 2 188 0
+ 644 001e 2A48     		ldr	r0, .L50+12
+ 645 0020 FFF7FEFF 		bl	UART_UartPutString
+ 646              	.LVL67:
+ 189:.\main.c      ****                 SenShowSetupData();
+ 647              		.loc 2 189 0
+ 648 0024 2948     		ldr	r0, .L50+16
+ 649 0026 FFF7FEFF 		bl	UART_UartPutString
+ 650              	.LVL68:
+ 190:.\main.c      ****                 UART_UartPutString("Please Input:\r 0, Continuous Frames Pixels-Burst;\r 1, Only On
+ 651              		.loc 2 190 0
+ 652 002a FFF7FEFF 		bl	SenShowSetupData
+ 653              	.LVL69:
+ 191:.\main.c      ****                 initialNeeded = 0;
+ 654              		.loc 2 191 0
+ 655 002e 2848     		ldr	r0, .L50+20
+ 656 0030 FFF7FEFF 		bl	UART_UartPutString
+ 657              	.LVL70:
+ 192:.\main.c      ****             }
+ 658              		.loc 2 192 0
+ 659 0034 0022     		mov	r2, #0
+ 660 0036 214B     		ldr	r3, .L50
+ 661 0038 1A60     		str	r2, [r3]
+ 662              	.L43:
+ 663              	.LVL71:
+ 197:.\main.c      ****             
+ 664              		.loc 2 197 0
+ 665 003a FFF7FEFF 		bl	SenSerialReadBlocking
+ 666              	.LVL72:
+ 667 003e 041E     		sub	r4, r0, #0
+ 668              	.LVL73:
+ 199:.\main.c      ****                 UART_UartPutString("Ready to Burst:\n");
+ 669              		.loc 2 199 0
+ 670 0040 302C     		cmp	r4, #48
+ 671 0042 05D1     		bne	.L44
+ 200:.\main.c      ****                 SenContinuousImageDisplay();
+ 672              		.loc 2 200 0
+ 673 0044 2348     		ldr	r0, .L50+24
+ 674              	.LVL74:
+ 675 0046 FFF7FEFF 		bl	UART_UartPutString
+ 676              	.LVL75:
+ 201:.\main.c      ****             }else if (input == 49)    {// One Frame Pixels             Num. 1 to start
+ 677              		.loc 2 201 0
+ 678 004a FFF7FEFF 		bl	SenContinuousImageDisplay
+ 679              	.LVL76:
+ 680 004e 2DE0     		b	.L45
+ 681              	.LVL77:
+ 682              	.L44:
+ 202:.\main.c      ****                 SenChipSelect();
+ 683              		.loc 2 202 0
+ 684 0050 3128     		cmp	r0, #49
+ 685 0052 07D1     		bne	.L46
+ 203:.\main.c      ****                 SenImageDisplay();
+ 686              		.loc 2 203 0
+ 687 0054 FFF7FEFF 		bl	SenChipSelect
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 20
+
+
+ 688              	.LVL78:
+ 204:.\main.c      ****                 CyDelay(100);
+ 689              		.loc 2 204 0
+ 690 0058 FFF7FEFF 		bl	SenImageDisplay
+ 691              	.LVL79:
+ 205:.\main.c      ****             }else if (input == 50)    {// MotionTracking               Num. 2 to start
+ 692              		.loc 2 205 0
+ 693 005c 6420     		mov	r0, #100
+ 694 005e FFF7FEFF 		bl	CyDelay
+ 695              	.LVL80:
+ 696 0062 23E0     		b	.L45
+ 697              	.LVL81:
+ 698              	.L46:
+ 206:.\main.c      ****                 UART_UartPutString("\n");
+ 699              		.loc 2 206 0
+ 700 0064 3228     		cmp	r0, #50
+ 701 0066 0AD1     		bne	.L47
+ 207:.\main.c      ****                 UART_UartPutString("SenMotionSprouting:\n");
+ 702              		.loc 2 207 0
+ 703 0068 1B48     		ldr	r0, .L50+28
+ 704              	.LVL82:
+ 705 006a FFF7FEFF 		bl	UART_UartPutString
+ 706              	.LVL83:
+ 208:.\main.c      ****                 SenReset();
+ 707              		.loc 2 208 0
+ 708 006e 1B48     		ldr	r0, .L50+32
+ 709 0070 FFF7FEFF 		bl	UART_UartPutString
+ 710              	.LVL84:
+ 209:.\main.c      ****                 SenReadCoodinataData();
+ 711              		.loc 2 209 0
+ 712 0074 FFF7FEFF 		bl	SenReset
+ 713              	.LVL85:
+ 210:.\main.c      ****             }else if (input == 51)    {// MotionBurst                  Num. 3 to start
+ 714              		.loc 2 210 0
+ 715 0078 FFF7FEFF 		bl	SenReadCoodinataData
+ 716              	.LVL86:
+ 717 007c 16E0     		b	.L45
+ 718              	.LVL87:
+ 719              	.L47:
+ 211:.\main.c      ****                 SenContinueMotionBurst();
+ 720              		.loc 2 211 0
+ 721 007e 3328     		cmp	r0, #51
+ 722 0080 14D0     		beq	.L45
+ 213:.\main.c      ****                UART_UartPutString("I'm Sen Stop Request!\n");
+ 723              		.loc 2 213 0
+ 724 0082 7128     		cmp	r0, #113
+ 725 0084 0CD1     		bne	.L48
+ 214:.\main.c      ****                UART_UartPutString("Now the input is: ");
+ 726              		.loc 2 214 0
+ 727 0086 1648     		ldr	r0, .L50+36
+ 728              	.LVL88:
+ 729 0088 FFF7FEFF 		bl	UART_UartPutString
+ 730              	.LVL89:
+ 215:.\main.c      ****                UART_UartPutChar(input);
+ 731              		.loc 2 215 0
+ 732 008c 1548     		ldr	r0, .L50+40
+ 733 008e FFF7FEFF 		bl	UART_UartPutString
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 21
+
+
+ 734              	.LVL90:
+ 216:.\main.c      ****                UART_UartPutString("\n");
+ 735              		.loc 2 216 0
+ 736 0092 201C     		mov	r0, r4
+ 737 0094 FFF7FEFF 		bl	UART_SpiUartWriteTxData
+ 738              	.LVL91:
+ 217:.\main.c      ****             }else  {
+ 739              		.loc 2 217 0
+ 740 0098 0F48     		ldr	r0, .L50+28
+ 741 009a FFF7FEFF 		bl	UART_UartPutString
+ 742              	.LVL92:
+ 743 009e 05E0     		b	.L45
+ 744              	.LVL93:
+ 745              	.L48:
+ 219:.\main.c      **** 				UART_UartPutChar(input);
+ 746              		.loc 2 219 0
+ 747 00a0 1048     		ldr	r0, .L50+40
+ 748              	.LVL94:
+ 749 00a2 FFF7FEFF 		bl	UART_UartPutString
+ 750              	.LVL95:
+ 220:.\main.c      ****             }
+ 751              		.loc 2 220 0
+ 752 00a6 201C     		mov	r0, r4
+ 753 00a8 FFF7FEFF 		bl	UART_SpiUartWriteTxData
+ 754              	.LVL96:
+ 755              	.L45:
+ 222:.\main.c      ****             CyDelay(500);
+ 756              		.loc 2 222 0
+ 757 00ac 0A48     		ldr	r0, .L50+28
+ 758 00ae FFF7FEFF 		bl	UART_UartPutString
+ 759              	.LVL97:
+ 223:.\main.c      **** 
+ 760              		.loc 2 223 0
+ 761 00b2 FA20     		mov	r0, #250
+ 762 00b4 4000     		lsl	r0, r0, #1
+ 763 00b6 FFF7FEFF 		bl	CyDelay
+ 764              	.LVL98:
+ 765              	.LBE2:
+ 225:.\main.c      **** }
+ 766              		.loc 2 225 0
+ 767 00ba A2E7     		b	.L49
+ 768              	.L51:
+ 769              		.align	2
+ 770              	.L50:
+ 771 00bc 00000000 		.word	.LANCHOR1
+ 772 00c0 30000000 		.word	.LC24
+ 773 00c4 BC000000 		.word	.LC26
+ 774 00c8 FC000000 		.word	.LC28
+ 775 00cc 38010000 		.word	.LC30
+ 776 00d0 78010000 		.word	.LC32
+ 777 00d4 08020000 		.word	.LC34
+ 778 00d8 1C020000 		.word	.LC36
+ 779 00dc 20020000 		.word	.LC38
+ 780 00e0 38020000 		.word	.LC40
+ 781 00e4 50020000 		.word	.LC42
+ 782              		.cfi_endproc
+ 783              	.LFE42:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 22
+
+
+ 784              		.size	loop, .-loop
+ 785              		.section	.text.SenSerialReadBlocking,"ax",%progbits
+ 786              		.align	2
+ 787              		.global	SenSerialReadBlocking
+ 788              		.code	16
+ 789              		.thumb_func
+ 790              		.type	SenSerialReadBlocking, %function
+ 791              	SenSerialReadBlocking:
+ 792              	.LFB43:
+ 230:.\main.c      ****     uint8 input = (uint8)-1;
+ 793              		.loc 2 230 0
+ 794              		.cfi_startproc
+ 795 0000 38B5     		push	{r3, r4, r5, lr}
+ 796              		.cfi_def_cfa_offset 16
+ 797              		.cfi_offset 3, -16
+ 798              		.cfi_offset 4, -12
+ 799              		.cfi_offset 5, -8
+ 800              		.cfi_offset 14, -4
+ 801              	.LVL99:
+ 234:.\main.c      ****       //  while(input == -1 || input < 0)  { 
+ 802              		.loc 2 234 0
+ 803 0002 174B     		ldr	r3, .L62
+ 804 0004 5B68     		ldr	r3, [r3, #4]
+ 805 0006 002B     		cmp	r3, #0
+ 806 0008 15D0     		beq	.L60
+ 231:.\main.c      ****     int initialConfirmCount = 0;
+ 807              		.loc 2 231 0
+ 808 000a FF24     		mov	r4, #255
+ 809 000c 17E0     		b	.L54
+ 810              	.LVL100:
+ 811              	.L57:
+ 237:.\main.c      ****               if (++initialConfirmCount >= SEN_RECONNECTION_CONFIRM_NUM)
+ 812              		.loc 2 237 0
+ 813 000e 154B     		ldr	r3, .L62+4
+ 814 0010 1B68     		ldr	r3, [r3]
+ 815 0012 012B     		cmp	r3, #1
+ 816 0014 05D1     		bne	.L61
+ 238:.\main.c      ****                   loop();             
+ 817              		.loc 2 238 0
+ 818 0016 0135     		add	r5, r5, #1
+ 819              	.LVL101:
+ 820 0018 134B     		ldr	r3, .L62+8
+ 821 001a 9D42     		cmp	r5, r3
+ 822 001c 02DD     		ble	.L55
+ 239:.\main.c      ****           }else   {
+ 823              		.loc 2 239 0
+ 824 001e FFF7FEFF 		bl	loop
+ 825              	.LVL102:
+ 826              	.L61:
+ 241:.\main.c      ****           }
+ 827              		.loc 2 241 0
+ 828 0022 0025     		mov	r5, #0
+ 829              	.LVL103:
+ 830              	.L55:
+ 243:.\main.c      ****           if (input == (uint8)-2)  {
+ 831              		.loc 2 243 0
+ 832 0024 FFF7FEFF 		bl	UART_UartGetByte
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 23
+
+
+ 833              	.LVL104:
+ 834 0028 C4B2     		uxtb	r4, r0
+ 835              	.LVL105:
+ 244:.\main.c      ****               initialing = 1;      
+ 836              		.loc 2 244 0
+ 837 002a FE2C     		cmp	r4, #254
+ 838 002c 05D1     		bne	.L53
+ 245:.\main.c      ****           }
+ 839              		.loc 2 245 0
+ 840 002e 0122     		mov	r2, #1
+ 841 0030 0B4B     		ldr	r3, .L62
+ 842 0032 5A60     		str	r2, [r3, #4]
+ 843 0034 01E0     		b	.L53
+ 844              	.LVL106:
+ 845              	.L60:
+ 846 0036 0025     		mov	r5, #0
+ 847 0038 FF24     		mov	r4, #255
+ 848              	.LVL107:
+ 849              	.L53:
+ 236:.\main.c      ****           if (initialNeeded == 1)  {
+ 850              		.loc 2 236 0
+ 851 003a FF2C     		cmp	r4, #255
+ 852 003c E7D0     		beq	.L57
+ 853              	.LVL108:
+ 854              	.L54:
+ 251:.\main.c      ****           initialConfirmCount = 0;
+ 855              		.loc 2 251 0
+ 856 003e 084B     		ldr	r3, .L62
+ 857 0040 5B68     		ldr	r3, [r3, #4]
+ 858 0042 012B     		cmp	r3, #1
+ 859 0044 09D1     		bne	.L58
+ 860              	.LVL109:
+ 253:.\main.c      ****               initialing = 0;
+ 861              		.loc 2 253 0
+ 862 0046 FF2C     		cmp	r4, #255
+ 863 0048 05D1     		bne	.L59
+ 254:.\main.c      ****               initialNeeded = 1;
+ 864              		.loc 2 254 0
+ 865 004a 0022     		mov	r2, #0
+ 866 004c 044B     		ldr	r3, .L62
+ 867 004e 5A60     		str	r2, [r3, #4]
+ 255:.\main.c      ****           }
+ 868              		.loc 2 255 0
+ 869 0050 0132     		add	r2, r2, #1
+ 870 0052 044B     		ldr	r3, .L62+4
+ 871 0054 1A60     		str	r2, [r3]
+ 872              	.L59:
+ 257:.\main.c      ****     }        
+ 873              		.loc 2 257 0
+ 874 0056 FFF7FEFF 		bl	SenSerialReadBlocking
+ 875              	.LVL110:
+ 876              	.L58:
+ 262:.\main.c      **** 
+ 877              		.loc 2 262 0
+ 878 005a 201C     		mov	r0, r4
+ 879              		@ sp needed
+ 880              	.LVL111:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 24
+
+
+ 881 005c 38BD     		pop	{r3, r4, r5, pc}
+ 882              	.L63:
+ 883 005e C046     		.align	2
+ 884              	.L62:
+ 885 0060 00000000 		.word	.LANCHOR0
+ 886 0064 00000000 		.word	.LANCHOR1
+ 887 0068 DB050000 		.word	1499
+ 888              		.cfi_endproc
+ 889              	.LFE43:
+ 890              		.size	SenSerialReadBlocking, .-SenSerialReadBlocking
+ 891              		.section	.text.SenEcho,"ax",%progbits
+ 892              		.align	2
+ 893              		.global	SenEcho
+ 894              		.code	16
+ 895              		.thumb_func
+ 896              		.type	SenEcho, %function
+ 897              	SenEcho:
+ 898              	.LFB44:
+ 264:.\main.c      ****        uint8 input = SenSerialReadBlocking();
+ 899              		.loc 2 264 0
+ 900              		.cfi_startproc
+ 901 0000 08B5     		push	{r3, lr}
+ 902              		.cfi_def_cfa_offset 8
+ 903              		.cfi_offset 3, -8
+ 904              		.cfi_offset 14, -4
+ 265:.\main.c      ****        UART_UartPutChar(input);
+ 905              		.loc 2 265 0
+ 906 0002 FFF7FEFF 		bl	SenSerialReadBlocking
+ 907              	.LVL112:
+ 266:.\main.c      ****        UART_UartPutString("\n");
+ 908              		.loc 2 266 0
+ 909 0006 FFF7FEFF 		bl	UART_SpiUartWriteTxData
+ 910              	.LVL113:
+ 267:.\main.c      ****        CyDelayUs(50);
+ 911              		.loc 2 267 0
+ 912 000a 0348     		ldr	r0, .L65
+ 913 000c FFF7FEFF 		bl	UART_UartPutString
+ 914              	.LVL114:
+ 268:.\main.c      **** }
+ 915              		.loc 2 268 0
+ 916 0010 3220     		mov	r0, #50
+ 917 0012 FFF7FEFF 		bl	CyDelayUs
+ 918              	.LVL115:
+ 269:.\main.c      **** 
+ 919              		.loc 2 269 0
+ 920              		@ sp needed
+ 921 0016 08BD     		pop	{r3, pc}
+ 922              	.L66:
+ 923              		.align	2
+ 924              	.L65:
+ 925 0018 1C020000 		.word	.LC36
+ 926              		.cfi_endproc
+ 927              	.LFE44:
+ 928              		.size	SenEcho, .-SenEcho
+ 929              		.global	initialNeeded
+ 930              		.global	initialing
+ 931              		.global	motionBurstCount
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 25
+
+
+ 932              		.global	n
+ 933              		.comm	Pixels18Array,301,4
+ 934              		.global	motionUpdateNeeded
+ 935              		.global	delta_Y
+ 936              		.global	delta_X
+ 937              		.comm	InterruptHpn,4,4
+ 938              		.global	motionAccumulation
+ 939              		.data
+ 940              		.align	2
+ 941              		.set	.LANCHOR1,. + 0
+ 942              		.type	initialNeeded, %object
+ 943              		.size	initialNeeded, 4
+ 944              	initialNeeded:
+ 945 0000 FFFFFFFF 		.word	-1
+ 946              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 947              		.align	2
+ 948              	.LC13:
+ 949 0000 50726F64 		.ascii	"ProductID = 0x\000"
+ 949      75637449 
+ 949      44203D20 
+ 949      307800
+ 950 000f 00       		.space	1
+ 951              	.LC15:
+ 952 0010 303000   		.ascii	"00\000"
+ 953 0013 00       		.space	1
+ 954              	.LC17:
+ 955 0014 2E0A00   		.ascii	".\012\000"
+ 956 0017 00       		.space	1
+ 957              	.LC19:
+ 958 0018 696D6167 		.ascii	"image data\012\000"
+ 958      65206461 
+ 958      74610A00 
+ 959              	.LC21:
+ 960 0024 2D2D2D2D 		.ascii	"----------\012\000"
+ 960      2D2D2D2D 
+ 960      2D2D0A00 
+ 961              	.LC24:
+ 962 0030 506C6561 		.ascii	"Please Input:\015 0, Continuous Frames Pixels-Burst"
+ 962      73652049 
+ 962      6E707574 
+ 962      3A0D2030 
+ 962      2C20436F 
+ 963 0060 3B0D2031 		.ascii	";\015 1, Only One Frame Pixels-Burst;\015 2, Motion"
+ 963      2C204F6E 
+ 963      6C79204F 
+ 963      6E652046 
+ 963      72616D65 
+ 964 008d 20547261 		.ascii	" Tracking and Recording;\012 3, Sen Motion Burst.\000"
+ 964      636B696E 
+ 964      6720616E 
+ 964      64205265 
+ 964      636F7264 
+ 965              	.LC26:
+ 966 00bc 0D2A2A2A 		.ascii	"\015***********************************************"
+ 966      2A2A2A2A 
+ 966      2A2A2A2A 
+ 966      2A2A2A2A 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 26
+
+
+ 966      2A2A2A2A 
+ 967 00ec 2A2A2A2A 		.ascii	"**************\012\000"
+ 967      2A2A2A2A 
+ 967      2A2A2A2A 
+ 967      2A2A0A00 
+ 968              	.LC28:
+ 969 00fc 20202020 		.ascii	"                  Welcome to Sen PSoC Optical-Flow "
+ 969      20202020 
+ 969      20202020 
+ 969      20202020 
+ 969      20205765 
+ 970 012f 576F726C 		.ascii	"World\012\000"
+ 970      640A00
+ 971 0136 0000     		.space	2
+ 972              	.LC30:
+ 973 0138 2A2A2A2A 		.ascii	"***************************************************"
+ 973      2A2A2A2A 
+ 973      2A2A2A2A 
+ 973      2A2A2A2A 
+ 973      2A2A2A2A 
+ 974 016b 2A2A2A2A 		.ascii	"**********\012\000"
+ 974      2A2A2A2A 
+ 974      2A2A0A00 
+ 975 0177 00       		.space	1
+ 976              	.LC32:
+ 977 0178 506C6561 		.ascii	"Please Input:\015 0, Continuous Frames Pixels-Burst"
+ 977      73652049 
+ 977      6E707574 
+ 977      3A0D2030 
+ 977      2C20436F 
+ 978 01a8 3B0D2031 		.ascii	";\015 1, Only One Frame Pixels-Burst;\015 2, Motion"
+ 978      2C204F6E 
+ 978      6C79204F 
+ 978      6E652046 
+ 978      72616D65 
+ 979 01d5 20547261 		.ascii	" Tracking and Recording;\012 3, Sen Motion Burst.\012"
+ 979      636B696E 
+ 979      6720616E 
+ 979      64205265 
+ 979      636F7264 
+ 980 0204 00       		.ascii	"\000"
+ 981 0205 000000   		.space	3
+ 982              	.LC34:
+ 983 0208 52656164 		.ascii	"Ready to Burst:\012\000"
+ 983      7920746F 
+ 983      20427572 
+ 983      73743A0A 
+ 983      00
+ 984 0219 000000   		.space	3
+ 985              	.LC36:
+ 986 021c 0A00     		.ascii	"\012\000"
+ 987 021e 0000     		.space	2
+ 988              	.LC38:
+ 989 0220 53656E4D 		.ascii	"SenMotionSprouting:\012\000"
+ 989      6F74696F 
+ 989      6E537072 
+ 989      6F757469 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 27
+
+
+ 989      6E673A0A 
+ 990 0235 000000   		.space	3
+ 991              	.LC40:
+ 992 0238 49276D20 		.ascii	"I'm Sen Stop Request!\012\000"
+ 992      53656E20 
+ 992      53746F70 
+ 992      20526571 
+ 992      75657374 
+ 993 024f 00       		.space	1
+ 994              	.LC42:
+ 995 0250 4E6F7720 		.ascii	"Now the input is: \000"
+ 995      74686520 
+ 995      696E7075 
+ 995      74206973 
+ 995      3A2000
+ 996 0263 00       		.bss
+ 997              		.align	2
+ 998              		.set	.LANCHOR0,. + 0
+ 999              		.type	delta_X, %object
+ 1000              		.size	delta_X, 1
+ 1001              	delta_X:
+ 1002 0000 00       		.space	1
+ 1003              		.type	delta_Y, %object
+ 1004              		.size	delta_Y, 1
+ 1005              	delta_Y:
+ 1006 0001 00       		.space	1
+ 1007              		.type	motionUpdateNeeded, %object
+ 1008              		.size	motionUpdateNeeded, 1
+ 1009              	motionUpdateNeeded:
+ 1010 0002 00       		.space	1
+ 1011 0003 00       		.space	1
+ 1012              		.type	initialing, %object
+ 1013              		.size	initialing, 4
+ 1014              	initialing:
+ 1015 0004 00000000 		.space	4
+ 1016              		.type	motionBurstCount, %object
+ 1017              		.size	motionBurstCount, 4
+ 1018              	motionBurstCount:
+ 1019 0008 00000000 		.space	4
+ 1020              		.type	n, %object
+ 1021              		.size	n, 4
+ 1022              	n:
+ 1023 000c 00000000 		.space	4
+ 1024              		.type	motionAccumulation, %object
+ 1025              		.size	motionAccumulation, 1
+ 1026              	motionAccumulation:
+ 1027 0010 00       		.space	1
+ 1028 0011 000000   		.text
+ 1029              	.Letext0:
+ 1030              		.file 3 "Generated_Source\\PSoC4/cytypes.h"
+ 1031              		.file 4 "Generated_Source\\PSoC4/SenBLE_Stack.h"
+ 1032              		.file 5 "Generated_Source\\PSoC4/SenBLE.h"
+ 1033              		.file 6 ".\\Sen_SPI_OF.h"
+ 1034              		.file 7 "Generated_Source\\PSoC4/CyLib.h"
+ 1035              		.file 8 ".\\BLE_Process.h"
+ 1036              		.file 9 "Generated_Source\\PSoC4/SenTimer.h"
+ 1037              		.file 10 "Generated_Source\\PSoC4/SenTimerISR.h"
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 28
+
+
+ 1038              		.file 11 "Generated_Source\\PSoC4/PrISM_1.h"
+ 1039              		.file 12 "Generated_Source\\PSoC4/PrISM_2.h"
+ 1040              		.file 13 "Generated_Source\\PSoC4/RED.h"
+ 1041              		.file 14 "Generated_Source\\PSoC4/GREEN.h"
+ 1042              		.file 15 "Generated_Source\\PSoC4/BLUE.h"
+ 1043              		.file 16 "Generated_Source\\PSoC4/SPI_Master.h"
+ 1044              		.file 17 "Generated_Source\\PSoC4/Reset.h"
+ 1045              		.file 18 "Generated_Source\\PSoC4/UART_SPI_UART.h"
+ 1046              		.file 19 "Generated_Source\\PSoC4/SPI_Master_SPI_UART.h"
+ 1047              		.section	.debug_info,"",%progbits
+ 1048              	.Ldebug_info0:
+ 1049 0000 DA0C0000 		.4byte	0xcda
+ 1050 0004 0400     		.2byte	0x4
+ 1051 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1052 000a 04       		.byte	0x4
+ 1053 000b 01       		.uleb128 0x1
+ 1054 000c 790B0000 		.4byte	.LASF173
+ 1055 0010 01       		.byte	0x1
+ 1056 0011 F70C0000 		.4byte	.LASF174
+ 1057 0015 82090000 		.4byte	.LASF175
+ 1058 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1059 001d 00000000 		.4byte	0
+ 1060 0021 00000000 		.4byte	.Ldebug_line0
+ 1061 0025 02       		.uleb128 0x2
+ 1062 0026 01       		.byte	0x1
+ 1063 0027 06       		.byte	0x6
+ 1064 0028 DF020000 		.4byte	.LASF0
+ 1065 002c 02       		.uleb128 0x2
+ 1066 002d 01       		.byte	0x1
+ 1067 002e 08       		.byte	0x8
+ 1068 002f 860E0000 		.4byte	.LASF1
+ 1069 0033 02       		.uleb128 0x2
+ 1070 0034 02       		.byte	0x2
+ 1071 0035 05       		.byte	0x5
+ 1072 0036 130C0000 		.4byte	.LASF2
+ 1073 003a 02       		.uleb128 0x2
+ 1074 003b 02       		.byte	0x2
+ 1075 003c 07       		.byte	0x7
+ 1076 003d 730E0000 		.4byte	.LASF3
+ 1077 0041 02       		.uleb128 0x2
+ 1078 0042 04       		.byte	0x4
+ 1079 0043 05       		.byte	0x5
+ 1080 0044 89010000 		.4byte	.LASF4
+ 1081 0048 02       		.uleb128 0x2
+ 1082 0049 04       		.byte	0x4
+ 1083 004a 07       		.byte	0x7
+ 1084 004b 2E060000 		.4byte	.LASF5
+ 1085 004f 02       		.uleb128 0x2
+ 1086 0050 08       		.byte	0x8
+ 1087 0051 05       		.byte	0x5
+ 1088 0052 D1020000 		.4byte	.LASF6
+ 1089 0056 02       		.uleb128 0x2
+ 1090 0057 08       		.byte	0x8
+ 1091 0058 07       		.byte	0x7
+ 1092 0059 5F050000 		.4byte	.LASF7
+ 1093 005d 03       		.uleb128 0x3
+ 1094 005e 04       		.byte	0x4
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 29
+
+
+ 1095 005f 05       		.byte	0x5
+ 1096 0060 696E7400 		.ascii	"int\000"
+ 1097 0064 02       		.uleb128 0x2
+ 1098 0065 04       		.byte	0x4
+ 1099 0066 07       		.byte	0x7
+ 1100 0067 830D0000 		.4byte	.LASF8
+ 1101 006b 04       		.uleb128 0x4
+ 1102 006c 10040000 		.4byte	.LASF9
+ 1103 0070 03       		.byte	0x3
+ 1104 0071 C2       		.byte	0xc2
+ 1105 0072 2C000000 		.4byte	0x2c
+ 1106 0076 04       		.uleb128 0x4
+ 1107 0077 3F000000 		.4byte	.LASF10
+ 1108 007b 03       		.byte	0x3
+ 1109 007c C3       		.byte	0xc3
+ 1110 007d 3A000000 		.4byte	0x3a
+ 1111 0081 04       		.uleb128 0x4
+ 1112 0082 83040000 		.4byte	.LASF11
+ 1113 0086 03       		.byte	0x3
+ 1114 0087 C4       		.byte	0xc4
+ 1115 0088 48000000 		.4byte	0x48
+ 1116 008c 04       		.uleb128 0x4
+ 1117 008d 1B070000 		.4byte	.LASF12
+ 1118 0091 03       		.byte	0x3
+ 1119 0092 C5       		.byte	0xc5
+ 1120 0093 25000000 		.4byte	0x25
+ 1121 0097 02       		.uleb128 0x2
+ 1122 0098 04       		.byte	0x4
+ 1123 0099 04       		.byte	0x4
+ 1124 009a BD0A0000 		.4byte	.LASF13
+ 1125 009e 02       		.uleb128 0x2
+ 1126 009f 08       		.byte	0x8
+ 1127 00a0 04       		.byte	0x4
+ 1128 00a1 35040000 		.4byte	.LASF14
+ 1129 00a5 04       		.uleb128 0x4
+ 1130 00a6 DA0D0000 		.4byte	.LASF15
+ 1131 00aa 03       		.byte	0x3
+ 1132 00ab D3       		.byte	0xd3
+ 1133 00ac B0000000 		.4byte	0xb0
+ 1134 00b0 02       		.uleb128 0x2
+ 1135 00b1 01       		.byte	0x1
+ 1136 00b2 08       		.byte	0x8
+ 1137 00b3 2F0D0000 		.4byte	.LASF16
+ 1138 00b7 05       		.uleb128 0x5
+ 1139 00b8 760D0000 		.4byte	.LASF17
+ 1140 00bc 03       		.byte	0x3
+ 1141 00bd 7E01     		.2byte	0x17e
+ 1142 00bf C3000000 		.4byte	0xc3
+ 1143 00c3 06       		.uleb128 0x6
+ 1144 00c4 04       		.byte	0x4
+ 1145 00c5 C9000000 		.4byte	0xc9
+ 1146 00c9 07       		.uleb128 0x7
+ 1147 00ca 02       		.uleb128 0x2
+ 1148 00cb 04       		.byte	0x4
+ 1149 00cc 07       		.byte	0x7
+ 1150 00cd B2080000 		.4byte	.LASF18
+ 1151 00d1 08       		.uleb128 0x8
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 30
+
+
+ 1152 00d2 04       		.byte	0x4
+ 1153 00d3 09       		.uleb128 0x9
+ 1154 00d4 01       		.byte	0x1
+ 1155 00d5 04       		.byte	0x4
+ 1156 00d6 A4       		.byte	0xa4
+ 1157 00d7 58020000 		.4byte	0x258
+ 1158 00db 0A       		.uleb128 0xa
+ 1159 00dc 78030000 		.4byte	.LASF19
+ 1160 00e0 00       		.sleb128 0
+ 1161 00e1 0A       		.uleb128 0xa
+ 1162 00e2 EB020000 		.4byte	.LASF20
+ 1163 00e6 01       		.sleb128 1
+ 1164 00e7 0A       		.uleb128 0xa
+ 1165 00e8 77010000 		.4byte	.LASF21
+ 1166 00ec 02       		.sleb128 2
+ 1167 00ed 0A       		.uleb128 0xa
+ 1168 00ee 5A0E0000 		.4byte	.LASF22
+ 1169 00f2 03       		.sleb128 3
+ 1170 00f3 0A       		.uleb128 0xa
+ 1171 00f4 17090000 		.4byte	.LASF23
+ 1172 00f8 04       		.sleb128 4
+ 1173 00f9 0A       		.uleb128 0xa
+ 1174 00fa 23000000 		.4byte	.LASF24
+ 1175 00fe 05       		.sleb128 5
+ 1176 00ff 0A       		.uleb128 0xa
+ 1177 0100 34080000 		.4byte	.LASF25
+ 1178 0104 20       		.sleb128 32
+ 1179 0105 0A       		.uleb128 0xa
+ 1180 0106 2E030000 		.4byte	.LASF26
+ 1181 010a 21       		.sleb128 33
+ 1182 010b 0A       		.uleb128 0xa
+ 1183 010c 5E070000 		.4byte	.LASF27
+ 1184 0110 22       		.sleb128 34
+ 1185 0111 0A       		.uleb128 0xa
+ 1186 0112 D7070000 		.4byte	.LASF28
+ 1187 0116 23       		.sleb128 35
+ 1188 0117 0A       		.uleb128 0xa
+ 1189 0118 440A0000 		.4byte	.LASF29
+ 1190 011c 24       		.sleb128 36
+ 1191 011d 0A       		.uleb128 0xa
+ 1192 011e BB080000 		.4byte	.LASF30
+ 1193 0122 25       		.sleb128 37
+ 1194 0123 0A       		.uleb128 0xa
+ 1195 0124 C5030000 		.4byte	.LASF31
+ 1196 0128 26       		.sleb128 38
+ 1197 0129 0A       		.uleb128 0xa
+ 1198 012a 82070000 		.4byte	.LASF32
+ 1199 012e 27       		.sleb128 39
+ 1200 012f 0A       		.uleb128 0xa
+ 1201 0130 540D0000 		.4byte	.LASF33
+ 1202 0134 28       		.sleb128 40
+ 1203 0135 0A       		.uleb128 0xa
+ 1204 0136 63020000 		.4byte	.LASF34
+ 1205 013a 29       		.sleb128 41
+ 1206 013b 0A       		.uleb128 0xa
+ 1207 013c C1000000 		.4byte	.LASF35
+ 1208 0140 2A       		.sleb128 42
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 31
+
+
+ 1209 0141 0A       		.uleb128 0xa
+ 1210 0142 FE010000 		.4byte	.LASF36
+ 1211 0146 2B       		.sleb128 43
+ 1212 0147 0A       		.uleb128 0xa
+ 1213 0148 3B050000 		.4byte	.LASF37
+ 1214 014c 2C       		.sleb128 44
+ 1215 014d 0A       		.uleb128 0xa
+ 1216 014e F2040000 		.4byte	.LASF38
+ 1217 0152 C000     		.sleb128 64
+ 1218 0154 0A       		.uleb128 0xa
+ 1219 0155 FD070000 		.4byte	.LASF39
+ 1220 0159 C100     		.sleb128 65
+ 1221 015b 0A       		.uleb128 0xa
+ 1222 015c AE100000 		.4byte	.LASF40
+ 1223 0160 C200     		.sleb128 66
+ 1224 0162 0A       		.uleb128 0xa
+ 1225 0163 ED0E0000 		.4byte	.LASF41
+ 1226 0167 C300     		.sleb128 67
+ 1227 0169 0A       		.uleb128 0xa
+ 1228 016a 5A060000 		.4byte	.LASF42
+ 1229 016e C400     		.sleb128 68
+ 1230 0170 0A       		.uleb128 0xa
+ 1231 0171 960A0000 		.4byte	.LASF43
+ 1232 0175 C500     		.sleb128 69
+ 1233 0177 0A       		.uleb128 0xa
+ 1234 0178 91080000 		.4byte	.LASF44
+ 1235 017c C600     		.sleb128 70
+ 1236 017e 0A       		.uleb128 0xa
+ 1237 017f E9060000 		.4byte	.LASF45
+ 1238 0183 C700     		.sleb128 71
+ 1239 0185 0A       		.uleb128 0xa
+ 1240 0186 D10F0000 		.4byte	.LASF46
+ 1241 018a C800     		.sleb128 72
+ 1242 018c 0A       		.uleb128 0xa
+ 1243 018d 45030000 		.4byte	.LASF47
+ 1244 0191 C900     		.sleb128 73
+ 1245 0193 0A       		.uleb128 0xa
+ 1246 0194 220F0000 		.4byte	.LASF48
+ 1247 0198 CA00     		.sleb128 74
+ 1248 019a 0A       		.uleb128 0xa
+ 1249 019b 33010000 		.4byte	.LASF49
+ 1250 019f CB00     		.sleb128 75
+ 1251 01a1 0A       		.uleb128 0xa
+ 1252 01a2 40060000 		.4byte	.LASF50
+ 1253 01a6 CC00     		.sleb128 76
+ 1254 01a8 0A       		.uleb128 0xa
+ 1255 01a9 D5080000 		.4byte	.LASF51
+ 1256 01ad CD00     		.sleb128 77
+ 1257 01af 0A       		.uleb128 0xa
+ 1258 01b0 8F030000 		.4byte	.LASF52
+ 1259 01b4 CE00     		.sleb128 78
+ 1260 01b6 0A       		.uleb128 0xa
+ 1261 01b7 760C0000 		.4byte	.LASF53
+ 1262 01bb CF00     		.sleb128 79
+ 1263 01bd 0A       		.uleb128 0xa
+ 1264 01be 20070000 		.4byte	.LASF54
+ 1265 01c2 D000     		.sleb128 80
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 32
+
+
+ 1266 01c4 0A       		.uleb128 0xa
+ 1267 01c5 16040000 		.4byte	.LASF55
+ 1268 01c9 D100     		.sleb128 81
+ 1269 01cb 0A       		.uleb128 0xa
+ 1270 01cc 230A0000 		.4byte	.LASF56
+ 1271 01d0 D200     		.sleb128 82
+ 1272 01d2 0A       		.uleb128 0xa
+ 1273 01d3 A20F0000 		.4byte	.LASF57
+ 1274 01d7 D300     		.sleb128 83
+ 1275 01d9 0A       		.uleb128 0xa
+ 1276 01da B80C0000 		.4byte	.LASF58
+ 1277 01de D400     		.sleb128 84
+ 1278 01e0 0A       		.uleb128 0xa
+ 1279 01e1 78060000 		.4byte	.LASF59
+ 1280 01e5 D500     		.sleb128 85
+ 1281 01e7 0A       		.uleb128 0xa
+ 1282 01e8 83050000 		.4byte	.LASF60
+ 1283 01ec D600     		.sleb128 86
+ 1284 01ee 0A       		.uleb128 0xa
+ 1285 01ef 900D0000 		.4byte	.LASF61
+ 1286 01f3 D700     		.sleb128 87
+ 1287 01f5 0A       		.uleb128 0xa
+ 1288 01f6 0C050000 		.4byte	.LASF62
+ 1289 01fa F000     		.sleb128 112
+ 1290 01fc 0A       		.uleb128 0xa
+ 1291 01fd 71100000 		.4byte	.LASF63
+ 1292 0201 F100     		.sleb128 113
+ 1293 0203 0A       		.uleb128 0xa
+ 1294 0204 18080000 		.4byte	.LASF64
+ 1295 0208 F200     		.sleb128 114
+ 1296 020a 0A       		.uleb128 0xa
+ 1297 020b 73080000 		.4byte	.LASF65
+ 1298 020f F300     		.sleb128 115
+ 1299 0211 0A       		.uleb128 0xa
+ 1300 0212 A3000000 		.4byte	.LASF66
+ 1301 0216 F400     		.sleb128 116
+ 1302 0218 0A       		.uleb128 0xa
+ 1303 0219 3A100000 		.4byte	.LASF67
+ 1304 021d F500     		.sleb128 117
+ 1305 021f 0A       		.uleb128 0xa
+ 1306 0220 EA000000 		.4byte	.LASF68
+ 1307 0224 F600     		.sleb128 118
+ 1308 0226 0A       		.uleb128 0xa
+ 1309 0227 3F070000 		.4byte	.LASF69
+ 1310 022b F700     		.sleb128 119
+ 1311 022d 0A       		.uleb128 0xa
+ 1312 022e 00000000 		.4byte	.LASF70
+ 1313 0232 F800     		.sleb128 120
+ 1314 0234 0A       		.uleb128 0xa
+ 1315 0235 AE020000 		.4byte	.LASF71
+ 1316 0239 F900     		.sleb128 121
+ 1317 023b 0A       		.uleb128 0xa
+ 1318 023c 8A040000 		.4byte	.LASF72
+ 1319 0240 FA00     		.sleb128 122
+ 1320 0242 0A       		.uleb128 0xa
+ 1321 0243 1D020000 		.4byte	.LASF73
+ 1322 0247 FA01     		.sleb128 250
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 33
+
+
+ 1323 0249 0A       		.uleb128 0xa
+ 1324 024a C3050000 		.4byte	.LASF74
+ 1325 024e FB01     		.sleb128 251
+ 1326 0250 0A       		.uleb128 0xa
+ 1327 0251 D5040000 		.4byte	.LASF75
+ 1328 0255 FF01     		.sleb128 255
+ 1329 0257 00       		.byte	0
+ 1330 0258 0B       		.uleb128 0xb
+ 1331 0259 02       		.byte	0x2
+ 1332 025a 04       		.byte	0x4
+ 1333 025b 0C02     		.2byte	0x20c
+ 1334 025d 0F030000 		.4byte	0x30f
+ 1335 0261 0A       		.uleb128 0xa
+ 1336 0262 E3040000 		.4byte	.LASF76
+ 1337 0266 00       		.sleb128 0
+ 1338 0267 0A       		.uleb128 0xa
+ 1339 0268 54040000 		.4byte	.LASF77
+ 1340 026c 01       		.sleb128 1
+ 1341 026d 0A       		.uleb128 0xa
+ 1342 026e BE0E0000 		.4byte	.LASF78
+ 1343 0272 02       		.sleb128 2
+ 1344 0273 0A       		.uleb128 0xa
+ 1345 0274 6A000000 		.4byte	.LASF79
+ 1346 0278 03       		.sleb128 3
+ 1347 0279 0A       		.uleb128 0xa
+ 1348 027a C7010000 		.4byte	.LASF80
+ 1349 027e 04       		.sleb128 4
+ 1350 027f 0A       		.uleb128 0xa
+ 1351 0280 A5050000 		.4byte	.LASF81
+ 1352 0284 05       		.sleb128 5
+ 1353 0285 0A       		.uleb128 0xa
+ 1354 0286 2E0C0000 		.4byte	.LASF82
+ 1355 028a 06       		.sleb128 6
+ 1356 028b 0A       		.uleb128 0xa
+ 1357 028c 11030000 		.4byte	.LASF83
+ 1358 0290 07       		.sleb128 7
+ 1359 0291 0A       		.uleb128 0xa
+ 1360 0292 D90C0000 		.4byte	.LASF84
+ 1361 0296 08       		.sleb128 8
+ 1362 0297 0A       		.uleb128 0xa
+ 1363 0298 F80F0000 		.4byte	.LASF85
+ 1364 029c 09       		.sleb128 9
+ 1365 029d 0A       		.uleb128 0xa
+ 1366 029e F80A0000 		.4byte	.LASF86
+ 1367 02a2 0A       		.sleb128 10
+ 1368 02a3 0A       		.uleb128 0xa
+ 1369 02a4 340D0000 		.4byte	.LASF87
+ 1370 02a8 0B       		.sleb128 11
+ 1371 02a9 0A       		.uleb128 0xa
+ 1372 02aa 3B020000 		.4byte	.LASF88
+ 1373 02ae 0C       		.sleb128 12
+ 1374 02af 0A       		.uleb128 0xa
+ 1375 02b0 A2010000 		.4byte	.LASF89
+ 1376 02b4 0D       		.sleb128 13
+ 1377 02b5 0A       		.uleb128 0xa
+ 1378 02b6 05060000 		.4byte	.LASF90
+ 1379 02ba 0E       		.sleb128 14
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 34
+
+
+ 1380 02bb 0A       		.uleb128 0xa
+ 1381 02bc 7D0F0000 		.4byte	.LASF91
+ 1382 02c0 0F       		.sleb128 15
+ 1383 02c1 0A       		.uleb128 0xa
+ 1384 02c2 100E0000 		.4byte	.LASF92
+ 1385 02c6 10       		.sleb128 16
+ 1386 02c7 0A       		.uleb128 0xa
+ 1387 02c8 9C060000 		.4byte	.LASF93
+ 1388 02cc 11       		.sleb128 17
+ 1389 02cd 0A       		.uleb128 0xa
+ 1390 02ce ED030000 		.4byte	.LASF94
+ 1391 02d2 12       		.sleb128 18
+ 1392 02d3 0A       		.uleb128 0xa
+ 1393 02d4 CC100000 		.4byte	.LASF95
+ 1394 02d8 13       		.sleb128 19
+ 1395 02d9 0A       		.uleb128 0xa
+ 1396 02da 18100000 		.4byte	.LASF96
+ 1397 02de 27       		.sleb128 39
+ 1398 02df 0A       		.uleb128 0xa
+ 1399 02e0 EB0D0000 		.4byte	.LASF97
+ 1400 02e4 28       		.sleb128 40
+ 1401 02e5 0A       		.uleb128 0xa
+ 1402 02e6 610F0000 		.4byte	.LASF98
+ 1403 02ea 29       		.sleb128 41
+ 1404 02eb 0A       		.uleb128 0xa
+ 1405 02ec 63080000 		.4byte	.LASF99
+ 1406 02f0 FF01     		.sleb128 255
+ 1407 02f2 0A       		.uleb128 0xa
+ 1408 02f3 C0060000 		.4byte	.LASF100
+ 1409 02f7 8002     		.sleb128 256
+ 1410 02f9 0A       		.uleb128 0xa
+ 1411 02fa 0B010000 		.4byte	.LASF101
+ 1412 02fe 8102     		.sleb128 257
+ 1413 0300 0A       		.uleb128 0xa
+ 1414 0301 120B0000 		.4byte	.LASF102
+ 1415 0305 8202     		.sleb128 258
+ 1416 0307 0A       		.uleb128 0xa
+ 1417 0308 5E030000 		.4byte	.LASF103
+ 1418 030c 8302     		.sleb128 259
+ 1419 030e 00       		.byte	0
+ 1420 030f 05       		.uleb128 0x5
+ 1421 0310 100A0000 		.4byte	.LASF104
+ 1422 0314 04       		.byte	0x4
+ 1423 0315 6902     		.2byte	0x269
+ 1424 0317 58020000 		.4byte	0x258
+ 1425 031b 06       		.uleb128 0x6
+ 1426 031c 04       		.byte	0x4
+ 1427 031d 6B000000 		.4byte	0x6b
+ 1428 0321 05       		.uleb128 0x5
+ 1429 0322 DC0E0000 		.4byte	.LASF105
+ 1430 0326 05       		.byte	0x5
+ 1431 0327 4101     		.2byte	0x141
+ 1432 0329 2D030000 		.4byte	0x32d
+ 1433 032d 06       		.uleb128 0x6
+ 1434 032e 04       		.byte	0x4
+ 1435 032f 33030000 		.4byte	0x333
+ 1436 0333 0C       		.uleb128 0xc
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 35
+
+
+ 1437 0334 43030000 		.4byte	0x343
+ 1438 0338 0D       		.uleb128 0xd
+ 1439 0339 81000000 		.4byte	0x81
+ 1440 033d 0D       		.uleb128 0xd
+ 1441 033e D1000000 		.4byte	0xd1
+ 1442 0342 00       		.byte	0
+ 1443 0343 0E       		.uleb128 0xe
+ 1444 0344 52010000 		.4byte	.LASF176
+ 1445 0348 01       		.byte	0x1
+ 1446 0349 27       		.byte	0x27
+ 1447 034a 00000000 		.4byte	.LFB35
+ 1448 034e 02000000 		.4byte	.LFE35-.LFB35
+ 1449 0352 01       		.uleb128 0x1
+ 1450 0353 9C       		.byte	0x9c
+ 1451 0354 0F       		.uleb128 0xf
+ 1452 0355 46000000 		.4byte	.LASF109
+ 1453 0359 02       		.byte	0x2
+ 1454 035a 59       		.byte	0x59
+ 1455 035b 00000000 		.4byte	.LFB38
+ 1456 035f 60000000 		.4byte	.LFE38-.LFB38
+ 1457 0363 01       		.uleb128 0x1
+ 1458 0364 9C       		.byte	0x9c
+ 1459 0365 49040000 		.4byte	0x449
+ 1460 0369 10       		.uleb128 0x10
+ 1461 036a 6900     		.ascii	"i\000"
+ 1462 036c 02       		.byte	0x2
+ 1463 036d 5B       		.byte	0x5b
+ 1464 036e 5D000000 		.4byte	0x5d
+ 1465 0372 00000000 		.4byte	.LLST0
+ 1466 0376 10       		.uleb128 0x10
+ 1467 0377 6A00     		.ascii	"j\000"
+ 1468 0379 02       		.byte	0x2
+ 1469 037a 5B       		.byte	0x5b
+ 1470 037b 5D000000 		.4byte	0x5d
+ 1471 037f 1F000000 		.4byte	.LLST1
+ 1472 0383 11       		.uleb128 0x11
+ 1473 0384 6B00     		.ascii	"k\000"
+ 1474 0386 02       		.byte	0x2
+ 1475 0387 5B       		.byte	0x5b
+ 1476 0388 5D000000 		.4byte	0x5d
+ 1477 038c 12       		.uleb128 0x12
+ 1478 038d CD0D0000 		.4byte	.LASF106
+ 1479 0391 02       		.byte	0x2
+ 1480 0392 5C       		.byte	0x5c
+ 1481 0393 5D000000 		.4byte	0x5d
+ 1482 0397 3E000000 		.4byte	.LLST2
+ 1483 039b 12       		.uleb128 0x12
+ 1484 039c 32050000 		.4byte	.LASF107
+ 1485 03a0 02       		.byte	0x2
+ 1486 03a1 5D       		.byte	0x5d
+ 1487 03a2 2C000000 		.4byte	0x2c
+ 1488 03a6 5E000000 		.4byte	.LLST3
+ 1489 03aa 12       		.uleb128 0x12
+ 1490 03ab 58080000 		.4byte	.LASF108
+ 1491 03af 02       		.byte	0x2
+ 1492 03b0 5E       		.byte	0x5e
+ 1493 03b1 2C000000 		.4byte	0x2c
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 36
+
+
+ 1494 03b5 71000000 		.4byte	.LLST4
+ 1495 03b9 13       		.uleb128 0x13
+ 1496 03ba 06000000 		.4byte	.LVL1
+ 1497 03be 130B0000 		.4byte	0xb13
+ 1498 03c2 14       		.uleb128 0x14
+ 1499 03c3 0E000000 		.4byte	.LVL2
+ 1500 03c7 1A0B0000 		.4byte	0xb1a
+ 1501 03cb DB030000 		.4byte	0x3db
+ 1502 03cf 15       		.uleb128 0x15
+ 1503 03d0 01       		.uleb128 0x1
+ 1504 03d1 51       		.byte	0x51
+ 1505 03d2 02       		.uleb128 0x2
+ 1506 03d3 09       		.byte	0x9
+ 1507 03d4 83       		.byte	0x83
+ 1508 03d5 15       		.uleb128 0x15
+ 1509 03d6 01       		.uleb128 0x1
+ 1510 03d7 50       		.byte	0x50
+ 1511 03d8 01       		.uleb128 0x1
+ 1512 03d9 43       		.byte	0x43
+ 1513 03da 00       		.byte	0
+ 1514 03db 14       		.uleb128 0x14
+ 1515 03dc 14000000 		.4byte	.LVL3
+ 1516 03e0 300B0000 		.4byte	0xb30
+ 1517 03e4 F0030000 		.4byte	0x3f0
+ 1518 03e8 15       		.uleb128 0x15
+ 1519 03e9 01       		.uleb128 0x1
+ 1520 03ea 50       		.byte	0x50
+ 1521 03eb 03       		.uleb128 0x3
+ 1522 03ec 0A       		.byte	0xa
+ 1523 03ed 0E06     		.2byte	0x60e
+ 1524 03ef 00       		.byte	0
+ 1525 03f0 14       		.uleb128 0x14
+ 1526 03f1 26000000 		.4byte	.LVL7
+ 1527 03f5 410B0000 		.4byte	0xb41
+ 1528 03f9 03040000 		.4byte	0x403
+ 1529 03fd 15       		.uleb128 0x15
+ 1530 03fe 01       		.uleb128 0x1
+ 1531 03ff 50       		.byte	0x50
+ 1532 0400 01       		.uleb128 0x1
+ 1533 0401 43       		.byte	0x43
+ 1534 0402 00       		.byte	0
+ 1535 0403 14       		.uleb128 0x14
+ 1536 0404 32000000 		.4byte	.LVL10
+ 1537 0408 300B0000 		.4byte	0xb30
+ 1538 040c 16040000 		.4byte	0x416
+ 1539 0410 15       		.uleb128 0x15
+ 1540 0411 01       		.uleb128 0x1
+ 1541 0412 50       		.byte	0x50
+ 1542 0413 01       		.uleb128 0x1
+ 1543 0414 44       		.byte	0x44
+ 1544 0415 00       		.byte	0
+ 1545 0416 13       		.uleb128 0x13
+ 1546 0417 36000000 		.4byte	.LVL11
+ 1547 041b 560B0000 		.4byte	0xb56
+ 1548 041f 14       		.uleb128 0x14
+ 1549 0420 46000000 		.4byte	.LVL13
+ 1550 0424 5E0B0000 		.4byte	0xb5e
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 37
+
+
+ 1551 0428 36040000 		.4byte	0x436
+ 1552 042c 15       		.uleb128 0x15
+ 1553 042d 01       		.uleb128 0x1
+ 1554 042e 50       		.byte	0x50
+ 1555 042f 05       		.uleb128 0x5
+ 1556 0430 03       		.byte	0x3
+ 1557 0431 00000000 		.4byte	Pixels18Array
+ 1558 0435 00       		.byte	0
+ 1559 0436 13       		.uleb128 0x13
+ 1560 0437 4A000000 		.4byte	.LVL14
+ 1561 043b 560B0000 		.4byte	0xb56
+ 1562 043f 13       		.uleb128 0x13
+ 1563 0440 54000000 		.4byte	.LVL16
+ 1564 0444 130B0000 		.4byte	0xb13
+ 1565 0448 00       		.byte	0
+ 1566 0449 0F       		.uleb128 0xf
+ 1567 044a 6D090000 		.4byte	.LASF110
+ 1568 044e 02       		.byte	0x2
+ 1569 044f 7F       		.byte	0x7f
+ 1570 0450 00000000 		.4byte	.LFB39
+ 1571 0454 44000000 		.4byte	.LFE39-.LFB39
+ 1572 0458 01       		.uleb128 0x1
+ 1573 0459 9C       		.byte	0x9c
+ 1574 045a BD040000 		.4byte	0x4bd
+ 1575 045e 16       		.uleb128 0x16
+ 1576 045f 8C0A0000 		.4byte	.LASF111
+ 1577 0463 02       		.byte	0x2
+ 1578 0464 81       		.byte	0x81
+ 1579 0465 6B000000 		.4byte	0x6b
+ 1580 0469 12       		.uleb128 0x12
+ 1581 046a 0D100000 		.4byte	.LASF112
+ 1582 046e 02       		.byte	0x2
+ 1583 046f 82       		.byte	0x82
+ 1584 0470 8C000000 		.4byte	0x8c
+ 1585 0474 93000000 		.4byte	.LLST5
+ 1586 0478 12       		.uleb128 0x12
+ 1587 0479 170F0000 		.4byte	.LASF113
+ 1588 047d 02       		.byte	0x2
+ 1589 047e 83       		.byte	0x83
+ 1590 047f 8C000000 		.4byte	0x8c
+ 1591 0483 A6000000 		.4byte	.LLST6
+ 1592 0487 14       		.uleb128 0x14
+ 1593 0488 08000000 		.4byte	.LVL18
+ 1594 048c 410B0000 		.4byte	0xb41
+ 1595 0490 9A040000 		.4byte	0x49a
+ 1596 0494 15       		.uleb128 0x15
+ 1597 0495 01       		.uleb128 0x1
+ 1598 0496 50       		.byte	0x50
+ 1599 0497 01       		.uleb128 0x1
+ 1600 0498 32       		.byte	0x32
+ 1601 0499 00       		.byte	0
+ 1602 049a 14       		.uleb128 0x14
+ 1603 049b 0E000000 		.4byte	.LVL19
+ 1604 049f 410B0000 		.4byte	0xb41
+ 1605 04a3 AD040000 		.4byte	0x4ad
+ 1606 04a7 15       		.uleb128 0x15
+ 1607 04a8 01       		.uleb128 0x1
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 38
+
+
+ 1608 04a9 50       		.byte	0x50
+ 1609 04aa 01       		.uleb128 0x1
+ 1610 04ab 33       		.byte	0x33
+ 1611 04ac 00       		.byte	0
+ 1612 04ad 17       		.uleb128 0x17
+ 1613 04ae 18000000 		.4byte	.LVL21
+ 1614 04b2 410B0000 		.4byte	0xb41
+ 1615 04b6 15       		.uleb128 0x15
+ 1616 04b7 01       		.uleb128 0x1
+ 1617 04b8 50       		.byte	0x50
+ 1618 04b9 01       		.uleb128 0x1
+ 1619 04ba 34       		.byte	0x34
+ 1620 04bb 00       		.byte	0
+ 1621 04bc 00       		.byte	0
+ 1622 04bd 18       		.uleb128 0x18
+ 1623 04be 550B0000 		.4byte	.LASF119
+ 1624 04c2 02       		.byte	0x2
+ 1625 04c3 8E       		.byte	0x8e
+ 1626 04c4 00000000 		.4byte	.LFB40
+ 1627 04c8 18000000 		.4byte	.LFE40-.LFB40
+ 1628 04cc 01       		.uleb128 0x1
+ 1629 04cd 9C       		.byte	0x9c
+ 1630 04ce DC040000 		.4byte	0x4dc
+ 1631 04d2 13       		.uleb128 0x13
+ 1632 04d3 0C000000 		.4byte	.LVL26
+ 1633 04d7 6F0B0000 		.4byte	0xb6f
+ 1634 04db 00       		.byte	0
+ 1635 04dc 0F       		.uleb128 0xf
+ 1636 04dd 52020000 		.4byte	.LASF114
+ 1637 04e1 02       		.byte	0x2
+ 1638 04e2 1F       		.byte	0x1f
+ 1639 04e3 00000000 		.4byte	.LFB36
+ 1640 04e7 5C000000 		.4byte	.LFE36-.LFB36
+ 1641 04eb 01       		.uleb128 0x1
+ 1642 04ec 9C       		.byte	0x9c
+ 1643 04ed 16050000 		.4byte	0x516
+ 1644 04f1 13       		.uleb128 0x13
+ 1645 04f2 06000000 		.4byte	.LVL27
+ 1646 04f6 850B0000 		.4byte	0xb85
+ 1647 04fa 13       		.uleb128 0x13
+ 1648 04fb 12000000 		.4byte	.LVL28
+ 1649 04ff 910B0000 		.4byte	0xb91
+ 1650 0503 13       		.uleb128 0x13
+ 1651 0504 1E000000 		.4byte	.LVL29
+ 1652 0508 49040000 		.4byte	0x449
+ 1653 050c 13       		.uleb128 0x13
+ 1654 050d 3A000000 		.4byte	.LVL30
+ 1655 0511 BD040000 		.4byte	0x4bd
+ 1656 0515 00       		.byte	0
+ 1657 0516 0F       		.uleb128 0xf
+ 1658 0517 400F0000 		.4byte	.LASF115
+ 1659 051b 02       		.byte	0x2
+ 1660 051c 94       		.byte	0x94
+ 1661 051d 00000000 		.4byte	.LFB41
+ 1662 0521 4C000000 		.4byte	.LFE41-.LFB41
+ 1663 0525 01       		.uleb128 0x1
+ 1664 0526 9C       		.byte	0x9c
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 39
+
+
+ 1665 0527 D8050000 		.4byte	0x5d8
+ 1666 052b 14       		.uleb128 0x14
+ 1667 052c 0A000000 		.4byte	.LVL31
+ 1668 0530 A30B0000 		.4byte	0xba3
+ 1669 0534 42050000 		.4byte	0x542
+ 1670 0538 15       		.uleb128 0x15
+ 1671 0539 01       		.uleb128 0x1
+ 1672 053a 50       		.byte	0x50
+ 1673 053b 05       		.uleb128 0x5
+ 1674 053c 03       		.byte	0x3
+ 1675 053d 00000000 		.4byte	InterruptHandler
+ 1676 0541 00       		.byte	0
+ 1677 0542 13       		.uleb128 0x13
+ 1678 0543 0E000000 		.4byte	.LVL32
+ 1679 0547 B40B0000 		.4byte	0xbb4
+ 1680 054b 13       		.uleb128 0x13
+ 1681 054c 14000000 		.4byte	.LVL33
+ 1682 0550 BC0B0000 		.4byte	0xbbc
+ 1683 0554 13       		.uleb128 0x13
+ 1684 0555 18000000 		.4byte	.LVL34
+ 1685 0559 D20B0000 		.4byte	0xbd2
+ 1686 055d 13       		.uleb128 0x13
+ 1687 055e 1C000000 		.4byte	.LVL35
+ 1688 0562 D90B0000 		.4byte	0xbd9
+ 1689 0566 14       		.uleb128 0x14
+ 1690 0567 22000000 		.4byte	.LVL36
+ 1691 056b E00B0000 		.4byte	0xbe0
+ 1692 056f 7A050000 		.4byte	0x57a
+ 1693 0573 15       		.uleb128 0x15
+ 1694 0574 01       		.uleb128 0x1
+ 1695 0575 50       		.byte	0x50
+ 1696 0576 02       		.uleb128 0x2
+ 1697 0577 09       		.byte	0x9
+ 1698 0578 FF       		.byte	0xff
+ 1699 0579 00       		.byte	0
+ 1700 057a 14       		.uleb128 0x14
+ 1701 057b 28000000 		.4byte	.LVL37
+ 1702 057f F10B0000 		.4byte	0xbf1
+ 1703 0583 8E050000 		.4byte	0x58e
+ 1704 0587 15       		.uleb128 0x15
+ 1705 0588 01       		.uleb128 0x1
+ 1706 0589 50       		.byte	0x50
+ 1707 058a 02       		.uleb128 0x2
+ 1708 058b 09       		.byte	0x9
+ 1709 058c FF       		.byte	0xff
+ 1710 058d 00       		.byte	0
+ 1711 058e 14       		.uleb128 0x14
+ 1712 058f 2E000000 		.4byte	.LVL38
+ 1713 0593 020C0000 		.4byte	0xc02
+ 1714 0597 A2050000 		.4byte	0x5a2
+ 1715 059b 15       		.uleb128 0x15
+ 1716 059c 01       		.uleb128 0x1
+ 1717 059d 50       		.byte	0x50
+ 1718 059e 02       		.uleb128 0x2
+ 1719 059f 09       		.byte	0x9
+ 1720 05a0 FF       		.byte	0xff
+ 1721 05a1 00       		.byte	0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 40
+
+
+ 1722 05a2 14       		.uleb128 0x14
+ 1723 05a3 34000000 		.4byte	.LVL39
+ 1724 05a7 130C0000 		.4byte	0xc13
+ 1725 05ab B5050000 		.4byte	0x5b5
+ 1726 05af 15       		.uleb128 0x15
+ 1727 05b0 01       		.uleb128 0x1
+ 1728 05b1 50       		.byte	0x50
+ 1729 05b2 01       		.uleb128 0x1
+ 1730 05b3 36       		.byte	0x36
+ 1731 05b4 00       		.byte	0
+ 1732 05b5 14       		.uleb128 0x14
+ 1733 05b6 3A000000 		.4byte	.LVL40
+ 1734 05ba 240C0000 		.4byte	0xc24
+ 1735 05be C8050000 		.4byte	0x5c8
+ 1736 05c2 15       		.uleb128 0x15
+ 1737 05c3 01       		.uleb128 0x1
+ 1738 05c4 50       		.byte	0x50
+ 1739 05c5 01       		.uleb128 0x1
+ 1740 05c6 36       		.byte	0x36
+ 1741 05c7 00       		.byte	0
+ 1742 05c8 17       		.uleb128 0x17
+ 1743 05c9 40000000 		.4byte	.LVL41
+ 1744 05cd 350C0000 		.4byte	0xc35
+ 1745 05d1 15       		.uleb128 0x15
+ 1746 05d2 01       		.uleb128 0x1
+ 1747 05d3 50       		.byte	0x50
+ 1748 05d4 01       		.uleb128 0x1
+ 1749 05d5 36       		.byte	0x36
+ 1750 05d6 00       		.byte	0
+ 1751 05d7 00       		.byte	0
+ 1752 05d8 19       		.uleb128 0x19
+ 1753 05d9 97100000 		.4byte	.LASF116
+ 1754 05dd 02       		.byte	0x2
+ 1755 05de 39       		.byte	0x39
+ 1756 05df 5D000000 		.4byte	0x5d
+ 1757 05e3 00000000 		.4byte	.LFB37
+ 1758 05e7 44000000 		.4byte	.LFE37-.LFB37
+ 1759 05eb 01       		.uleb128 0x1
+ 1760 05ec 9C       		.byte	0x9c
+ 1761 05ed 32060000 		.4byte	0x632
+ 1762 05f1 13       		.uleb128 0x13
+ 1763 05f2 08000000 		.4byte	.LVL42
+ 1764 05f6 16050000 		.4byte	0x516
+ 1765 05fa 13       		.uleb128 0x13
+ 1766 05fb 0C000000 		.4byte	.LVL43
+ 1767 05ff 460C0000 		.4byte	0xc46
+ 1768 0603 13       		.uleb128 0x13
+ 1769 0604 16000000 		.4byte	.LVL44
+ 1770 0608 4D0C0000 		.4byte	0xc4d
+ 1771 060c 14       		.uleb128 0x14
+ 1772 060d 1C000000 		.4byte	.LVL45
+ 1773 0611 540C0000 		.4byte	0xc54
+ 1774 0615 1F060000 		.4byte	0x61f
+ 1775 0619 15       		.uleb128 0x15
+ 1776 061a 01       		.uleb128 0x1
+ 1777 061b 50       		.byte	0x50
+ 1778 061c 01       		.uleb128 0x1
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 41
+
+
+ 1779 061d 30       		.byte	0x30
+ 1780 061e 00       		.byte	0
+ 1781 061f 13       		.uleb128 0x13
+ 1782 0620 20000000 		.4byte	.LVL46
+ 1783 0624 560B0000 		.4byte	0xb56
+ 1784 0628 13       		.uleb128 0x13
+ 1785 0629 34000000 		.4byte	.LVL47
+ 1786 062d 54030000 		.4byte	0x354
+ 1787 0631 00       		.byte	0
+ 1788 0632 1A       		.uleb128 0x1a
+ 1789 0633 A1070000 		.4byte	.LASF117
+ 1790 0637 02       		.byte	0x2
+ 1791 0638 0F01     		.2byte	0x10f
+ 1792 063a 00000000 		.4byte	.LFB45
+ 1793 063e 38000000 		.4byte	.LFE45-.LFB45
+ 1794 0642 01       		.uleb128 0x1
+ 1795 0643 9C       		.byte	0x9c
+ 1796 0644 C1060000 		.4byte	0x6c1
+ 1797 0648 1B       		.uleb128 0x1b
+ 1798 0649 820A0000 		.4byte	.LASF118
+ 1799 064d 02       		.byte	0x2
+ 1800 064e 1001     		.2byte	0x110
+ 1801 0650 6B000000 		.4byte	0x6b
+ 1802 0654 C4000000 		.4byte	.LLST7
+ 1803 0658 14       		.uleb128 0x14
+ 1804 0659 08000000 		.4byte	.LVL48
+ 1805 065d 410B0000 		.4byte	0xb41
+ 1806 0661 6B060000 		.4byte	0x66b
+ 1807 0665 15       		.uleb128 0x15
+ 1808 0666 01       		.uleb128 0x1
+ 1809 0667 50       		.byte	0x50
+ 1810 0668 01       		.uleb128 0x1
+ 1811 0669 30       		.byte	0x30
+ 1812 066a 00       		.byte	0
+ 1813 066b 14       		.uleb128 0x14
+ 1814 066c 10000000 		.4byte	.LVL50
+ 1815 0670 650C0000 		.4byte	0xc65
+ 1816 0674 82060000 		.4byte	0x682
+ 1817 0678 15       		.uleb128 0x15
+ 1818 0679 01       		.uleb128 0x1
+ 1819 067a 50       		.byte	0x50
+ 1820 067b 05       		.uleb128 0x5
+ 1821 067c 03       		.byte	0x3
+ 1822 067d 00000000 		.4byte	.LC13
+ 1823 0681 00       		.byte	0
+ 1824 0682 14       		.uleb128 0x14
+ 1825 0683 1A000000 		.4byte	.LVL51
+ 1826 0687 820C0000 		.4byte	0xc82
+ 1827 068b 96060000 		.4byte	0x696
+ 1828 068f 15       		.uleb128 0x15
+ 1829 0690 01       		.uleb128 0x1
+ 1830 0691 50       		.byte	0x50
+ 1831 0692 02       		.uleb128 0x2
+ 1832 0693 74       		.byte	0x74
+ 1833 0694 00       		.sleb128 0
+ 1834 0695 00       		.byte	0
+ 1835 0696 14       		.uleb128 0x14
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 42
+
+
+ 1836 0697 22000000 		.4byte	.LVL52
+ 1837 069b 650C0000 		.4byte	0xc65
+ 1838 069f AD060000 		.4byte	0x6ad
+ 1839 06a3 15       		.uleb128 0x15
+ 1840 06a4 01       		.uleb128 0x1
+ 1841 06a5 50       		.byte	0x50
+ 1842 06a6 05       		.uleb128 0x5
+ 1843 06a7 03       		.byte	0x3
+ 1844 06a8 10000000 		.4byte	.LC15
+ 1845 06ac 00       		.byte	0
+ 1846 06ad 17       		.uleb128 0x17
+ 1847 06ae 28000000 		.4byte	.LVL53
+ 1848 06b2 650C0000 		.4byte	0xc65
+ 1849 06b6 15       		.uleb128 0x15
+ 1850 06b7 01       		.uleb128 0x1
+ 1851 06b8 50       		.byte	0x50
+ 1852 06b9 05       		.uleb128 0x5
+ 1853 06ba 03       		.byte	0x3
+ 1854 06bb 14000000 		.4byte	.LC17
+ 1855 06bf 00       		.byte	0
+ 1856 06c0 00       		.byte	0
+ 1857 06c1 1C       		.uleb128 0x1c
+ 1858 06c2 92010000 		.4byte	.LASF120
+ 1859 06c6 02       		.byte	0x2
+ 1860 06c7 1A01     		.2byte	0x11a
+ 1861 06c9 00000000 		.4byte	.LFB46
+ 1862 06cd 1C000000 		.4byte	.LFE46-.LFB46
+ 1863 06d1 01       		.uleb128 0x1
+ 1864 06d2 9C       		.byte	0x9c
+ 1865 06d3 0B070000 		.4byte	0x70b
+ 1866 06d7 14       		.uleb128 0x14
+ 1867 06d8 08000000 		.4byte	.LVL55
+ 1868 06dc 650C0000 		.4byte	0xc65
+ 1869 06e0 EE060000 		.4byte	0x6ee
+ 1870 06e4 15       		.uleb128 0x15
+ 1871 06e5 01       		.uleb128 0x1
+ 1872 06e6 50       		.byte	0x50
+ 1873 06e7 05       		.uleb128 0x5
+ 1874 06e8 03       		.byte	0x3
+ 1875 06e9 18000000 		.4byte	.LC19
+ 1876 06ed 00       		.byte	0
+ 1877 06ee 13       		.uleb128 0x13
+ 1878 06ef 0C000000 		.4byte	.LVL56
+ 1879 06f3 54030000 		.4byte	0x354
+ 1880 06f7 17       		.uleb128 0x17
+ 1881 06f8 12000000 		.4byte	.LVL57
+ 1882 06fc 650C0000 		.4byte	0xc65
+ 1883 0700 15       		.uleb128 0x15
+ 1884 0701 01       		.uleb128 0x1
+ 1885 0702 50       		.byte	0x50
+ 1886 0703 05       		.uleb128 0x5
+ 1887 0704 03       		.byte	0x3
+ 1888 0705 24000000 		.4byte	.LC21
+ 1889 0709 00       		.byte	0
+ 1890 070a 00       		.byte	0
+ 1891 070b 1D       		.uleb128 0x1d
+ 1892 070c 3C040000 		.4byte	.LASF125
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 43
+
+
+ 1893 0710 02       		.byte	0x2
+ 1894 0711 2E01     		.2byte	0x12e
+ 1895 0713 6B000000 		.4byte	0x6b
+ 1896 0717 00000000 		.4byte	.LFB48
+ 1897 071b 0E000000 		.4byte	.LFE48-.LFB48
+ 1898 071f 01       		.uleb128 0x1
+ 1899 0720 9C       		.byte	0x9c
+ 1900 0721 2F070000 		.4byte	0x72f
+ 1901 0725 13       		.uleb128 0x13
+ 1902 0726 06000000 		.4byte	.LVL58
+ 1903 072a 930C0000 		.4byte	0xc93
+ 1904 072e 00       		.byte	0
+ 1905 072f 1C       		.uleb128 0x1c
+ 1906 0730 600A0000 		.4byte	.LASF121
+ 1907 0734 02       		.byte	0x2
+ 1908 0735 2101     		.2byte	0x121
+ 1909 0737 00000000 		.4byte	.LFB47
+ 1910 073b 20000000 		.4byte	.LFE47-.LFB47
+ 1911 073f 01       		.uleb128 0x1
+ 1912 0740 9C       		.byte	0x9c
+ 1913 0741 95070000 		.4byte	0x795
+ 1914 0745 1E       		.uleb128 0x1e
+ 1915 0746 6900     		.ascii	"i\000"
+ 1916 0748 02       		.byte	0x2
+ 1917 0749 2301     		.2byte	0x123
+ 1918 074b 5D000000 		.4byte	0x5d
+ 1919 074f 1F       		.uleb128 0x1f
+ 1920 0750 B2070000 		.4byte	.LASF122
+ 1921 0754 02       		.byte	0x2
+ 1922 0755 2301     		.2byte	0x123
+ 1923 0757 5D000000 		.4byte	0x5d
+ 1924 075b 00       		.byte	0
+ 1925 075c 13       		.uleb128 0x13
+ 1926 075d 06000000 		.4byte	.LVL60
+ 1927 0761 9F0C0000 		.4byte	0xc9f
+ 1928 0765 13       		.uleb128 0x13
+ 1929 0766 0C000000 		.4byte	.LVL61
+ 1930 076a C1060000 		.4byte	0x6c1
+ 1931 076e 13       		.uleb128 0x13
+ 1932 076f 10000000 		.4byte	.LVL62
+ 1933 0773 0B070000 		.4byte	0x70b
+ 1934 0777 14       		.uleb128 0x14
+ 1935 0778 1A000000 		.4byte	.LVL63
+ 1936 077c A70C0000 		.4byte	0xca7
+ 1937 0780 8B070000 		.4byte	0x78b
+ 1938 0784 15       		.uleb128 0x15
+ 1939 0785 01       		.uleb128 0x1
+ 1940 0786 50       		.byte	0x50
+ 1941 0787 02       		.uleb128 0x2
+ 1942 0788 08       		.byte	0x8
+ 1943 0789 32       		.byte	0x32
+ 1944 078a 00       		.byte	0
+ 1945 078b 13       		.uleb128 0x13
+ 1946 078c 1E000000 		.4byte	.LVL64
+ 1947 0790 9F0C0000 		.4byte	0xc9f
+ 1948 0794 00       		.byte	0
+ 1949 0795 0F       		.uleb128 0xf
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 44
+
+
+ 1950 0796 FE020000 		.4byte	.LASF123
+ 1951 079a 02       		.byte	0x2
+ 1952 079b B1       		.byte	0xb1
+ 1953 079c 00000000 		.4byte	.LFB42
+ 1954 07a0 E8000000 		.4byte	.LFE42-.LFB42
+ 1955 07a4 01       		.uleb128 0x1
+ 1956 07a5 9C       		.byte	0x9c
+ 1957 07a6 7B090000 		.4byte	0x97b
+ 1958 07aa 20       		.uleb128 0x20
+ 1959 07ab 02000000 		.4byte	.LBB2
+ 1960 07af B8000000 		.4byte	.LBE2-.LBB2
+ 1961 07b3 12       		.uleb128 0x12
+ 1962 07b4 B20C0000 		.4byte	.LASF124
+ 1963 07b8 02       		.byte	0x2
+ 1964 07b9 C4       		.byte	0xc4
+ 1965 07ba 6B000000 		.4byte	0x6b
+ 1966 07be D7000000 		.4byte	.LLST8
+ 1967 07c2 14       		.uleb128 0x14
+ 1968 07c3 10000000 		.4byte	.LVL65
+ 1969 07c7 650C0000 		.4byte	0xc65
+ 1970 07cb D9070000 		.4byte	0x7d9
+ 1971 07cf 15       		.uleb128 0x15
+ 1972 07d0 01       		.uleb128 0x1
+ 1973 07d1 50       		.byte	0x50
+ 1974 07d2 05       		.uleb128 0x5
+ 1975 07d3 03       		.byte	0x3
+ 1976 07d4 30000000 		.4byte	.LC24
+ 1977 07d8 00       		.byte	0
+ 1978 07d9 14       		.uleb128 0x14
+ 1979 07da 1E000000 		.4byte	.LVL66
+ 1980 07de 650C0000 		.4byte	0xc65
+ 1981 07e2 F0070000 		.4byte	0x7f0
+ 1982 07e6 15       		.uleb128 0x15
+ 1983 07e7 01       		.uleb128 0x1
+ 1984 07e8 50       		.byte	0x50
+ 1985 07e9 05       		.uleb128 0x5
+ 1986 07ea 03       		.byte	0x3
+ 1987 07eb BC000000 		.4byte	.LC26
+ 1988 07ef 00       		.byte	0
+ 1989 07f0 14       		.uleb128 0x14
+ 1990 07f1 24000000 		.4byte	.LVL67
+ 1991 07f5 650C0000 		.4byte	0xc65
+ 1992 07f9 07080000 		.4byte	0x807
+ 1993 07fd 15       		.uleb128 0x15
+ 1994 07fe 01       		.uleb128 0x1
+ 1995 07ff 50       		.byte	0x50
+ 1996 0800 05       		.uleb128 0x5
+ 1997 0801 03       		.byte	0x3
+ 1998 0802 FC000000 		.4byte	.LC28
+ 1999 0806 00       		.byte	0
+ 2000 0807 14       		.uleb128 0x14
+ 2001 0808 2A000000 		.4byte	.LVL68
+ 2002 080c 650C0000 		.4byte	0xc65
+ 2003 0810 1E080000 		.4byte	0x81e
+ 2004 0814 15       		.uleb128 0x15
+ 2005 0815 01       		.uleb128 0x1
+ 2006 0816 50       		.byte	0x50
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 45
+
+
+ 2007 0817 05       		.uleb128 0x5
+ 2008 0818 03       		.byte	0x3
+ 2009 0819 38010000 		.4byte	.LC30
+ 2010 081d 00       		.byte	0
+ 2011 081e 13       		.uleb128 0x13
+ 2012 081f 2E000000 		.4byte	.LVL69
+ 2013 0823 32060000 		.4byte	0x632
+ 2014 0827 14       		.uleb128 0x14
+ 2015 0828 34000000 		.4byte	.LVL70
+ 2016 082c 650C0000 		.4byte	0xc65
+ 2017 0830 3E080000 		.4byte	0x83e
+ 2018 0834 15       		.uleb128 0x15
+ 2019 0835 01       		.uleb128 0x1
+ 2020 0836 50       		.byte	0x50
+ 2021 0837 05       		.uleb128 0x5
+ 2022 0838 03       		.byte	0x3
+ 2023 0839 78010000 		.4byte	.LC32
+ 2024 083d 00       		.byte	0
+ 2025 083e 13       		.uleb128 0x13
+ 2026 083f 3E000000 		.4byte	.LVL72
+ 2027 0843 7B090000 		.4byte	0x97b
+ 2028 0847 14       		.uleb128 0x14
+ 2029 0848 4A000000 		.4byte	.LVL75
+ 2030 084c 650C0000 		.4byte	0xc65
+ 2031 0850 5E080000 		.4byte	0x85e
+ 2032 0854 15       		.uleb128 0x15
+ 2033 0855 01       		.uleb128 0x1
+ 2034 0856 50       		.byte	0x50
+ 2035 0857 05       		.uleb128 0x5
+ 2036 0858 03       		.byte	0x3
+ 2037 0859 08020000 		.4byte	.LC34
+ 2038 085d 00       		.byte	0
+ 2039 085e 13       		.uleb128 0x13
+ 2040 085f 4E000000 		.4byte	.LVL76
+ 2041 0863 2F070000 		.4byte	0x72f
+ 2042 0867 13       		.uleb128 0x13
+ 2043 0868 58000000 		.4byte	.LVL78
+ 2044 086c B80C0000 		.4byte	0xcb8
+ 2045 0870 13       		.uleb128 0x13
+ 2046 0871 5C000000 		.4byte	.LVL79
+ 2047 0875 C1060000 		.4byte	0x6c1
+ 2048 0879 14       		.uleb128 0x14
+ 2049 087a 62000000 		.4byte	.LVL80
+ 2050 087e A70C0000 		.4byte	0xca7
+ 2051 0882 8D080000 		.4byte	0x88d
+ 2052 0886 15       		.uleb128 0x15
+ 2053 0887 01       		.uleb128 0x1
+ 2054 0888 50       		.byte	0x50
+ 2055 0889 02       		.uleb128 0x2
+ 2056 088a 08       		.byte	0x8
+ 2057 088b 64       		.byte	0x64
+ 2058 088c 00       		.byte	0
+ 2059 088d 14       		.uleb128 0x14
+ 2060 088e 6E000000 		.4byte	.LVL83
+ 2061 0892 650C0000 		.4byte	0xc65
+ 2062 0896 A4080000 		.4byte	0x8a4
+ 2063 089a 15       		.uleb128 0x15
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 46
+
+
+ 2064 089b 01       		.uleb128 0x1
+ 2065 089c 50       		.byte	0x50
+ 2066 089d 05       		.uleb128 0x5
+ 2067 089e 03       		.byte	0x3
+ 2068 089f 1C020000 		.4byte	.LC36
+ 2069 08a3 00       		.byte	0
+ 2070 08a4 14       		.uleb128 0x14
+ 2071 08a5 74000000 		.4byte	.LVL84
+ 2072 08a9 650C0000 		.4byte	0xc65
+ 2073 08ad BB080000 		.4byte	0x8bb
+ 2074 08b1 15       		.uleb128 0x15
+ 2075 08b2 01       		.uleb128 0x1
+ 2076 08b3 50       		.byte	0x50
+ 2077 08b4 05       		.uleb128 0x5
+ 2078 08b5 03       		.byte	0x3
+ 2079 08b6 20020000 		.4byte	.LC38
+ 2080 08ba 00       		.byte	0
+ 2081 08bb 13       		.uleb128 0x13
+ 2082 08bc 78000000 		.4byte	.LVL85
+ 2083 08c0 130B0000 		.4byte	0xb13
+ 2084 08c4 13       		.uleb128 0x13
+ 2085 08c5 7C000000 		.4byte	.LVL86
+ 2086 08c9 49040000 		.4byte	0x449
+ 2087 08cd 14       		.uleb128 0x14
+ 2088 08ce 8C000000 		.4byte	.LVL89
+ 2089 08d2 650C0000 		.4byte	0xc65
+ 2090 08d6 E4080000 		.4byte	0x8e4
+ 2091 08da 15       		.uleb128 0x15
+ 2092 08db 01       		.uleb128 0x1
+ 2093 08dc 50       		.byte	0x50
+ 2094 08dd 05       		.uleb128 0x5
+ 2095 08de 03       		.byte	0x3
+ 2096 08df 38020000 		.4byte	.LC40
+ 2097 08e3 00       		.byte	0
+ 2098 08e4 14       		.uleb128 0x14
+ 2099 08e5 92000000 		.4byte	.LVL90
+ 2100 08e9 650C0000 		.4byte	0xc65
+ 2101 08ed FB080000 		.4byte	0x8fb
+ 2102 08f1 15       		.uleb128 0x15
+ 2103 08f2 01       		.uleb128 0x1
+ 2104 08f3 50       		.byte	0x50
+ 2105 08f4 05       		.uleb128 0x5
+ 2106 08f5 03       		.byte	0x3
+ 2107 08f6 50020000 		.4byte	.LC42
+ 2108 08fa 00       		.byte	0
+ 2109 08fb 14       		.uleb128 0x14
+ 2110 08fc 98000000 		.4byte	.LVL91
+ 2111 0900 BF0C0000 		.4byte	0xcbf
+ 2112 0904 0F090000 		.4byte	0x90f
+ 2113 0908 15       		.uleb128 0x15
+ 2114 0909 01       		.uleb128 0x1
+ 2115 090a 50       		.byte	0x50
+ 2116 090b 02       		.uleb128 0x2
+ 2117 090c 74       		.byte	0x74
+ 2118 090d 00       		.sleb128 0
+ 2119 090e 00       		.byte	0
+ 2120 090f 14       		.uleb128 0x14
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 47
+
+
+ 2121 0910 9E000000 		.4byte	.LVL92
+ 2122 0914 650C0000 		.4byte	0xc65
+ 2123 0918 26090000 		.4byte	0x926
+ 2124 091c 15       		.uleb128 0x15
+ 2125 091d 01       		.uleb128 0x1
+ 2126 091e 50       		.byte	0x50
+ 2127 091f 05       		.uleb128 0x5
+ 2128 0920 03       		.byte	0x3
+ 2129 0921 1C020000 		.4byte	.LC36
+ 2130 0925 00       		.byte	0
+ 2131 0926 14       		.uleb128 0x14
+ 2132 0927 A6000000 		.4byte	.LVL95
+ 2133 092b 650C0000 		.4byte	0xc65
+ 2134 092f 3D090000 		.4byte	0x93d
+ 2135 0933 15       		.uleb128 0x15
+ 2136 0934 01       		.uleb128 0x1
+ 2137 0935 50       		.byte	0x50
+ 2138 0936 05       		.uleb128 0x5
+ 2139 0937 03       		.byte	0x3
+ 2140 0938 50020000 		.4byte	.LC42
+ 2141 093c 00       		.byte	0
+ 2142 093d 14       		.uleb128 0x14
+ 2143 093e AC000000 		.4byte	.LVL96
+ 2144 0942 BF0C0000 		.4byte	0xcbf
+ 2145 0946 51090000 		.4byte	0x951
+ 2146 094a 15       		.uleb128 0x15
+ 2147 094b 01       		.uleb128 0x1
+ 2148 094c 50       		.byte	0x50
+ 2149 094d 02       		.uleb128 0x2
+ 2150 094e 74       		.byte	0x74
+ 2151 094f 00       		.sleb128 0
+ 2152 0950 00       		.byte	0
+ 2153 0951 14       		.uleb128 0x14
+ 2154 0952 B2000000 		.4byte	.LVL97
+ 2155 0956 650C0000 		.4byte	0xc65
+ 2156 095a 68090000 		.4byte	0x968
+ 2157 095e 15       		.uleb128 0x15
+ 2158 095f 01       		.uleb128 0x1
+ 2159 0960 50       		.byte	0x50
+ 2160 0961 05       		.uleb128 0x5
+ 2161 0962 03       		.byte	0x3
+ 2162 0963 1C020000 		.4byte	.LC36
+ 2163 0967 00       		.byte	0
+ 2164 0968 17       		.uleb128 0x17
+ 2165 0969 BA000000 		.4byte	.LVL98
+ 2166 096d A70C0000 		.4byte	0xca7
+ 2167 0971 15       		.uleb128 0x15
+ 2168 0972 01       		.uleb128 0x1
+ 2169 0973 50       		.byte	0x50
+ 2170 0974 03       		.uleb128 0x3
+ 2171 0975 0A       		.byte	0xa
+ 2172 0976 F401     		.2byte	0x1f4
+ 2173 0978 00       		.byte	0
+ 2174 0979 00       		.byte	0
+ 2175 097a 00       		.byte	0
+ 2176 097b 21       		.uleb128 0x21
+ 2177 097c 5B100000 		.4byte	.LASF126
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 48
+
+
+ 2178 0980 02       		.byte	0x2
+ 2179 0981 E6       		.byte	0xe6
+ 2180 0982 6B000000 		.4byte	0x6b
+ 2181 0986 00000000 		.4byte	.LFB43
+ 2182 098a 6C000000 		.4byte	.LFE43-.LFB43
+ 2183 098e 01       		.uleb128 0x1
+ 2184 098f 9C       		.byte	0x9c
+ 2185 0990 CE090000 		.4byte	0x9ce
+ 2186 0994 12       		.uleb128 0x12
+ 2187 0995 B20C0000 		.4byte	.LASF124
+ 2188 0999 02       		.byte	0x2
+ 2189 099a E7       		.byte	0xe7
+ 2190 099b 6B000000 		.4byte	0x6b
+ 2191 099f 22010000 		.4byte	.LLST9
+ 2192 09a3 12       		.uleb128 0x12
+ 2193 09a4 EA010000 		.4byte	.LASF127
+ 2194 09a8 02       		.byte	0x2
+ 2195 09a9 E8       		.byte	0xe8
+ 2196 09aa 5D000000 		.4byte	0x5d
+ 2197 09ae 5A010000 		.4byte	.LLST10
+ 2198 09b2 13       		.uleb128 0x13
+ 2199 09b3 22000000 		.4byte	.LVL102
+ 2200 09b7 95070000 		.4byte	0x795
+ 2201 09bb 13       		.uleb128 0x13
+ 2202 09bc 28000000 		.4byte	.LVL104
+ 2203 09c0 D10C0000 		.4byte	0xcd1
+ 2204 09c4 13       		.uleb128 0x13
+ 2205 09c5 5A000000 		.4byte	.LVL110
+ 2206 09c9 7B090000 		.4byte	0x97b
+ 2207 09cd 00       		.byte	0
+ 2208 09ce 1A       		.uleb128 0x1a
+ 2209 09cf 7A0A0000 		.4byte	.LASF128
+ 2210 09d3 02       		.byte	0x2
+ 2211 09d4 0801     		.2byte	0x108
+ 2212 09d6 00000000 		.4byte	.LFB44
+ 2213 09da 1C000000 		.4byte	.LFE44-.LFB44
+ 2214 09de 01       		.uleb128 0x1
+ 2215 09df 9C       		.byte	0x9c
+ 2216 09e0 2E0A0000 		.4byte	0xa2e
+ 2217 09e4 1B       		.uleb128 0x1b
+ 2218 09e5 B20C0000 		.4byte	.LASF124
+ 2219 09e9 02       		.byte	0x2
+ 2220 09ea 0901     		.2byte	0x109
+ 2221 09ec 6B000000 		.4byte	0x6b
+ 2222 09f0 9C010000 		.4byte	.LLST11
+ 2223 09f4 13       		.uleb128 0x13
+ 2224 09f5 06000000 		.4byte	.LVL112
+ 2225 09f9 7B090000 		.4byte	0x97b
+ 2226 09fd 13       		.uleb128 0x13
+ 2227 09fe 0A000000 		.4byte	.LVL113
+ 2228 0a02 BF0C0000 		.4byte	0xcbf
+ 2229 0a06 14       		.uleb128 0x14
+ 2230 0a07 10000000 		.4byte	.LVL114
+ 2231 0a0b 650C0000 		.4byte	0xc65
+ 2232 0a0f 1D0A0000 		.4byte	0xa1d
+ 2233 0a13 15       		.uleb128 0x15
+ 2234 0a14 01       		.uleb128 0x1
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 49
+
+
+ 2235 0a15 50       		.byte	0x50
+ 2236 0a16 05       		.uleb128 0x5
+ 2237 0a17 03       		.byte	0x3
+ 2238 0a18 1C020000 		.4byte	.LC36
+ 2239 0a1c 00       		.byte	0
+ 2240 0a1d 17       		.uleb128 0x17
+ 2241 0a1e 16000000 		.4byte	.LVL115
+ 2242 0a22 300B0000 		.4byte	0xb30
+ 2243 0a26 15       		.uleb128 0x15
+ 2244 0a27 01       		.uleb128 0x1
+ 2245 0a28 50       		.byte	0x50
+ 2246 0a29 02       		.uleb128 0x2
+ 2247 0a2a 08       		.byte	0x8
+ 2248 0a2b 32       		.byte	0x32
+ 2249 0a2c 00       		.byte	0
+ 2250 0a2d 00       		.byte	0
+ 2251 0a2e 22       		.uleb128 0x22
+ 2252 0a2f 07090000 		.4byte	.LASF129
+ 2253 0a33 01       		.byte	0x1
+ 2254 0a34 11       		.byte	0x11
+ 2255 0a35 6B000000 		.4byte	0x6b
+ 2256 0a39 22       		.uleb128 0x22
+ 2257 0a3a 950C0000 		.4byte	.LASF130
+ 2258 0a3e 01       		.byte	0x1
+ 2259 0a3f 12       		.byte	0x12
+ 2260 0a40 6B000000 		.4byte	0x6b
+ 2261 0a44 22       		.uleb128 0x22
+ 2262 0a45 3E0E0000 		.4byte	.LASF131
+ 2263 0a49 01       		.byte	0x1
+ 2264 0a4a 13       		.byte	0x13
+ 2265 0a4b 6B000000 		.4byte	0x6b
+ 2266 0a4f 22       		.uleb128 0x22
+ 2267 0a50 D9060000 		.4byte	.LASF132
+ 2268 0a54 01       		.byte	0x1
+ 2269 0a55 14       		.byte	0x14
+ 2270 0a56 8C000000 		.4byte	0x8c
+ 2271 0a5a 23       		.uleb128 0x23
+ 2272 0a5b C30A0000 		.4byte	.LASF133
+ 2273 0a5f 01       		.byte	0x1
+ 2274 0a60 1A       		.byte	0x1a
+ 2275 0a61 6B000000 		.4byte	0x6b
+ 2276 0a65 05       		.uleb128 0x5
+ 2277 0a66 03       		.byte	0x3
+ 2278 0a67 00000000 		.4byte	motionAccumulation
+ 2279 0a6b 23       		.uleb128 0x23
+ 2280 0a6c 76050000 		.4byte	.LASF134
+ 2281 0a70 02       		.byte	0x2
+ 2282 0a71 0F       		.byte	0xf
+ 2283 0a72 81000000 		.4byte	0x81
+ 2284 0a76 05       		.uleb128 0x5
+ 2285 0a77 03       		.byte	0x3
+ 2286 0a78 00000000 		.4byte	InterruptHpn
+ 2287 0a7c 23       		.uleb128 0x23
+ 2288 0a7d E2050000 		.4byte	.LASF135
+ 2289 0a81 02       		.byte	0x2
+ 2290 0a82 11       		.byte	0x11
+ 2291 0a83 8C000000 		.4byte	0x8c
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 50
+
+
+ 2292 0a87 05       		.uleb128 0x5
+ 2293 0a88 03       		.byte	0x3
+ 2294 0a89 00000000 		.4byte	delta_X
+ 2295 0a8d 23       		.uleb128 0x23
+ 2296 0a8e EA050000 		.4byte	.LASF136
+ 2297 0a92 02       		.byte	0x2
+ 2298 0a93 12       		.byte	0x12
+ 2299 0a94 8C000000 		.4byte	0x8c
+ 2300 0a98 05       		.uleb128 0x5
+ 2301 0a99 03       		.byte	0x3
+ 2302 0a9a 00000000 		.4byte	delta_Y
+ 2303 0a9e 23       		.uleb128 0x23
+ 2304 0a9f 1C0D0000 		.4byte	.LASF137
+ 2305 0aa3 02       		.byte	0x2
+ 2306 0aa4 13       		.byte	0x13
+ 2307 0aa5 6B000000 		.4byte	0x6b
+ 2308 0aa9 05       		.uleb128 0x5
+ 2309 0aaa 03       		.byte	0x3
+ 2310 0aab 00000000 		.4byte	motionUpdateNeeded
+ 2311 0aaf 24       		.uleb128 0x24
+ 2312 0ab0 6B000000 		.4byte	0x6b
+ 2313 0ab4 C00A0000 		.4byte	0xac0
+ 2314 0ab8 25       		.uleb128 0x25
+ 2315 0ab9 CA000000 		.4byte	0xca
+ 2316 0abd 2C01     		.2byte	0x12c
+ 2317 0abf 00       		.byte	0
+ 2318 0ac0 23       		.uleb128 0x23
+ 2319 0ac1 BD070000 		.4byte	.LASF138
+ 2320 0ac5 02       		.byte	0x2
+ 2321 0ac6 19       		.byte	0x19
+ 2322 0ac7 AF0A0000 		.4byte	0xaaf
+ 2323 0acb 05       		.uleb128 0x5
+ 2324 0acc 03       		.byte	0x3
+ 2325 0acd 00000000 		.4byte	Pixels18Array
+ 2326 0ad1 26       		.uleb128 0x26
+ 2327 0ad2 6E00     		.ascii	"n\000"
+ 2328 0ad4 02       		.byte	0x2
+ 2329 0ad5 1B       		.byte	0x1b
+ 2330 0ad6 5D000000 		.4byte	0x5d
+ 2331 0ada 05       		.uleb128 0x5
+ 2332 0adb 03       		.byte	0x3
+ 2333 0adc 00000000 		.4byte	n
+ 2334 0ae0 23       		.uleb128 0x23
+ 2335 0ae1 480C0000 		.4byte	.LASF139
+ 2336 0ae5 02       		.byte	0x2
+ 2337 0ae6 1B       		.byte	0x1b
+ 2338 0ae7 5D000000 		.4byte	0x5d
+ 2339 0aeb 05       		.uleb128 0x5
+ 2340 0aec 03       		.byte	0x3
+ 2341 0aed 00000000 		.4byte	motionBurstCount
+ 2342 0af1 23       		.uleb128 0x23
+ 2343 0af2 E00D0000 		.4byte	.LASF140
+ 2344 0af6 02       		.byte	0x2
+ 2345 0af7 1C       		.byte	0x1c
+ 2346 0af8 5D000000 		.4byte	0x5d
+ 2347 0afc 05       		.uleb128 0x5
+ 2348 0afd 03       		.byte	0x3
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 51
+
+
+ 2349 0afe 00000000 		.4byte	initialing
+ 2350 0b02 23       		.uleb128 0x23
+ 2351 0b03 C30F0000 		.4byte	.LASF141
+ 2352 0b07 02       		.byte	0x2
+ 2353 0b08 1D       		.byte	0x1d
+ 2354 0b09 5D000000 		.4byte	0x5d
+ 2355 0b0d 05       		.uleb128 0x5
+ 2356 0b0e 03       		.byte	0x3
+ 2357 0b0f 00000000 		.4byte	initialNeeded
+ 2358 0b13 27       		.uleb128 0x27
+ 2359 0b14 EF0A0000 		.4byte	.LASF144
+ 2360 0b18 06       		.byte	0x6
+ 2361 0b19 21       		.byte	0x21
+ 2362 0b1a 28       		.uleb128 0x28
+ 2363 0b1b 070C0000 		.4byte	.LASF142
+ 2364 0b1f 06       		.byte	0x6
+ 2365 0b20 26       		.byte	0x26
+ 2366 0b21 300B0000 		.4byte	0xb30
+ 2367 0b25 0D       		.uleb128 0xd
+ 2368 0b26 6B000000 		.4byte	0x6b
+ 2369 0b2a 0D       		.uleb128 0xd
+ 2370 0b2b 6B000000 		.4byte	0x6b
+ 2371 0b2f 00       		.byte	0
+ 2372 0b30 28       		.uleb128 0x28
+ 2373 0b31 6C0C0000 		.4byte	.LASF143
+ 2374 0b35 07       		.byte	0x7
+ 2375 0b36 58       		.byte	0x58
+ 2376 0b37 410B0000 		.4byte	0xb41
+ 2377 0b3b 0D       		.uleb128 0xd
+ 2378 0b3c 76000000 		.4byte	0x76
+ 2379 0b40 00       		.byte	0
+ 2380 0b41 29       		.uleb128 0x29
+ 2381 0b42 000D0000 		.4byte	.LASF151
+ 2382 0b46 06       		.byte	0x6
+ 2383 0b47 25       		.byte	0x25
+ 2384 0b48 6B000000 		.4byte	0x6b
+ 2385 0b4c 560B0000 		.4byte	0xb56
+ 2386 0b50 0D       		.uleb128 0xd
+ 2387 0b51 6B000000 		.4byte	0x6b
+ 2388 0b55 00       		.byte	0
+ 2389 0b56 2A       		.uleb128 0x2a
+ 2390 0b57 2C090000 		.4byte	.LASF145
+ 2391 0b5b 04       		.byte	0x4
+ 2392 0b5c A304     		.2byte	0x4a3
+ 2393 0b5e 28       		.uleb128 0x28
+ 2394 0b5f 40090000 		.4byte	.LASF146
+ 2395 0b63 08       		.byte	0x8
+ 2396 0b64 2C       		.byte	0x2c
+ 2397 0b65 6F0B0000 		.4byte	0xb6f
+ 2398 0b69 0D       		.uleb128 0xd
+ 2399 0b6a 1B030000 		.4byte	0x31b
+ 2400 0b6e 00       		.byte	0
+ 2401 0b6f 28       		.uleb128 0x28
+ 2402 0b70 AE040000 		.4byte	.LASF147
+ 2403 0b74 08       		.byte	0x8
+ 2404 0b75 2B       		.byte	0x2b
+ 2405 0b76 850B0000 		.4byte	0xb85
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 52
+
+
+ 2406 0b7a 0D       		.uleb128 0xd
+ 2407 0b7b 6B000000 		.4byte	0x6b
+ 2408 0b7f 0D       		.uleb128 0xd
+ 2409 0b80 6B000000 		.4byte	0x6b
+ 2410 0b84 00       		.byte	0
+ 2411 0b85 2B       		.uleb128 0x2b
+ 2412 0b86 940E0000 		.4byte	.LASF166
+ 2413 0b8a 09       		.byte	0x9
+ 2414 0b8b 4401     		.2byte	0x144
+ 2415 0b8d 81000000 		.4byte	0x81
+ 2416 0b91 2C       		.uleb128 0x2c
+ 2417 0b92 AD030000 		.4byte	.LASF148
+ 2418 0b96 09       		.byte	0x9
+ 2419 0b97 4601     		.2byte	0x146
+ 2420 0b99 A30B0000 		.4byte	0xba3
+ 2421 0b9d 0D       		.uleb128 0xd
+ 2422 0b9e 81000000 		.4byte	0x81
+ 2423 0ba2 00       		.byte	0
+ 2424 0ba3 28       		.uleb128 0x28
+ 2425 0ba4 56000000 		.4byte	.LASF149
+ 2426 0ba8 0A       		.byte	0xa
+ 2427 0ba9 18       		.byte	0x18
+ 2428 0baa B40B0000 		.4byte	0xbb4
+ 2429 0bae 0D       		.uleb128 0xd
+ 2430 0baf B7000000 		.4byte	0xb7
+ 2431 0bb3 00       		.byte	0
+ 2432 0bb4 2A       		.uleb128 0x2a
+ 2433 0bb5 24010000 		.4byte	.LASF150
+ 2434 0bb9 09       		.byte	0x9
+ 2435 0bba 3101     		.2byte	0x131
+ 2436 0bbc 2D       		.uleb128 0x2d
+ 2437 0bbd CB070000 		.4byte	.LASF152
+ 2438 0bc1 05       		.byte	0x5
+ 2439 0bc2 A101     		.2byte	0x1a1
+ 2440 0bc4 0F030000 		.4byte	0x30f
+ 2441 0bc8 D20B0000 		.4byte	0xbd2
+ 2442 0bcc 0D       		.uleb128 0xd
+ 2443 0bcd 21030000 		.4byte	0x321
+ 2444 0bd1 00       		.byte	0
+ 2445 0bd2 27       		.uleb128 0x27
+ 2446 0bd3 6B0B0000 		.4byte	.LASF153
+ 2447 0bd7 0B       		.byte	0xb
+ 2448 0bd8 47       		.byte	0x47
+ 2449 0bd9 27       		.uleb128 0x27
+ 2450 0bda 03030000 		.4byte	.LASF154
+ 2451 0bde 0C       		.byte	0xc
+ 2452 0bdf 47       		.byte	0x47
+ 2453 0be0 28       		.uleb128 0x28
+ 2454 0be1 07070000 		.4byte	.LASF155
+ 2455 0be5 0B       		.byte	0xb
+ 2456 0be6 51       		.byte	0x51
+ 2457 0be7 F10B0000 		.4byte	0xbf1
+ 2458 0beb 0D       		.uleb128 0xd
+ 2459 0bec 6B000000 		.4byte	0x6b
+ 2460 0bf0 00       		.byte	0
+ 2461 0bf1 28       		.uleb128 0x28
+ 2462 0bf2 B90D0000 		.4byte	.LASF156
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 53
+
+
+ 2463 0bf6 0B       		.byte	0xb
+ 2464 0bf7 54       		.byte	0x54
+ 2465 0bf8 020C0000 		.4byte	0xc02
+ 2466 0bfc 0D       		.uleb128 0xd
+ 2467 0bfd 6B000000 		.4byte	0x6b
+ 2468 0c01 00       		.byte	0
+ 2469 0c02 28       		.uleb128 0x28
+ 2470 0c03 8F000000 		.4byte	.LASF157
+ 2471 0c07 0C       		.byte	0xc
+ 2472 0c08 51       		.byte	0x51
+ 2473 0c09 130C0000 		.4byte	0xc13
+ 2474 0c0d 0D       		.uleb128 0xd
+ 2475 0c0e 6B000000 		.4byte	0x6b
+ 2476 0c12 00       		.byte	0
+ 2477 0c13 28       		.uleb128 0x28
+ 2478 0c14 0B0D0000 		.4byte	.LASF158
+ 2479 0c18 0D       		.byte	0xd
+ 2480 0c19 1E       		.byte	0x1e
+ 2481 0c1a 240C0000 		.4byte	0xc24
+ 2482 0c1e 0D       		.uleb128 0xd
+ 2483 0c1f 6B000000 		.4byte	0x6b
+ 2484 0c23 00       		.byte	0
+ 2485 0c24 28       		.uleb128 0x28
+ 2486 0c25 590C0000 		.4byte	.LASF159
+ 2487 0c29 0E       		.byte	0xe
+ 2488 0c2a 1E       		.byte	0x1e
+ 2489 0c2b 350C0000 		.4byte	0xc35
+ 2490 0c2f 0D       		.uleb128 0xd
+ 2491 0c30 6B000000 		.4byte	0x6b
+ 2492 0c34 00       		.byte	0
+ 2493 0c35 28       		.uleb128 0x28
+ 2494 0c36 9C100000 		.4byte	.LASF160
+ 2495 0c3a 0F       		.byte	0xf
+ 2496 0c3b 1E       		.byte	0x1e
+ 2497 0c3c 460C0000 		.4byte	0xc46
+ 2498 0c40 0D       		.uleb128 0xd
+ 2499 0c41 6B000000 		.4byte	0x6b
+ 2500 0c45 00       		.byte	0
+ 2501 0c46 27       		.uleb128 0x27
+ 2502 0c47 80020000 		.4byte	.LASF161
+ 2503 0c4b 10       		.byte	0x10
+ 2504 0c4c 67       		.byte	0x67
+ 2505 0c4d 27       		.uleb128 0x27
+ 2506 0c4e 1D0C0000 		.4byte	.LASF162
+ 2507 0c52 10       		.byte	0x10
+ 2508 0c53 68       		.byte	0x68
+ 2509 0c54 28       		.uleb128 0x28
+ 2510 0c55 0B0F0000 		.4byte	.LASF163
+ 2511 0c59 11       		.byte	0x11
+ 2512 0c5a 1D       		.byte	0x1d
+ 2513 0c5b 650C0000 		.4byte	0xc65
+ 2514 0c5f 0D       		.uleb128 0xd
+ 2515 0c60 6B000000 		.4byte	0x6b
+ 2516 0c64 00       		.byte	0
+ 2517 0c65 2C       		.uleb128 0x2c
+ 2518 0c66 F2050000 		.4byte	.LASF164
+ 2519 0c6a 12       		.byte	0x12
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 54
+
+
+ 2520 0c6b 7701     		.2byte	0x177
+ 2521 0c6d 770C0000 		.4byte	0xc77
+ 2522 0c71 0D       		.uleb128 0xd
+ 2523 0c72 770C0000 		.4byte	0xc77
+ 2524 0c76 00       		.byte	0
+ 2525 0c77 06       		.uleb128 0x6
+ 2526 0c78 04       		.byte	0x4
+ 2527 0c79 7D0C0000 		.4byte	0xc7d
+ 2528 0c7d 2E       		.uleb128 0x2e
+ 2529 0c7e A5000000 		.4byte	0xa5
+ 2530 0c82 28       		.uleb128 0x28
+ 2531 0c83 D60A0000 		.4byte	.LASF165
+ 2532 0c87 06       		.byte	0x6
+ 2533 0c88 28       		.byte	0x28
+ 2534 0c89 930C0000 		.4byte	0xc93
+ 2535 0c8d 0D       		.uleb128 0xd
+ 2536 0c8e 6B000000 		.4byte	0x6b
+ 2537 0c92 00       		.byte	0
+ 2538 0c93 2B       		.uleb128 0x2b
+ 2539 0c94 92020000 		.4byte	.LASF167
+ 2540 0c98 12       		.byte	0x12
+ 2541 0c99 8601     		.2byte	0x186
+ 2542 0c9b 81000000 		.4byte	0x81
+ 2543 0c9f 2A       		.uleb128 0x2a
+ 2544 0ca0 350B0000 		.4byte	.LASF168
+ 2545 0ca4 13       		.byte	0x13
+ 2546 0ca5 8F01     		.2byte	0x18f
+ 2547 0ca7 28       		.uleb128 0x28
+ 2548 0ca8 B60E0000 		.4byte	.LASF169
+ 2549 0cac 07       		.byte	0x7
+ 2550 0cad 57       		.byte	0x57
+ 2551 0cae B80C0000 		.4byte	0xcb8
+ 2552 0cb2 0D       		.uleb128 0xd
+ 2553 0cb3 81000000 		.4byte	0x81
+ 2554 0cb7 00       		.byte	0
+ 2555 0cb8 27       		.uleb128 0x27
+ 2556 0cb9 69010000 		.4byte	.LASF170
+ 2557 0cbd 06       		.byte	0x6
+ 2558 0cbe 20       		.byte	0x20
+ 2559 0cbf 2C       		.uleb128 0x2c
+ 2560 0cc0 EF080000 		.4byte	.LASF171
+ 2561 0cc4 12       		.byte	0x12
+ 2562 0cc5 8C01     		.2byte	0x18c
+ 2563 0cc7 D10C0000 		.4byte	0xcd1
+ 2564 0ccb 0D       		.uleb128 0xd
+ 2565 0ccc 81000000 		.4byte	0x81
+ 2566 0cd0 00       		.byte	0
+ 2567 0cd1 2B       		.uleb128 0x2b
+ 2568 0cd2 72040000 		.4byte	.LASF172
+ 2569 0cd6 12       		.byte	0x12
+ 2570 0cd7 6B01     		.2byte	0x16b
+ 2571 0cd9 81000000 		.4byte	0x81
+ 2572 0cdd 00       		.byte	0
+ 2573              		.section	.debug_abbrev,"",%progbits
+ 2574              	.Ldebug_abbrev0:
+ 2575 0000 01       		.uleb128 0x1
+ 2576 0001 11       		.uleb128 0x11
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 55
+
+
+ 2577 0002 01       		.byte	0x1
+ 2578 0003 25       		.uleb128 0x25
+ 2579 0004 0E       		.uleb128 0xe
+ 2580 0005 13       		.uleb128 0x13
+ 2581 0006 0B       		.uleb128 0xb
+ 2582 0007 03       		.uleb128 0x3
+ 2583 0008 0E       		.uleb128 0xe
+ 2584 0009 1B       		.uleb128 0x1b
+ 2585 000a 0E       		.uleb128 0xe
+ 2586 000b 55       		.uleb128 0x55
+ 2587 000c 17       		.uleb128 0x17
+ 2588 000d 11       		.uleb128 0x11
+ 2589 000e 01       		.uleb128 0x1
+ 2590 000f 10       		.uleb128 0x10
+ 2591 0010 17       		.uleb128 0x17
+ 2592 0011 00       		.byte	0
+ 2593 0012 00       		.byte	0
+ 2594 0013 02       		.uleb128 0x2
+ 2595 0014 24       		.uleb128 0x24
+ 2596 0015 00       		.byte	0
+ 2597 0016 0B       		.uleb128 0xb
+ 2598 0017 0B       		.uleb128 0xb
+ 2599 0018 3E       		.uleb128 0x3e
+ 2600 0019 0B       		.uleb128 0xb
+ 2601 001a 03       		.uleb128 0x3
+ 2602 001b 0E       		.uleb128 0xe
+ 2603 001c 00       		.byte	0
+ 2604 001d 00       		.byte	0
+ 2605 001e 03       		.uleb128 0x3
+ 2606 001f 24       		.uleb128 0x24
+ 2607 0020 00       		.byte	0
+ 2608 0021 0B       		.uleb128 0xb
+ 2609 0022 0B       		.uleb128 0xb
+ 2610 0023 3E       		.uleb128 0x3e
+ 2611 0024 0B       		.uleb128 0xb
+ 2612 0025 03       		.uleb128 0x3
+ 2613 0026 08       		.uleb128 0x8
+ 2614 0027 00       		.byte	0
+ 2615 0028 00       		.byte	0
+ 2616 0029 04       		.uleb128 0x4
+ 2617 002a 16       		.uleb128 0x16
+ 2618 002b 00       		.byte	0
+ 2619 002c 03       		.uleb128 0x3
+ 2620 002d 0E       		.uleb128 0xe
+ 2621 002e 3A       		.uleb128 0x3a
+ 2622 002f 0B       		.uleb128 0xb
+ 2623 0030 3B       		.uleb128 0x3b
+ 2624 0031 0B       		.uleb128 0xb
+ 2625 0032 49       		.uleb128 0x49
+ 2626 0033 13       		.uleb128 0x13
+ 2627 0034 00       		.byte	0
+ 2628 0035 00       		.byte	0
+ 2629 0036 05       		.uleb128 0x5
+ 2630 0037 16       		.uleb128 0x16
+ 2631 0038 00       		.byte	0
+ 2632 0039 03       		.uleb128 0x3
+ 2633 003a 0E       		.uleb128 0xe
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 56
+
+
+ 2634 003b 3A       		.uleb128 0x3a
+ 2635 003c 0B       		.uleb128 0xb
+ 2636 003d 3B       		.uleb128 0x3b
+ 2637 003e 05       		.uleb128 0x5
+ 2638 003f 49       		.uleb128 0x49
+ 2639 0040 13       		.uleb128 0x13
+ 2640 0041 00       		.byte	0
+ 2641 0042 00       		.byte	0
+ 2642 0043 06       		.uleb128 0x6
+ 2643 0044 0F       		.uleb128 0xf
+ 2644 0045 00       		.byte	0
+ 2645 0046 0B       		.uleb128 0xb
+ 2646 0047 0B       		.uleb128 0xb
+ 2647 0048 49       		.uleb128 0x49
+ 2648 0049 13       		.uleb128 0x13
+ 2649 004a 00       		.byte	0
+ 2650 004b 00       		.byte	0
+ 2651 004c 07       		.uleb128 0x7
+ 2652 004d 15       		.uleb128 0x15
+ 2653 004e 00       		.byte	0
+ 2654 004f 27       		.uleb128 0x27
+ 2655 0050 19       		.uleb128 0x19
+ 2656 0051 00       		.byte	0
+ 2657 0052 00       		.byte	0
+ 2658 0053 08       		.uleb128 0x8
+ 2659 0054 0F       		.uleb128 0xf
+ 2660 0055 00       		.byte	0
+ 2661 0056 0B       		.uleb128 0xb
+ 2662 0057 0B       		.uleb128 0xb
+ 2663 0058 00       		.byte	0
+ 2664 0059 00       		.byte	0
+ 2665 005a 09       		.uleb128 0x9
+ 2666 005b 04       		.uleb128 0x4
+ 2667 005c 01       		.byte	0x1
+ 2668 005d 0B       		.uleb128 0xb
+ 2669 005e 0B       		.uleb128 0xb
+ 2670 005f 3A       		.uleb128 0x3a
+ 2671 0060 0B       		.uleb128 0xb
+ 2672 0061 3B       		.uleb128 0x3b
+ 2673 0062 0B       		.uleb128 0xb
+ 2674 0063 01       		.uleb128 0x1
+ 2675 0064 13       		.uleb128 0x13
+ 2676 0065 00       		.byte	0
+ 2677 0066 00       		.byte	0
+ 2678 0067 0A       		.uleb128 0xa
+ 2679 0068 28       		.uleb128 0x28
+ 2680 0069 00       		.byte	0
+ 2681 006a 03       		.uleb128 0x3
+ 2682 006b 0E       		.uleb128 0xe
+ 2683 006c 1C       		.uleb128 0x1c
+ 2684 006d 0D       		.uleb128 0xd
+ 2685 006e 00       		.byte	0
+ 2686 006f 00       		.byte	0
+ 2687 0070 0B       		.uleb128 0xb
+ 2688 0071 04       		.uleb128 0x4
+ 2689 0072 01       		.byte	0x1
+ 2690 0073 0B       		.uleb128 0xb
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 57
+
+
+ 2691 0074 0B       		.uleb128 0xb
+ 2692 0075 3A       		.uleb128 0x3a
+ 2693 0076 0B       		.uleb128 0xb
+ 2694 0077 3B       		.uleb128 0x3b
+ 2695 0078 05       		.uleb128 0x5
+ 2696 0079 01       		.uleb128 0x1
+ 2697 007a 13       		.uleb128 0x13
+ 2698 007b 00       		.byte	0
+ 2699 007c 00       		.byte	0
+ 2700 007d 0C       		.uleb128 0xc
+ 2701 007e 15       		.uleb128 0x15
+ 2702 007f 01       		.byte	0x1
+ 2703 0080 27       		.uleb128 0x27
+ 2704 0081 19       		.uleb128 0x19
+ 2705 0082 01       		.uleb128 0x1
+ 2706 0083 13       		.uleb128 0x13
+ 2707 0084 00       		.byte	0
+ 2708 0085 00       		.byte	0
+ 2709 0086 0D       		.uleb128 0xd
+ 2710 0087 05       		.uleb128 0x5
+ 2711 0088 00       		.byte	0
+ 2712 0089 49       		.uleb128 0x49
+ 2713 008a 13       		.uleb128 0x13
+ 2714 008b 00       		.byte	0
+ 2715 008c 00       		.byte	0
+ 2716 008d 0E       		.uleb128 0xe
+ 2717 008e 2E       		.uleb128 0x2e
+ 2718 008f 00       		.byte	0
+ 2719 0090 3F       		.uleb128 0x3f
+ 2720 0091 19       		.uleb128 0x19
+ 2721 0092 03       		.uleb128 0x3
+ 2722 0093 0E       		.uleb128 0xe
+ 2723 0094 3A       		.uleb128 0x3a
+ 2724 0095 0B       		.uleb128 0xb
+ 2725 0096 3B       		.uleb128 0x3b
+ 2726 0097 0B       		.uleb128 0xb
+ 2727 0098 27       		.uleb128 0x27
+ 2728 0099 19       		.uleb128 0x19
+ 2729 009a 11       		.uleb128 0x11
+ 2730 009b 01       		.uleb128 0x1
+ 2731 009c 12       		.uleb128 0x12
+ 2732 009d 06       		.uleb128 0x6
+ 2733 009e 40       		.uleb128 0x40
+ 2734 009f 18       		.uleb128 0x18
+ 2735 00a0 9742     		.uleb128 0x2117
+ 2736 00a2 19       		.uleb128 0x19
+ 2737 00a3 00       		.byte	0
+ 2738 00a4 00       		.byte	0
+ 2739 00a5 0F       		.uleb128 0xf
+ 2740 00a6 2E       		.uleb128 0x2e
+ 2741 00a7 01       		.byte	0x1
+ 2742 00a8 3F       		.uleb128 0x3f
+ 2743 00a9 19       		.uleb128 0x19
+ 2744 00aa 03       		.uleb128 0x3
+ 2745 00ab 0E       		.uleb128 0xe
+ 2746 00ac 3A       		.uleb128 0x3a
+ 2747 00ad 0B       		.uleb128 0xb
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 58
+
+
+ 2748 00ae 3B       		.uleb128 0x3b
+ 2749 00af 0B       		.uleb128 0xb
+ 2750 00b0 27       		.uleb128 0x27
+ 2751 00b1 19       		.uleb128 0x19
+ 2752 00b2 11       		.uleb128 0x11
+ 2753 00b3 01       		.uleb128 0x1
+ 2754 00b4 12       		.uleb128 0x12
+ 2755 00b5 06       		.uleb128 0x6
+ 2756 00b6 40       		.uleb128 0x40
+ 2757 00b7 18       		.uleb128 0x18
+ 2758 00b8 9742     		.uleb128 0x2117
+ 2759 00ba 19       		.uleb128 0x19
+ 2760 00bb 01       		.uleb128 0x1
+ 2761 00bc 13       		.uleb128 0x13
+ 2762 00bd 00       		.byte	0
+ 2763 00be 00       		.byte	0
+ 2764 00bf 10       		.uleb128 0x10
+ 2765 00c0 34       		.uleb128 0x34
+ 2766 00c1 00       		.byte	0
+ 2767 00c2 03       		.uleb128 0x3
+ 2768 00c3 08       		.uleb128 0x8
+ 2769 00c4 3A       		.uleb128 0x3a
+ 2770 00c5 0B       		.uleb128 0xb
+ 2771 00c6 3B       		.uleb128 0x3b
+ 2772 00c7 0B       		.uleb128 0xb
+ 2773 00c8 49       		.uleb128 0x49
+ 2774 00c9 13       		.uleb128 0x13
+ 2775 00ca 02       		.uleb128 0x2
+ 2776 00cb 17       		.uleb128 0x17
+ 2777 00cc 00       		.byte	0
+ 2778 00cd 00       		.byte	0
+ 2779 00ce 11       		.uleb128 0x11
+ 2780 00cf 34       		.uleb128 0x34
+ 2781 00d0 00       		.byte	0
+ 2782 00d1 03       		.uleb128 0x3
+ 2783 00d2 08       		.uleb128 0x8
+ 2784 00d3 3A       		.uleb128 0x3a
+ 2785 00d4 0B       		.uleb128 0xb
+ 2786 00d5 3B       		.uleb128 0x3b
+ 2787 00d6 0B       		.uleb128 0xb
+ 2788 00d7 49       		.uleb128 0x49
+ 2789 00d8 13       		.uleb128 0x13
+ 2790 00d9 00       		.byte	0
+ 2791 00da 00       		.byte	0
+ 2792 00db 12       		.uleb128 0x12
+ 2793 00dc 34       		.uleb128 0x34
+ 2794 00dd 00       		.byte	0
+ 2795 00de 03       		.uleb128 0x3
+ 2796 00df 0E       		.uleb128 0xe
+ 2797 00e0 3A       		.uleb128 0x3a
+ 2798 00e1 0B       		.uleb128 0xb
+ 2799 00e2 3B       		.uleb128 0x3b
+ 2800 00e3 0B       		.uleb128 0xb
+ 2801 00e4 49       		.uleb128 0x49
+ 2802 00e5 13       		.uleb128 0x13
+ 2803 00e6 02       		.uleb128 0x2
+ 2804 00e7 17       		.uleb128 0x17
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 59
+
+
+ 2805 00e8 00       		.byte	0
+ 2806 00e9 00       		.byte	0
+ 2807 00ea 13       		.uleb128 0x13
+ 2808 00eb 898201   		.uleb128 0x4109
+ 2809 00ee 00       		.byte	0
+ 2810 00ef 11       		.uleb128 0x11
+ 2811 00f0 01       		.uleb128 0x1
+ 2812 00f1 31       		.uleb128 0x31
+ 2813 00f2 13       		.uleb128 0x13
+ 2814 00f3 00       		.byte	0
+ 2815 00f4 00       		.byte	0
+ 2816 00f5 14       		.uleb128 0x14
+ 2817 00f6 898201   		.uleb128 0x4109
+ 2818 00f9 01       		.byte	0x1
+ 2819 00fa 11       		.uleb128 0x11
+ 2820 00fb 01       		.uleb128 0x1
+ 2821 00fc 31       		.uleb128 0x31
+ 2822 00fd 13       		.uleb128 0x13
+ 2823 00fe 01       		.uleb128 0x1
+ 2824 00ff 13       		.uleb128 0x13
+ 2825 0100 00       		.byte	0
+ 2826 0101 00       		.byte	0
+ 2827 0102 15       		.uleb128 0x15
+ 2828 0103 8A8201   		.uleb128 0x410a
+ 2829 0106 00       		.byte	0
+ 2830 0107 02       		.uleb128 0x2
+ 2831 0108 18       		.uleb128 0x18
+ 2832 0109 9142     		.uleb128 0x2111
+ 2833 010b 18       		.uleb128 0x18
+ 2834 010c 00       		.byte	0
+ 2835 010d 00       		.byte	0
+ 2836 010e 16       		.uleb128 0x16
+ 2837 010f 34       		.uleb128 0x34
+ 2838 0110 00       		.byte	0
+ 2839 0111 03       		.uleb128 0x3
+ 2840 0112 0E       		.uleb128 0xe
+ 2841 0113 3A       		.uleb128 0x3a
+ 2842 0114 0B       		.uleb128 0xb
+ 2843 0115 3B       		.uleb128 0x3b
+ 2844 0116 0B       		.uleb128 0xb
+ 2845 0117 49       		.uleb128 0x49
+ 2846 0118 13       		.uleb128 0x13
+ 2847 0119 00       		.byte	0
+ 2848 011a 00       		.byte	0
+ 2849 011b 17       		.uleb128 0x17
+ 2850 011c 898201   		.uleb128 0x4109
+ 2851 011f 01       		.byte	0x1
+ 2852 0120 11       		.uleb128 0x11
+ 2853 0121 01       		.uleb128 0x1
+ 2854 0122 31       		.uleb128 0x31
+ 2855 0123 13       		.uleb128 0x13
+ 2856 0124 00       		.byte	0
+ 2857 0125 00       		.byte	0
+ 2858 0126 18       		.uleb128 0x18
+ 2859 0127 2E       		.uleb128 0x2e
+ 2860 0128 01       		.byte	0x1
+ 2861 0129 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 60
+
+
+ 2862 012a 19       		.uleb128 0x19
+ 2863 012b 03       		.uleb128 0x3
+ 2864 012c 0E       		.uleb128 0xe
+ 2865 012d 3A       		.uleb128 0x3a
+ 2866 012e 0B       		.uleb128 0xb
+ 2867 012f 3B       		.uleb128 0x3b
+ 2868 0130 0B       		.uleb128 0xb
+ 2869 0131 11       		.uleb128 0x11
+ 2870 0132 01       		.uleb128 0x1
+ 2871 0133 12       		.uleb128 0x12
+ 2872 0134 06       		.uleb128 0x6
+ 2873 0135 40       		.uleb128 0x40
+ 2874 0136 18       		.uleb128 0x18
+ 2875 0137 9742     		.uleb128 0x2117
+ 2876 0139 19       		.uleb128 0x19
+ 2877 013a 01       		.uleb128 0x1
+ 2878 013b 13       		.uleb128 0x13
+ 2879 013c 00       		.byte	0
+ 2880 013d 00       		.byte	0
+ 2881 013e 19       		.uleb128 0x19
+ 2882 013f 2E       		.uleb128 0x2e
+ 2883 0140 01       		.byte	0x1
+ 2884 0141 3F       		.uleb128 0x3f
+ 2885 0142 19       		.uleb128 0x19
+ 2886 0143 03       		.uleb128 0x3
+ 2887 0144 0E       		.uleb128 0xe
+ 2888 0145 3A       		.uleb128 0x3a
+ 2889 0146 0B       		.uleb128 0xb
+ 2890 0147 3B       		.uleb128 0x3b
+ 2891 0148 0B       		.uleb128 0xb
+ 2892 0149 49       		.uleb128 0x49
+ 2893 014a 13       		.uleb128 0x13
+ 2894 014b 11       		.uleb128 0x11
+ 2895 014c 01       		.uleb128 0x1
+ 2896 014d 12       		.uleb128 0x12
+ 2897 014e 06       		.uleb128 0x6
+ 2898 014f 40       		.uleb128 0x40
+ 2899 0150 18       		.uleb128 0x18
+ 2900 0151 9742     		.uleb128 0x2117
+ 2901 0153 19       		.uleb128 0x19
+ 2902 0154 01       		.uleb128 0x1
+ 2903 0155 13       		.uleb128 0x13
+ 2904 0156 00       		.byte	0
+ 2905 0157 00       		.byte	0
+ 2906 0158 1A       		.uleb128 0x1a
+ 2907 0159 2E       		.uleb128 0x2e
+ 2908 015a 01       		.byte	0x1
+ 2909 015b 3F       		.uleb128 0x3f
+ 2910 015c 19       		.uleb128 0x19
+ 2911 015d 03       		.uleb128 0x3
+ 2912 015e 0E       		.uleb128 0xe
+ 2913 015f 3A       		.uleb128 0x3a
+ 2914 0160 0B       		.uleb128 0xb
+ 2915 0161 3B       		.uleb128 0x3b
+ 2916 0162 05       		.uleb128 0x5
+ 2917 0163 27       		.uleb128 0x27
+ 2918 0164 19       		.uleb128 0x19
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 61
+
+
+ 2919 0165 11       		.uleb128 0x11
+ 2920 0166 01       		.uleb128 0x1
+ 2921 0167 12       		.uleb128 0x12
+ 2922 0168 06       		.uleb128 0x6
+ 2923 0169 40       		.uleb128 0x40
+ 2924 016a 18       		.uleb128 0x18
+ 2925 016b 9742     		.uleb128 0x2117
+ 2926 016d 19       		.uleb128 0x19
+ 2927 016e 01       		.uleb128 0x1
+ 2928 016f 13       		.uleb128 0x13
+ 2929 0170 00       		.byte	0
+ 2930 0171 00       		.byte	0
+ 2931 0172 1B       		.uleb128 0x1b
+ 2932 0173 34       		.uleb128 0x34
+ 2933 0174 00       		.byte	0
+ 2934 0175 03       		.uleb128 0x3
+ 2935 0176 0E       		.uleb128 0xe
+ 2936 0177 3A       		.uleb128 0x3a
+ 2937 0178 0B       		.uleb128 0xb
+ 2938 0179 3B       		.uleb128 0x3b
+ 2939 017a 05       		.uleb128 0x5
+ 2940 017b 49       		.uleb128 0x49
+ 2941 017c 13       		.uleb128 0x13
+ 2942 017d 02       		.uleb128 0x2
+ 2943 017e 17       		.uleb128 0x17
+ 2944 017f 00       		.byte	0
+ 2945 0180 00       		.byte	0
+ 2946 0181 1C       		.uleb128 0x1c
+ 2947 0182 2E       		.uleb128 0x2e
+ 2948 0183 01       		.byte	0x1
+ 2949 0184 3F       		.uleb128 0x3f
+ 2950 0185 19       		.uleb128 0x19
+ 2951 0186 03       		.uleb128 0x3
+ 2952 0187 0E       		.uleb128 0xe
+ 2953 0188 3A       		.uleb128 0x3a
+ 2954 0189 0B       		.uleb128 0xb
+ 2955 018a 3B       		.uleb128 0x3b
+ 2956 018b 05       		.uleb128 0x5
+ 2957 018c 11       		.uleb128 0x11
+ 2958 018d 01       		.uleb128 0x1
+ 2959 018e 12       		.uleb128 0x12
+ 2960 018f 06       		.uleb128 0x6
+ 2961 0190 40       		.uleb128 0x40
+ 2962 0191 18       		.uleb128 0x18
+ 2963 0192 9742     		.uleb128 0x2117
+ 2964 0194 19       		.uleb128 0x19
+ 2965 0195 01       		.uleb128 0x1
+ 2966 0196 13       		.uleb128 0x13
+ 2967 0197 00       		.byte	0
+ 2968 0198 00       		.byte	0
+ 2969 0199 1D       		.uleb128 0x1d
+ 2970 019a 2E       		.uleb128 0x2e
+ 2971 019b 01       		.byte	0x1
+ 2972 019c 3F       		.uleb128 0x3f
+ 2973 019d 19       		.uleb128 0x19
+ 2974 019e 03       		.uleb128 0x3
+ 2975 019f 0E       		.uleb128 0xe
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 62
+
+
+ 2976 01a0 3A       		.uleb128 0x3a
+ 2977 01a1 0B       		.uleb128 0xb
+ 2978 01a2 3B       		.uleb128 0x3b
+ 2979 01a3 05       		.uleb128 0x5
+ 2980 01a4 27       		.uleb128 0x27
+ 2981 01a5 19       		.uleb128 0x19
+ 2982 01a6 49       		.uleb128 0x49
+ 2983 01a7 13       		.uleb128 0x13
+ 2984 01a8 11       		.uleb128 0x11
+ 2985 01a9 01       		.uleb128 0x1
+ 2986 01aa 12       		.uleb128 0x12
+ 2987 01ab 06       		.uleb128 0x6
+ 2988 01ac 40       		.uleb128 0x40
+ 2989 01ad 18       		.uleb128 0x18
+ 2990 01ae 9742     		.uleb128 0x2117
+ 2991 01b0 19       		.uleb128 0x19
+ 2992 01b1 01       		.uleb128 0x1
+ 2993 01b2 13       		.uleb128 0x13
+ 2994 01b3 00       		.byte	0
+ 2995 01b4 00       		.byte	0
+ 2996 01b5 1E       		.uleb128 0x1e
+ 2997 01b6 34       		.uleb128 0x34
+ 2998 01b7 00       		.byte	0
+ 2999 01b8 03       		.uleb128 0x3
+ 3000 01b9 08       		.uleb128 0x8
+ 3001 01ba 3A       		.uleb128 0x3a
+ 3002 01bb 0B       		.uleb128 0xb
+ 3003 01bc 3B       		.uleb128 0x3b
+ 3004 01bd 05       		.uleb128 0x5
+ 3005 01be 49       		.uleb128 0x49
+ 3006 01bf 13       		.uleb128 0x13
+ 3007 01c0 00       		.byte	0
+ 3008 01c1 00       		.byte	0
+ 3009 01c2 1F       		.uleb128 0x1f
+ 3010 01c3 34       		.uleb128 0x34
+ 3011 01c4 00       		.byte	0
+ 3012 01c5 03       		.uleb128 0x3
+ 3013 01c6 0E       		.uleb128 0xe
+ 3014 01c7 3A       		.uleb128 0x3a
+ 3015 01c8 0B       		.uleb128 0xb
+ 3016 01c9 3B       		.uleb128 0x3b
+ 3017 01ca 05       		.uleb128 0x5
+ 3018 01cb 49       		.uleb128 0x49
+ 3019 01cc 13       		.uleb128 0x13
+ 3020 01cd 1C       		.uleb128 0x1c
+ 3021 01ce 0B       		.uleb128 0xb
+ 3022 01cf 00       		.byte	0
+ 3023 01d0 00       		.byte	0
+ 3024 01d1 20       		.uleb128 0x20
+ 3025 01d2 0B       		.uleb128 0xb
+ 3026 01d3 01       		.byte	0x1
+ 3027 01d4 11       		.uleb128 0x11
+ 3028 01d5 01       		.uleb128 0x1
+ 3029 01d6 12       		.uleb128 0x12
+ 3030 01d7 06       		.uleb128 0x6
+ 3031 01d8 00       		.byte	0
+ 3032 01d9 00       		.byte	0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 63
+
+
+ 3033 01da 21       		.uleb128 0x21
+ 3034 01db 2E       		.uleb128 0x2e
+ 3035 01dc 01       		.byte	0x1
+ 3036 01dd 3F       		.uleb128 0x3f
+ 3037 01de 19       		.uleb128 0x19
+ 3038 01df 03       		.uleb128 0x3
+ 3039 01e0 0E       		.uleb128 0xe
+ 3040 01e1 3A       		.uleb128 0x3a
+ 3041 01e2 0B       		.uleb128 0xb
+ 3042 01e3 3B       		.uleb128 0x3b
+ 3043 01e4 0B       		.uleb128 0xb
+ 3044 01e5 27       		.uleb128 0x27
+ 3045 01e6 19       		.uleb128 0x19
+ 3046 01e7 49       		.uleb128 0x49
+ 3047 01e8 13       		.uleb128 0x13
+ 3048 01e9 11       		.uleb128 0x11
+ 3049 01ea 01       		.uleb128 0x1
+ 3050 01eb 12       		.uleb128 0x12
+ 3051 01ec 06       		.uleb128 0x6
+ 3052 01ed 40       		.uleb128 0x40
+ 3053 01ee 18       		.uleb128 0x18
+ 3054 01ef 9742     		.uleb128 0x2117
+ 3055 01f1 19       		.uleb128 0x19
+ 3056 01f2 01       		.uleb128 0x1
+ 3057 01f3 13       		.uleb128 0x13
+ 3058 01f4 00       		.byte	0
+ 3059 01f5 00       		.byte	0
+ 3060 01f6 22       		.uleb128 0x22
+ 3061 01f7 34       		.uleb128 0x34
+ 3062 01f8 00       		.byte	0
+ 3063 01f9 03       		.uleb128 0x3
+ 3064 01fa 0E       		.uleb128 0xe
+ 3065 01fb 3A       		.uleb128 0x3a
+ 3066 01fc 0B       		.uleb128 0xb
+ 3067 01fd 3B       		.uleb128 0x3b
+ 3068 01fe 0B       		.uleb128 0xb
+ 3069 01ff 49       		.uleb128 0x49
+ 3070 0200 13       		.uleb128 0x13
+ 3071 0201 3F       		.uleb128 0x3f
+ 3072 0202 19       		.uleb128 0x19
+ 3073 0203 3C       		.uleb128 0x3c
+ 3074 0204 19       		.uleb128 0x19
+ 3075 0205 00       		.byte	0
+ 3076 0206 00       		.byte	0
+ 3077 0207 23       		.uleb128 0x23
+ 3078 0208 34       		.uleb128 0x34
+ 3079 0209 00       		.byte	0
+ 3080 020a 03       		.uleb128 0x3
+ 3081 020b 0E       		.uleb128 0xe
+ 3082 020c 3A       		.uleb128 0x3a
+ 3083 020d 0B       		.uleb128 0xb
+ 3084 020e 3B       		.uleb128 0x3b
+ 3085 020f 0B       		.uleb128 0xb
+ 3086 0210 49       		.uleb128 0x49
+ 3087 0211 13       		.uleb128 0x13
+ 3088 0212 3F       		.uleb128 0x3f
+ 3089 0213 19       		.uleb128 0x19
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 64
+
+
+ 3090 0214 02       		.uleb128 0x2
+ 3091 0215 18       		.uleb128 0x18
+ 3092 0216 00       		.byte	0
+ 3093 0217 00       		.byte	0
+ 3094 0218 24       		.uleb128 0x24
+ 3095 0219 01       		.uleb128 0x1
+ 3096 021a 01       		.byte	0x1
+ 3097 021b 49       		.uleb128 0x49
+ 3098 021c 13       		.uleb128 0x13
+ 3099 021d 01       		.uleb128 0x1
+ 3100 021e 13       		.uleb128 0x13
+ 3101 021f 00       		.byte	0
+ 3102 0220 00       		.byte	0
+ 3103 0221 25       		.uleb128 0x25
+ 3104 0222 21       		.uleb128 0x21
+ 3105 0223 00       		.byte	0
+ 3106 0224 49       		.uleb128 0x49
+ 3107 0225 13       		.uleb128 0x13
+ 3108 0226 2F       		.uleb128 0x2f
+ 3109 0227 05       		.uleb128 0x5
+ 3110 0228 00       		.byte	0
+ 3111 0229 00       		.byte	0
+ 3112 022a 26       		.uleb128 0x26
+ 3113 022b 34       		.uleb128 0x34
+ 3114 022c 00       		.byte	0
+ 3115 022d 03       		.uleb128 0x3
+ 3116 022e 08       		.uleb128 0x8
+ 3117 022f 3A       		.uleb128 0x3a
+ 3118 0230 0B       		.uleb128 0xb
+ 3119 0231 3B       		.uleb128 0x3b
+ 3120 0232 0B       		.uleb128 0xb
+ 3121 0233 49       		.uleb128 0x49
+ 3122 0234 13       		.uleb128 0x13
+ 3123 0235 3F       		.uleb128 0x3f
+ 3124 0236 19       		.uleb128 0x19
+ 3125 0237 02       		.uleb128 0x2
+ 3126 0238 18       		.uleb128 0x18
+ 3127 0239 00       		.byte	0
+ 3128 023a 00       		.byte	0
+ 3129 023b 27       		.uleb128 0x27
+ 3130 023c 2E       		.uleb128 0x2e
+ 3131 023d 00       		.byte	0
+ 3132 023e 3F       		.uleb128 0x3f
+ 3133 023f 19       		.uleb128 0x19
+ 3134 0240 03       		.uleb128 0x3
+ 3135 0241 0E       		.uleb128 0xe
+ 3136 0242 3A       		.uleb128 0x3a
+ 3137 0243 0B       		.uleb128 0xb
+ 3138 0244 3B       		.uleb128 0x3b
+ 3139 0245 0B       		.uleb128 0xb
+ 3140 0246 27       		.uleb128 0x27
+ 3141 0247 19       		.uleb128 0x19
+ 3142 0248 3C       		.uleb128 0x3c
+ 3143 0249 19       		.uleb128 0x19
+ 3144 024a 00       		.byte	0
+ 3145 024b 00       		.byte	0
+ 3146 024c 28       		.uleb128 0x28
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 65
+
+
+ 3147 024d 2E       		.uleb128 0x2e
+ 3148 024e 01       		.byte	0x1
+ 3149 024f 3F       		.uleb128 0x3f
+ 3150 0250 19       		.uleb128 0x19
+ 3151 0251 03       		.uleb128 0x3
+ 3152 0252 0E       		.uleb128 0xe
+ 3153 0253 3A       		.uleb128 0x3a
+ 3154 0254 0B       		.uleb128 0xb
+ 3155 0255 3B       		.uleb128 0x3b
+ 3156 0256 0B       		.uleb128 0xb
+ 3157 0257 27       		.uleb128 0x27
+ 3158 0258 19       		.uleb128 0x19
+ 3159 0259 3C       		.uleb128 0x3c
+ 3160 025a 19       		.uleb128 0x19
+ 3161 025b 01       		.uleb128 0x1
+ 3162 025c 13       		.uleb128 0x13
+ 3163 025d 00       		.byte	0
+ 3164 025e 00       		.byte	0
+ 3165 025f 29       		.uleb128 0x29
+ 3166 0260 2E       		.uleb128 0x2e
+ 3167 0261 01       		.byte	0x1
+ 3168 0262 3F       		.uleb128 0x3f
+ 3169 0263 19       		.uleb128 0x19
+ 3170 0264 03       		.uleb128 0x3
+ 3171 0265 0E       		.uleb128 0xe
+ 3172 0266 3A       		.uleb128 0x3a
+ 3173 0267 0B       		.uleb128 0xb
+ 3174 0268 3B       		.uleb128 0x3b
+ 3175 0269 0B       		.uleb128 0xb
+ 3176 026a 27       		.uleb128 0x27
+ 3177 026b 19       		.uleb128 0x19
+ 3178 026c 49       		.uleb128 0x49
+ 3179 026d 13       		.uleb128 0x13
+ 3180 026e 3C       		.uleb128 0x3c
+ 3181 026f 19       		.uleb128 0x19
+ 3182 0270 01       		.uleb128 0x1
+ 3183 0271 13       		.uleb128 0x13
+ 3184 0272 00       		.byte	0
+ 3185 0273 00       		.byte	0
+ 3186 0274 2A       		.uleb128 0x2a
+ 3187 0275 2E       		.uleb128 0x2e
+ 3188 0276 00       		.byte	0
+ 3189 0277 3F       		.uleb128 0x3f
+ 3190 0278 19       		.uleb128 0x19
+ 3191 0279 03       		.uleb128 0x3
+ 3192 027a 0E       		.uleb128 0xe
+ 3193 027b 3A       		.uleb128 0x3a
+ 3194 027c 0B       		.uleb128 0xb
+ 3195 027d 3B       		.uleb128 0x3b
+ 3196 027e 05       		.uleb128 0x5
+ 3197 027f 27       		.uleb128 0x27
+ 3198 0280 19       		.uleb128 0x19
+ 3199 0281 3C       		.uleb128 0x3c
+ 3200 0282 19       		.uleb128 0x19
+ 3201 0283 00       		.byte	0
+ 3202 0284 00       		.byte	0
+ 3203 0285 2B       		.uleb128 0x2b
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 66
+
+
+ 3204 0286 2E       		.uleb128 0x2e
+ 3205 0287 00       		.byte	0
+ 3206 0288 3F       		.uleb128 0x3f
+ 3207 0289 19       		.uleb128 0x19
+ 3208 028a 03       		.uleb128 0x3
+ 3209 028b 0E       		.uleb128 0xe
+ 3210 028c 3A       		.uleb128 0x3a
+ 3211 028d 0B       		.uleb128 0xb
+ 3212 028e 3B       		.uleb128 0x3b
+ 3213 028f 05       		.uleb128 0x5
+ 3214 0290 27       		.uleb128 0x27
+ 3215 0291 19       		.uleb128 0x19
+ 3216 0292 49       		.uleb128 0x49
+ 3217 0293 13       		.uleb128 0x13
+ 3218 0294 3C       		.uleb128 0x3c
+ 3219 0295 19       		.uleb128 0x19
+ 3220 0296 00       		.byte	0
+ 3221 0297 00       		.byte	0
+ 3222 0298 2C       		.uleb128 0x2c
+ 3223 0299 2E       		.uleb128 0x2e
+ 3224 029a 01       		.byte	0x1
+ 3225 029b 3F       		.uleb128 0x3f
+ 3226 029c 19       		.uleb128 0x19
+ 3227 029d 03       		.uleb128 0x3
+ 3228 029e 0E       		.uleb128 0xe
+ 3229 029f 3A       		.uleb128 0x3a
+ 3230 02a0 0B       		.uleb128 0xb
+ 3231 02a1 3B       		.uleb128 0x3b
+ 3232 02a2 05       		.uleb128 0x5
+ 3233 02a3 27       		.uleb128 0x27
+ 3234 02a4 19       		.uleb128 0x19
+ 3235 02a5 3C       		.uleb128 0x3c
+ 3236 02a6 19       		.uleb128 0x19
+ 3237 02a7 01       		.uleb128 0x1
+ 3238 02a8 13       		.uleb128 0x13
+ 3239 02a9 00       		.byte	0
+ 3240 02aa 00       		.byte	0
+ 3241 02ab 2D       		.uleb128 0x2d
+ 3242 02ac 2E       		.uleb128 0x2e
+ 3243 02ad 01       		.byte	0x1
+ 3244 02ae 3F       		.uleb128 0x3f
+ 3245 02af 19       		.uleb128 0x19
+ 3246 02b0 03       		.uleb128 0x3
+ 3247 02b1 0E       		.uleb128 0xe
+ 3248 02b2 3A       		.uleb128 0x3a
+ 3249 02b3 0B       		.uleb128 0xb
+ 3250 02b4 3B       		.uleb128 0x3b
+ 3251 02b5 05       		.uleb128 0x5
+ 3252 02b6 27       		.uleb128 0x27
+ 3253 02b7 19       		.uleb128 0x19
+ 3254 02b8 49       		.uleb128 0x49
+ 3255 02b9 13       		.uleb128 0x13
+ 3256 02ba 3C       		.uleb128 0x3c
+ 3257 02bb 19       		.uleb128 0x19
+ 3258 02bc 01       		.uleb128 0x1
+ 3259 02bd 13       		.uleb128 0x13
+ 3260 02be 00       		.byte	0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 67
+
+
+ 3261 02bf 00       		.byte	0
+ 3262 02c0 2E       		.uleb128 0x2e
+ 3263 02c1 26       		.uleb128 0x26
+ 3264 02c2 00       		.byte	0
+ 3265 02c3 49       		.uleb128 0x49
+ 3266 02c4 13       		.uleb128 0x13
+ 3267 02c5 00       		.byte	0
+ 3268 02c6 00       		.byte	0
+ 3269 02c7 00       		.byte	0
+ 3270              		.section	.debug_loc,"",%progbits
+ 3271              	.Ldebug_loc0:
+ 3272              	.LLST0:
+ 3273 0000 14000000 		.4byte	.LVL3
+ 3274 0004 18000000 		.4byte	.LVL4
+ 3275 0008 0200     		.2byte	0x2
+ 3276 000a 31       		.byte	0x31
+ 3277 000b 9F       		.byte	0x9f
+ 3278 000c 18000000 		.4byte	.LVL4
+ 3279 0010 54000000 		.4byte	.LVL17
+ 3280 0014 0100     		.2byte	0x1
+ 3281 0016 55       		.byte	0x55
+ 3282 0017 00000000 		.4byte	0
+ 3283 001b 00000000 		.4byte	0
+ 3284              	.LLST1:
+ 3285 001f 1C000000 		.4byte	.LVL5
+ 3286 0023 20000000 		.4byte	.LVL6
+ 3287 0027 0200     		.2byte	0x2
+ 3288 0029 31       		.byte	0x31
+ 3289 002a 9F       		.byte	0x9f
+ 3290 002b 20000000 		.4byte	.LVL6
+ 3291 002f 4C000000 		.4byte	.LVL15
+ 3292 0033 0100     		.2byte	0x1
+ 3293 0035 54       		.byte	0x54
+ 3294 0036 00000000 		.4byte	0
+ 3295 003a 00000000 		.4byte	0
+ 3296              	.LLST2:
+ 3297 003e 02000000 		.4byte	.LVL0
+ 3298 0042 18000000 		.4byte	.LVL4
+ 3299 0046 0200     		.2byte	0x2
+ 3300 0048 31       		.byte	0x31
+ 3301 0049 9F       		.byte	0x9f
+ 3302 004a 26000000 		.4byte	.LVL7
+ 3303 004e 38000000 		.4byte	.LVL12
+ 3304 0052 0200     		.2byte	0x2
+ 3305 0054 30       		.byte	0x30
+ 3306 0055 9F       		.byte	0x9f
+ 3307 0056 00000000 		.4byte	0
+ 3308 005a 00000000 		.4byte	0
+ 3309              	.LLST3:
+ 3310 005e 26000000 		.4byte	.LVL7
+ 3311 0062 28000000 		.4byte	.LVL8
+ 3312 0066 0100     		.2byte	0x1
+ 3313 0068 50       		.byte	0x50
+ 3314 0069 00000000 		.4byte	0
+ 3315 006d 00000000 		.4byte	0
+ 3316              	.LLST4:
+ 3317 0071 28000000 		.4byte	.LVL8
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 68
+
+
+ 3318 0075 2E000000 		.4byte	.LVL9
+ 3319 0079 0100     		.2byte	0x1
+ 3320 007b 50       		.byte	0x50
+ 3321 007c 2E000000 		.4byte	.LVL9
+ 3322 0080 31000000 		.4byte	.LVL10-1
+ 3323 0084 0500     		.2byte	0x5
+ 3324 0086 73       		.byte	0x73
+ 3325 0087 00       		.sleb128 0
+ 3326 0088 74       		.byte	0x74
+ 3327 0089 00       		.sleb128 0
+ 3328 008a 22       		.byte	0x22
+ 3329 008b 00000000 		.4byte	0
+ 3330 008f 00000000 		.4byte	0
+ 3331              	.LLST5:
+ 3332 0093 12000000 		.4byte	.LVL20
+ 3333 0097 38000000 		.4byte	.LVL25
+ 3334 009b 0100     		.2byte	0x1
+ 3335 009d 55       		.byte	0x55
+ 3336 009e 00000000 		.4byte	0
+ 3337 00a2 00000000 		.4byte	0
+ 3338              	.LLST6:
+ 3339 00a6 1A000000 		.4byte	.LVL22
+ 3340 00aa 1C000000 		.4byte	.LVL23
+ 3341 00ae 0100     		.2byte	0x1
+ 3342 00b0 53       		.byte	0x53
+ 3343 00b1 1C000000 		.4byte	.LVL23
+ 3344 00b5 2A000000 		.4byte	.LVL24
+ 3345 00b9 0100     		.2byte	0x1
+ 3346 00bb 50       		.byte	0x50
+ 3347 00bc 00000000 		.4byte	0
+ 3348 00c0 00000000 		.4byte	0
+ 3349              	.LLST7:
+ 3350 00c4 0A000000 		.4byte	.LVL49
+ 3351 00c8 28000000 		.4byte	.LVL54
+ 3352 00cc 0100     		.2byte	0x1
+ 3353 00ce 54       		.byte	0x54
+ 3354 00cf 00000000 		.4byte	0
+ 3355 00d3 00000000 		.4byte	0
+ 3356              	.LLST8:
+ 3357 00d7 3A000000 		.4byte	.LVL71
+ 3358 00db 40000000 		.4byte	.LVL73
+ 3359 00df 0200     		.2byte	0x2
+ 3360 00e1 30       		.byte	0x30
+ 3361 00e2 9F       		.byte	0x9f
+ 3362 00e3 40000000 		.4byte	.LVL73
+ 3363 00e7 46000000 		.4byte	.LVL74
+ 3364 00eb 0100     		.2byte	0x1
+ 3365 00ed 50       		.byte	0x50
+ 3366 00ee 50000000 		.4byte	.LVL77
+ 3367 00f2 57000000 		.4byte	.LVL78-1
+ 3368 00f6 0100     		.2byte	0x1
+ 3369 00f8 50       		.byte	0x50
+ 3370 00f9 64000000 		.4byte	.LVL81
+ 3371 00fd 6A000000 		.4byte	.LVL82
+ 3372 0101 0100     		.2byte	0x1
+ 3373 0103 50       		.byte	0x50
+ 3374 0104 7E000000 		.4byte	.LVL87
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 69
+
+
+ 3375 0108 88000000 		.4byte	.LVL88
+ 3376 010c 0100     		.2byte	0x1
+ 3377 010e 50       		.byte	0x50
+ 3378 010f A0000000 		.4byte	.LVL93
+ 3379 0113 A2000000 		.4byte	.LVL94
+ 3380 0117 0100     		.2byte	0x1
+ 3381 0119 50       		.byte	0x50
+ 3382 011a 00000000 		.4byte	0
+ 3383 011e 00000000 		.4byte	0
+ 3384              	.LLST9:
+ 3385 0122 02000000 		.4byte	.LVL99
+ 3386 0126 0E000000 		.4byte	.LVL100
+ 3387 012a 0300     		.2byte	0x3
+ 3388 012c 09       		.byte	0x9
+ 3389 012d FF       		.byte	0xff
+ 3390 012e 9F       		.byte	0x9f
+ 3391 012f 0E000000 		.4byte	.LVL100
+ 3392 0133 36000000 		.4byte	.LVL106
+ 3393 0137 0100     		.2byte	0x1
+ 3394 0139 54       		.byte	0x54
+ 3395 013a 36000000 		.4byte	.LVL106
+ 3396 013e 3A000000 		.4byte	.LVL107
+ 3397 0142 0300     		.2byte	0x3
+ 3398 0144 09       		.byte	0x9
+ 3399 0145 FF       		.byte	0xff
+ 3400 0146 9F       		.byte	0x9f
+ 3401 0147 3A000000 		.4byte	.LVL107
+ 3402 014b 5C000000 		.4byte	.LVL111
+ 3403 014f 0100     		.2byte	0x1
+ 3404 0151 54       		.byte	0x54
+ 3405 0152 00000000 		.4byte	0
+ 3406 0156 00000000 		.4byte	0
+ 3407              	.LLST10:
+ 3408 015a 02000000 		.4byte	.LVL99
+ 3409 015e 0E000000 		.4byte	.LVL100
+ 3410 0162 0200     		.2byte	0x2
+ 3411 0164 30       		.byte	0x30
+ 3412 0165 9F       		.byte	0x9f
+ 3413 0166 0E000000 		.4byte	.LVL100
+ 3414 016a 36000000 		.4byte	.LVL106
+ 3415 016e 0100     		.2byte	0x1
+ 3416 0170 55       		.byte	0x55
+ 3417 0171 36000000 		.4byte	.LVL106
+ 3418 0175 3A000000 		.4byte	.LVL107
+ 3419 0179 0200     		.2byte	0x2
+ 3420 017b 30       		.byte	0x30
+ 3421 017c 9F       		.byte	0x9f
+ 3422 017d 3A000000 		.4byte	.LVL107
+ 3423 0181 3E000000 		.4byte	.LVL108
+ 3424 0185 0100     		.2byte	0x1
+ 3425 0187 55       		.byte	0x55
+ 3426 0188 46000000 		.4byte	.LVL109
+ 3427 018c 5A000000 		.4byte	.LVL110
+ 3428 0190 0200     		.2byte	0x2
+ 3429 0192 30       		.byte	0x30
+ 3430 0193 9F       		.byte	0x9f
+ 3431 0194 00000000 		.4byte	0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 70
+
+
+ 3432 0198 00000000 		.4byte	0
+ 3433              	.LLST11:
+ 3434 019c 06000000 		.4byte	.LVL112
+ 3435 01a0 09000000 		.4byte	.LVL113-1
+ 3436 01a4 0100     		.2byte	0x1
+ 3437 01a6 50       		.byte	0x50
+ 3438 01a7 00000000 		.4byte	0
+ 3439 01ab 00000000 		.4byte	0
+ 3440              		.section	.debug_aranges,"",%progbits
+ 3441 0000 84000000 		.4byte	0x84
+ 3442 0004 0200     		.2byte	0x2
+ 3443 0006 00000000 		.4byte	.Ldebug_info0
+ 3444 000a 04       		.byte	0x4
+ 3445 000b 00       		.byte	0
+ 3446 000c 0000     		.2byte	0
+ 3447 000e 0000     		.2byte	0
+ 3448 0010 00000000 		.4byte	.LFB35
+ 3449 0014 02000000 		.4byte	.LFE35-.LFB35
+ 3450 0018 00000000 		.4byte	.LFB38
+ 3451 001c 60000000 		.4byte	.LFE38-.LFB38
+ 3452 0020 00000000 		.4byte	.LFB39
+ 3453 0024 44000000 		.4byte	.LFE39-.LFB39
+ 3454 0028 00000000 		.4byte	.LFB40
+ 3455 002c 18000000 		.4byte	.LFE40-.LFB40
+ 3456 0030 00000000 		.4byte	.LFB36
+ 3457 0034 5C000000 		.4byte	.LFE36-.LFB36
+ 3458 0038 00000000 		.4byte	.LFB41
+ 3459 003c 4C000000 		.4byte	.LFE41-.LFB41
+ 3460 0040 00000000 		.4byte	.LFB37
+ 3461 0044 44000000 		.4byte	.LFE37-.LFB37
+ 3462 0048 00000000 		.4byte	.LFB45
+ 3463 004c 38000000 		.4byte	.LFE45-.LFB45
+ 3464 0050 00000000 		.4byte	.LFB46
+ 3465 0054 1C000000 		.4byte	.LFE46-.LFB46
+ 3466 0058 00000000 		.4byte	.LFB48
+ 3467 005c 0E000000 		.4byte	.LFE48-.LFB48
+ 3468 0060 00000000 		.4byte	.LFB47
+ 3469 0064 20000000 		.4byte	.LFE47-.LFB47
+ 3470 0068 00000000 		.4byte	.LFB42
+ 3471 006c E8000000 		.4byte	.LFE42-.LFB42
+ 3472 0070 00000000 		.4byte	.LFB43
+ 3473 0074 6C000000 		.4byte	.LFE43-.LFB43
+ 3474 0078 00000000 		.4byte	.LFB44
+ 3475 007c 1C000000 		.4byte	.LFE44-.LFB44
+ 3476 0080 00000000 		.4byte	0
+ 3477 0084 00000000 		.4byte	0
+ 3478              		.section	.debug_ranges,"",%progbits
+ 3479              	.Ldebug_ranges0:
+ 3480 0000 00000000 		.4byte	.LFB35
+ 3481 0004 02000000 		.4byte	.LFE35
+ 3482 0008 00000000 		.4byte	.LFB38
+ 3483 000c 60000000 		.4byte	.LFE38
+ 3484 0010 00000000 		.4byte	.LFB39
+ 3485 0014 44000000 		.4byte	.LFE39
+ 3486 0018 00000000 		.4byte	.LFB40
+ 3487 001c 18000000 		.4byte	.LFE40
+ 3488 0020 00000000 		.4byte	.LFB36
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 71
+
+
+ 3489 0024 5C000000 		.4byte	.LFE36
+ 3490 0028 00000000 		.4byte	.LFB41
+ 3491 002c 4C000000 		.4byte	.LFE41
+ 3492 0030 00000000 		.4byte	.LFB37
+ 3493 0034 44000000 		.4byte	.LFE37
+ 3494 0038 00000000 		.4byte	.LFB45
+ 3495 003c 38000000 		.4byte	.LFE45
+ 3496 0040 00000000 		.4byte	.LFB46
+ 3497 0044 1C000000 		.4byte	.LFE46
+ 3498 0048 00000000 		.4byte	.LFB48
+ 3499 004c 0E000000 		.4byte	.LFE48
+ 3500 0050 00000000 		.4byte	.LFB47
+ 3501 0054 20000000 		.4byte	.LFE47
+ 3502 0058 00000000 		.4byte	.LFB42
+ 3503 005c E8000000 		.4byte	.LFE42
+ 3504 0060 00000000 		.4byte	.LFB43
+ 3505 0064 6C000000 		.4byte	.LFE43
+ 3506 0068 00000000 		.4byte	.LFB44
+ 3507 006c 1C000000 		.4byte	.LFE44
+ 3508 0070 00000000 		.4byte	0
+ 3509 0074 00000000 		.4byte	0
+ 3510              		.section	.debug_line,"",%progbits
+ 3511              	.Ldebug_line0:
+ 3512 0000 08030000 		.section	.debug_str,"MS",%progbits,1
+ 3512      02003B01 
+ 3512      00000201 
+ 3512      FB0E0D00 
+ 3512      01010101 
+ 3513              	.LASF70:
+ 3514 0000 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_RX_CREDIT_IND\000"
+ 3514      455F4556 
+ 3514      545F4C32 
+ 3514      4341505F 
+ 3514      43424643 
+ 3515              	.LASF24:
+ 3516 0023 4359424C 		.ascii	"CYBLE_EVT_STACK_BUSY_STATUS\000"
+ 3516      455F4556 
+ 3516      545F5354 
+ 3516      41434B5F 
+ 3516      42555359 
+ 3517              	.LASF10:
+ 3518 003f 75696E74 		.ascii	"uint16\000"
+ 3518      313600
+ 3519              	.LASF109:
+ 3520 0046 53656E50 		.ascii	"SenPixelsShowUp\000"
+ 3520      6978656C 
+ 3520      7353686F 
+ 3520      77557000 
+ 3521              	.LASF149:
+ 3522 0056 53656E54 		.ascii	"SenTimerISR_StartEx\000"
+ 3522      696D6572 
+ 3522      4953525F 
+ 3522      53746172 
+ 3522      74457800 
+ 3523              	.LASF79:
+ 3524 006a 4359424C 		.ascii	"CYBLE_ERROR_MEMORY_ALLOCATION_FAILED\000"
+ 3524      455F4552 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 72
+
+
+ 3524      524F525F 
+ 3524      4D454D4F 
+ 3524      52595F41 
+ 3525              	.LASF157:
+ 3526 008f 50724953 		.ascii	"PrISM_2_WritePulse0\000"
+ 3526      4D5F325F 
+ 3526      57726974 
+ 3526      6550756C 
+ 3526      73653000 
+ 3527              	.LASF66:
+ 3528 00a3 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_CONN_CNF\000"
+ 3528      455F4556 
+ 3528      545F4C32 
+ 3528      4341505F 
+ 3528      43424643 
+ 3529              	.LASF35:
+ 3530 00c1 4359424C 		.ascii	"CYBLE_EVT_GAP_CONNECTION_UPDATE_COMPLETE\000"
+ 3530      455F4556 
+ 3530      545F4741 
+ 3530      505F434F 
+ 3530      4E4E4543 
+ 3531              	.LASF68:
+ 3532 00ea 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DISCONN_CNF\000"
+ 3532      455F4556 
+ 3532      545F4C32 
+ 3532      4341505F 
+ 3532      43424643 
+ 3533              	.LASF101:
+ 3534 010b 4359424C 		.ascii	"CYBLE_ERROR_IND_DISABLED\000"
+ 3534      455F4552 
+ 3534      524F525F 
+ 3534      494E445F 
+ 3534      44495341 
+ 3535              	.LASF150:
+ 3536 0124 53656E54 		.ascii	"SenTimer_Start\000"
+ 3536      696D6572 
+ 3536      5F537461 
+ 3536      727400
+ 3537              	.LASF49:
+ 3538 0133 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_MULTI_RSP\000"
+ 3538      455F4556 
+ 3538      545F4741 
+ 3538      5454435F 
+ 3538      52454144 
+ 3539              	.LASF176:
+ 3540 0152 53656E43 		.ascii	"SenContinueMotionBurst\000"
+ 3540      6F6E7469 
+ 3540      6E75654D 
+ 3540      6F74696F 
+ 3540      6E427572 
+ 3541              	.LASF170:
+ 3542 0169 53656E43 		.ascii	"SenChipSelect\000"
+ 3542      68697053 
+ 3542      656C6563 
+ 3542      7400
+ 3543              	.LASF21:
+ 3544 0177 4359424C 		.ascii	"CYBLE_EVT_TIMEOUT\000"
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 73
+
+
+ 3544      455F4556 
+ 3544      545F5449 
+ 3544      4D454F55 
+ 3544      5400
+ 3545              	.LASF4:
+ 3546 0189 6C6F6E67 		.ascii	"long int\000"
+ 3546      20696E74 
+ 3546      00
+ 3547              	.LASF120:
+ 3548 0192 53656E49 		.ascii	"SenImageDisplay\000"
+ 3548      6D616765 
+ 3548      44697370 
+ 3548      6C617900 
+ 3549              	.LASF89:
+ 3550 01a2 4359424C 		.ascii	"CYBLE_ERROR_L2CAP_PSM_WRONG_ENCODING\000"
+ 3550      455F4552 
+ 3550      524F525F 
+ 3550      4C324341 
+ 3550      505F5053 
+ 3551              	.LASF80:
+ 3552 01c7 4359424C 		.ascii	"CYBLE_ERROR_INSUFFICIENT_RESOURCES\000"
+ 3552      455F4552 
+ 3552      524F525F 
+ 3552      494E5355 
+ 3552      46464943 
+ 3553              	.LASF127:
+ 3554 01ea 696E6974 		.ascii	"initialConfirmCount\000"
+ 3554      69616C43 
+ 3554      6F6E6669 
+ 3554      726D436F 
+ 3554      756E7400 
+ 3555              	.LASF36:
+ 3556 01fe 4359424C 		.ascii	"CYBLE_EVT_GAPC_SCAN_START_STOP\000"
+ 3556      455F4556 
+ 3556      545F4741 
+ 3556      50435F53 
+ 3556      43414E5F 
+ 3557              	.LASF73:
+ 3558 021d 4359424C 		.ascii	"CYBLE_EVT_PENDING_FLASH_WRITE\000"
+ 3558      455F4556 
+ 3558      545F5045 
+ 3558      4E44494E 
+ 3558      475F464C 
+ 3559              	.LASF88:
+ 3560 023b 4359424C 		.ascii	"CYBLE_ERROR_SEC_FAILED\000"
+ 3560      455F4552 
+ 3560      524F525F 
+ 3560      5345435F 
+ 3560      4641494C 
+ 3561              	.LASF114:
+ 3562 0252 496E7465 		.ascii	"InterruptHandler\000"
+ 3562      72727570 
+ 3562      7448616E 
+ 3562      646C6572 
+ 3562      00
+ 3563              	.LASF34:
+ 3564 0263 4359424C 		.ascii	"CYBLE_EVT_GAP_ENCRYPT_CHANGE\000"
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 74
+
+
+ 3564      455F4556 
+ 3564      545F4741 
+ 3564      505F454E 
+ 3564      43525950 
+ 3565              	.LASF161:
+ 3566 0280 5350495F 		.ascii	"SPI_Master_Enable\000"
+ 3566      4D617374 
+ 3566      65725F45 
+ 3566      6E61626C 
+ 3566      6500
+ 3567              	.LASF167:
+ 3568 0292 55415254 		.ascii	"UART_SpiUartGetRxBufferSize\000"
+ 3568      5F537069 
+ 3568      55617274 
+ 3568      47657452 
+ 3568      78427566 
+ 3569              	.LASF71:
+ 3570 02ae 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_TX_CREDIT_IND\000"
+ 3570      455F4556 
+ 3570      545F4C32 
+ 3570      4341505F 
+ 3570      43424643 
+ 3571              	.LASF6:
+ 3572 02d1 6C6F6E67 		.ascii	"long long int\000"
+ 3572      206C6F6E 
+ 3572      6720696E 
+ 3572      7400
+ 3573              	.LASF0:
+ 3574 02df 7369676E 		.ascii	"signed char\000"
+ 3574      65642063 
+ 3574      68617200 
+ 3575              	.LASF20:
+ 3576 02eb 4359424C 		.ascii	"CYBLE_EVT_STACK_ON\000"
+ 3576      455F4556 
+ 3576      545F5354 
+ 3576      41434B5F 
+ 3576      4F4E00
+ 3577              	.LASF123:
+ 3578 02fe 6C6F6F70 		.ascii	"loop\000"
+ 3578      00
+ 3579              	.LASF154:
+ 3580 0303 50724953 		.ascii	"PrISM_2_Start\000"
+ 3580      4D5F325F 
+ 3580      53746172 
+ 3580      7400
+ 3581              	.LASF83:
+ 3582 0311 4359424C 		.ascii	"CYBLE_ERROR_NO_DEVICE_ENTITY\000"
+ 3582      455F4552 
+ 3582      524F525F 
+ 3582      4E4F5F44 
+ 3582      45564943 
+ 3583              	.LASF26:
+ 3584 032e 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_REQ\000"
+ 3584      455F4556 
+ 3584      545F4741 
+ 3584      505F4155 
+ 3584      54485F52 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 75
+
+
+ 3585              	.LASF47:
+ 3586 0345 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_RSP\000"
+ 3586      455F4556 
+ 3586      545F4741 
+ 3586      5454435F 
+ 3586      52454144 
+ 3587              	.LASF103:
+ 3588 035e 4359424C 		.ascii	"CYBLE_ERROR_INVALID_STATE\000"
+ 3588      455F4552 
+ 3588      524F525F 
+ 3588      494E5641 
+ 3588      4C49445F 
+ 3589              	.LASF19:
+ 3590 0378 4359424C 		.ascii	"CYBLE_EVT_HOST_INVALID\000"
+ 3590      455F4556 
+ 3590      545F484F 
+ 3590      53545F49 
+ 3590      4E56414C 
+ 3591              	.LASF52:
+ 3592 038f 4359424C 		.ascii	"CYBLE_EVT_GATTS_WRITE_CMD_REQ\000"
+ 3592      455F4556 
+ 3592      545F4741 
+ 3592      5454535F 
+ 3592      57524954 
+ 3593              	.LASF148:
+ 3594 03ad 53656E54 		.ascii	"SenTimer_ClearInterrupt\000"
+ 3594      696D6572 
+ 3594      5F436C65 
+ 3594      6172496E 
+ 3594      74657272 
+ 3595              	.LASF31:
+ 3596 03c5 4359424C 		.ascii	"CYBLE_EVT_GAPP_ADVERTISEMENT_START_STOP\000"
+ 3596      455F4556 
+ 3596      545F4741 
+ 3596      50505F41 
+ 3596      44564552 
+ 3597              	.LASF94:
+ 3598 03ed 4359424C 		.ascii	"CYBLE_ERROR_L2CAP_PSM_NOT_IN_RANGE\000"
+ 3598      455F4552 
+ 3598      524F525F 
+ 3598      4C324341 
+ 3598      505F5053 
+ 3599              	.LASF9:
+ 3600 0410 75696E74 		.ascii	"uint8\000"
+ 3600      3800
+ 3601              	.LASF55:
+ 3602 0416 4359424C 		.ascii	"CYBLE_EVT_GATTC_EXEC_WRITE_RSP\000"
+ 3602      455F4556 
+ 3602      545F4741 
+ 3602      5454435F 
+ 3602      45584543 
+ 3603              	.LASF14:
+ 3604 0435 646F7562 		.ascii	"double\000"
+ 3604      6C6500
+ 3605              	.LASF125:
+ 3606 043c 55415254 		.ascii	"UART_ReadAvailableCheck\000"
+ 3606      5F526561 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 76
+
+
+ 3606      64417661 
+ 3606      696C6162 
+ 3606      6C654368 
+ 3607              	.LASF77:
+ 3608 0454 4359424C 		.ascii	"CYBLE_ERROR_INVALID_PARAMETER\000"
+ 3608      455F4552 
+ 3608      524F525F 
+ 3608      494E5641 
+ 3608      4C49445F 
+ 3609              	.LASF172:
+ 3610 0472 55415254 		.ascii	"UART_UartGetByte\000"
+ 3610      5F556172 
+ 3610      74476574 
+ 3610      42797465 
+ 3610      00
+ 3611              	.LASF11:
+ 3612 0483 75696E74 		.ascii	"uint32\000"
+ 3612      333200
+ 3613              	.LASF72:
+ 3614 048a 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DATA_WRITE_IND\000"
+ 3614      455F4556 
+ 3614      545F4C32 
+ 3614      4341505F 
+ 3614      43424643 
+ 3615              	.LASF147:
+ 3616 04ae 53656E64 		.ascii	"SendDataOverSenMotionBurstNotification\000"
+ 3616      44617461 
+ 3616      4F766572 
+ 3616      53656E4D 
+ 3616      6F74696F 
+ 3617              	.LASF75:
+ 3618 04d5 4359424C 		.ascii	"CYBLE_EVT_MAX\000"
+ 3618      455F4556 
+ 3618      545F4D41 
+ 3618      5800
+ 3619              	.LASF76:
+ 3620 04e3 4359424C 		.ascii	"CYBLE_ERROR_OK\000"
+ 3620      455F4552 
+ 3620      524F525F 
+ 3620      4F4B00
+ 3621              	.LASF38:
+ 3622 04f2 4359424C 		.ascii	"CYBLE_EVT_GATTC_ERROR_RSP\000"
+ 3622      455F4556 
+ 3622      545F4741 
+ 3622      5454435F 
+ 3622      4552524F 
+ 3623              	.LASF62:
+ 3624 050c 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CONN_PARAM_UPDATE_REQ\000"
+ 3624      455F4556 
+ 3624      545F4C32 
+ 3624      4341505F 
+ 3624      434F4E4E 
+ 3625              	.LASF107:
+ 3626 0532 72656756 		.ascii	"regValue\000"
+ 3626      616C7565 
+ 3626      00
+ 3627              	.LASF37:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 77
+
+
+ 3628 053b 4359424C 		.ascii	"CYBLE_EVT_GAP_KEYINFO_EXCHNGE_CMPLT\000"
+ 3628      455F4556 
+ 3628      545F4741 
+ 3628      505F4B45 
+ 3628      59494E46 
+ 3629              	.LASF7:
+ 3630 055f 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 3630      206C6F6E 
+ 3630      6720756E 
+ 3630      7369676E 
+ 3630      65642069 
+ 3631              	.LASF134:
+ 3632 0576 496E7465 		.ascii	"InterruptHpn\000"
+ 3632      72727570 
+ 3632      7448706E 
+ 3632      00
+ 3633              	.LASF60:
+ 3634 0583 4359424C 		.ascii	"CYBLE_EVT_GATTC_STOP_CMD_COMPLETE\000"
+ 3634      455F4556 
+ 3634      545F4741 
+ 3634      5454435F 
+ 3634      53544F50 
+ 3635              	.LASF81:
+ 3636 05a5 4359424C 		.ascii	"CYBLE_ERROR_OOB_NOT_AVAILABLE\000"
+ 3636      455F4552 
+ 3636      524F525F 
+ 3636      4F4F425F 
+ 3636      4E4F545F 
+ 3637              	.LASF74:
+ 3638 05c3 4359424C 		.ascii	"CYBLE_EVT_LE_PING_AUTH_TIMEOUT\000"
+ 3638      455F4556 
+ 3638      545F4C45 
+ 3638      5F50494E 
+ 3638      475F4155 
+ 3639              	.LASF135:
+ 3640 05e2 64656C74 		.ascii	"delta_X\000"
+ 3640      615F5800 
+ 3641              	.LASF136:
+ 3642 05ea 64656C74 		.ascii	"delta_Y\000"
+ 3642      615F5900 
+ 3643              	.LASF164:
+ 3644 05f2 55415254 		.ascii	"UART_UartPutString\000"
+ 3644      5F556172 
+ 3644      74507574 
+ 3644      53747269 
+ 3644      6E6700
+ 3645              	.LASF90:
+ 3646 0605 4359424C 		.ascii	"CYBLE_ERROR_L2CAP_PSM_ALREADY_REGISTERED\000"
+ 3646      455F4552 
+ 3646      524F525F 
+ 3646      4C324341 
+ 3646      505F5053 
+ 3647              	.LASF5:
+ 3648 062e 6C6F6E67 		.ascii	"long unsigned int\000"
+ 3648      20756E73 
+ 3648      69676E65 
+ 3648      6420696E 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 78
+
+
+ 3648      7400
+ 3649              	.LASF50:
+ 3650 0640 4359424C 		.ascii	"CYBLE_EVT_GATTS_WRITE_REQ\000"
+ 3650      455F4556 
+ 3650      545F4741 
+ 3650      5454535F 
+ 3650      57524954 
+ 3651              	.LASF42:
+ 3652 065a 4359424C 		.ascii	"CYBLE_EVT_GATTC_XCHNG_MTU_RSP\000"
+ 3652      455F4556 
+ 3652      545F4741 
+ 3652      5454435F 
+ 3652      5843484E 
+ 3653              	.LASF59:
+ 3654 0678 4359424C 		.ascii	"CYBLE_EVT_GATTS_DATA_SIGNED_CMD_REQ\000"
+ 3654      455F4556 
+ 3654      545F4741 
+ 3654      5454535F 
+ 3654      44415441 
+ 3655              	.LASF93:
+ 3656 069c 4359424C 		.ascii	"CYBLE_ERROR_L2CAP_CHANNEL_NOT_FOUND\000"
+ 3656      455F4552 
+ 3656      524F525F 
+ 3656      4C324341 
+ 3656      505F4348 
+ 3657              	.LASF100:
+ 3658 06c0 4359424C 		.ascii	"CYBLE_ERROR_NTF_DISABLED\000"
+ 3658      455F4552 
+ 3658      524F525F 
+ 3658      4E54465F 
+ 3658      44495341 
+ 3659              	.LASF132:
+ 3660 06d9 6D6F7469 		.ascii	"motionReadTimes\000"
+ 3660      6F6E5265 
+ 3660      61645469 
+ 3660      6D657300 
+ 3661              	.LASF45:
+ 3662 06e9 4359424C 		.ascii	"CYBLE_EVT_GATTC_FIND_INFO_RSP\000"
+ 3662      455F4556 
+ 3662      545F4741 
+ 3662      5454435F 
+ 3662      46494E44 
+ 3663              	.LASF155:
+ 3664 0707 50724953 		.ascii	"PrISM_1_WritePulse0\000"
+ 3664      4D5F315F 
+ 3664      57726974 
+ 3664      6550756C 
+ 3664      73653000 
+ 3665              	.LASF12:
+ 3666 071b 696E7438 		.ascii	"int8\000"
+ 3666      00
+ 3667              	.LASF54:
+ 3668 0720 4359424C 		.ascii	"CYBLE_EVT_GATTS_EXEC_WRITE_REQ\000"
+ 3668      455F4556 
+ 3668      545F4741 
+ 3668      5454535F 
+ 3668      45584543 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 79
+
+
+ 3669              	.LASF69:
+ 3670 073f 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DATA_READ\000"
+ 3670      455F4556 
+ 3670      545F4C32 
+ 3670      4341505F 
+ 3670      43424643 
+ 3671              	.LASF27:
+ 3672 075e 4359424C 		.ascii	"CYBLE_EVT_GAP_PASSKEY_ENTRY_REQUEST\000"
+ 3672      455F4556 
+ 3672      545F4741 
+ 3672      505F5041 
+ 3672      53534B45 
+ 3673              	.LASF32:
+ 3674 0782 4359424C 		.ascii	"CYBLE_EVT_GAP_DEVICE_CONNECTED\000"
+ 3674      455F4556 
+ 3674      545F4741 
+ 3674      505F4445 
+ 3674      56494345 
+ 3675              	.LASF117:
+ 3676 07a1 53656E53 		.ascii	"SenShowSetupData\000"
+ 3676      686F7753 
+ 3676      65747570 
+ 3676      44617461 
+ 3676      00
+ 3677              	.LASF122:
+ 3678 07b2 62757273 		.ascii	"burstCount\000"
+ 3678      74436F75 
+ 3678      6E7400
+ 3679              	.LASF138:
+ 3680 07bd 50697865 		.ascii	"Pixels18Array\000"
+ 3680      6C733138 
+ 3680      41727261 
+ 3680      7900
+ 3681              	.LASF152:
+ 3682 07cb 4379426C 		.ascii	"CyBle_Start\000"
+ 3682      655F5374 
+ 3682      61727400 
+ 3683              	.LASF28:
+ 3684 07d7 4359424C 		.ascii	"CYBLE_EVT_GAP_PASSKEY_DISPLAY_REQUEST\000"
+ 3684      455F4556 
+ 3684      545F4741 
+ 3684      505F5041 
+ 3684      53534B45 
+ 3685              	.LASF39:
+ 3686 07fd 4359424C 		.ascii	"CYBLE_EVT_GATT_CONNECT_IND\000"
+ 3686      455F4556 
+ 3686      545F4741 
+ 3686      54545F43 
+ 3686      4F4E4E45 
+ 3687              	.LASF64:
+ 3688 0818 4359424C 		.ascii	"CYBLE_EVT_L2CAP_COMMAND_REJ\000"
+ 3688      455F4556 
+ 3688      545F4C32 
+ 3688      4341505F 
+ 3688      434F4D4D 
+ 3689              	.LASF25:
+ 3690 0834 4359424C 		.ascii	"CYBLE_EVT_GAPC_SCAN_PROGRESS_RESULT\000"
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 80
+
+
+ 3690      455F4556 
+ 3690      545F4741 
+ 3690      50435F53 
+ 3690      43414E5F 
+ 3691              	.LASF108:
+ 3692 0858 70697865 		.ascii	"pixelValue\000"
+ 3692      6C56616C 
+ 3692      756500
+ 3693              	.LASF99:
+ 3694 0863 4359424C 		.ascii	"CYBLE_ERROR_MAX\000"
+ 3694      455F4552 
+ 3694      524F525F 
+ 3694      4D415800 
+ 3695              	.LASF65:
+ 3696 0873 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_CONN_IND\000"
+ 3696      455F4556 
+ 3696      545F4C32 
+ 3696      4341505F 
+ 3696      43424643 
+ 3697              	.LASF44:
+ 3698 0891 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BY_TYPE_RSP\000"
+ 3698      455F4556 
+ 3698      545F4741 
+ 3698      5454435F 
+ 3698      52454144 
+ 3699              	.LASF18:
+ 3700 08b2 73697A65 		.ascii	"sizetype\000"
+ 3700      74797065 
+ 3700      00
+ 3701              	.LASF30:
+ 3702 08bb 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_FAILED\000"
+ 3702      455F4556 
+ 3702      545F4741 
+ 3702      505F4155 
+ 3702      54485F46 
+ 3703              	.LASF51:
+ 3704 08d5 4359424C 		.ascii	"CYBLE_EVT_GATTC_WRITE_RSP\000"
+ 3704      455F4556 
+ 3704      545F4741 
+ 3704      5454435F 
+ 3704      57524954 
+ 3705              	.LASF171:
+ 3706 08ef 55415254 		.ascii	"UART_SpiUartWriteTxData\000"
+ 3706      5F537069 
+ 3706      55617274 
+ 3706      57726974 
+ 3706      65547844 
+ 3707              	.LASF129:
+ 3708 0907 64657669 		.ascii	"deviceConnected\000"
+ 3708      6365436F 
+ 3708      6E6E6563 
+ 3708      74656400 
+ 3709              	.LASF23:
+ 3710 0917 4359424C 		.ascii	"CYBLE_EVT_HCI_STATUS\000"
+ 3710      455F4556 
+ 3710      545F4843 
+ 3710      495F5354 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 81
+
+
+ 3710      41545553 
+ 3711              	.LASF145:
+ 3712 092c 4379426C 		.ascii	"CyBle_ProcessEvents\000"
+ 3712      655F5072 
+ 3712      6F636573 
+ 3712      73457665 
+ 3712      6E747300 
+ 3713              	.LASF146:
+ 3714 0940 53656E64 		.ascii	"Send18ArrayDataOverSenImageBurstNotification\000"
+ 3714      31384172 
+ 3714      72617944 
+ 3714      6174614F 
+ 3714      76657253 
+ 3715              	.LASF110:
+ 3716 096d 53656E52 		.ascii	"SenReadCoodinataData\000"
+ 3716      65616443 
+ 3716      6F6F6469 
+ 3716      6E617461 
+ 3716      44617461 
+ 3717              	.LASF175:
+ 3718 0982 433A5C55 		.ascii	"C:\\Users\\liziy\\Desktop\\62_SenBlePSoC_AbandonSer"
+ 3718      73657273 
+ 3718      5C6C697A 
+ 3718      69795C44 
+ 3718      65736B74 
+ 3719 09b1 69616C44 		.ascii	"ialDialogUI_Perfect\\PSoC_Ble\\04_SenOpticalFlowPix"
+ 3719      69616C6F 
+ 3719      6755495F 
+ 3719      50657266 
+ 3719      6563745C 
+ 3720 09e2 656C734F 		.ascii	"elsOTA _ Refine\\SenOpticalFlowPixelsOTA.cydsn\000"
+ 3720      5441205F 
+ 3720      20526566 
+ 3720      696E655C 
+ 3720      53656E4F 
+ 3721              	.LASF104:
+ 3722 0a10 4359424C 		.ascii	"CYBLE_API_RESULT_T\000"
+ 3722      455F4150 
+ 3722      495F5245 
+ 3722      53554C54 
+ 3722      5F5400
+ 3723              	.LASF56:
+ 3724 0a23 4359424C 		.ascii	"CYBLE_EVT_GATTC_HANDLE_VALUE_NTF\000"
+ 3724      455F4556 
+ 3724      545F4741 
+ 3724      5454435F 
+ 3724      48414E44 
+ 3725              	.LASF29:
+ 3726 0a44 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_COMPLETE\000"
+ 3726      455F4556 
+ 3726      545F4741 
+ 3726      505F4155 
+ 3726      54485F43 
+ 3727              	.LASF121:
+ 3728 0a60 53656E43 		.ascii	"SenContinuousImageDisplay\000"
+ 3728      6F6E7469 
+ 3728      6E756F75 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 82
+
+
+ 3728      73496D61 
+ 3728      67654469 
+ 3729              	.LASF128:
+ 3730 0a7a 53656E45 		.ascii	"SenEcho\000"
+ 3730      63686F00 
+ 3731              	.LASF118:
+ 3732 0a82 70726F64 		.ascii	"productID\000"
+ 3732      75637449 
+ 3732      4400
+ 3733              	.LASF111:
+ 3734 0a8c 6E65774D 		.ascii	"newMotion\000"
+ 3734      6F74696F 
+ 3734      6E00
+ 3735              	.LASF43:
+ 3736 0a96 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BY_GROUP_TYPE_RSP\000"
+ 3736      455F4556 
+ 3736      545F4741 
+ 3736      5454435F 
+ 3736      52454144 
+ 3737              	.LASF13:
+ 3738 0abd 666C6F61 		.ascii	"float\000"
+ 3738      7400
+ 3739              	.LASF133:
+ 3740 0ac3 6D6F7469 		.ascii	"motionAccumulation\000"
+ 3740      6F6E4163 
+ 3740      63756D75 
+ 3740      6C617469 
+ 3740      6F6E00
+ 3741              	.LASF165:
+ 3742 0ad6 53656E55 		.ascii	"SenUartPutHexDecimalByte\000"
+ 3742      61727450 
+ 3742      75744865 
+ 3742      78446563 
+ 3742      696D616C 
+ 3743              	.LASF144:
+ 3744 0aef 53656E52 		.ascii	"SenReset\000"
+ 3744      65736574 
+ 3744      00
+ 3745              	.LASF86:
+ 3746 0af8 4359424C 		.ascii	"CYBLE_ERROR_TX_POWER_READ\000"
+ 3746      455F4552 
+ 3746      524F525F 
+ 3746      54585F50 
+ 3746      4F574552 
+ 3747              	.LASF102:
+ 3748 0b12 4359424C 		.ascii	"CYBLE_ERROR_CHAR_IS_NOT_DISCOVERED\000"
+ 3748      455F4552 
+ 3748      524F525F 
+ 3748      43484152 
+ 3748      5F49535F 
+ 3749              	.LASF168:
+ 3750 0b35 5350495F 		.ascii	"SPI_Master_SpiUartClearTxBuffer\000"
+ 3750      4D617374 
+ 3750      65725F53 
+ 3750      70695561 
+ 3750      7274436C 
+ 3751              	.LASF119:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 83
+
+
+ 3752 0b55 53656E4D 		.ascii	"SenMotionBurstHandler\000"
+ 3752      6F74696F 
+ 3752      6E427572 
+ 3752      73744861 
+ 3752      6E646C65 
+ 3753              	.LASF153:
+ 3754 0b6b 50724953 		.ascii	"PrISM_1_Start\000"
+ 3754      4D5F315F 
+ 3754      53746172 
+ 3754      7400
+ 3755              	.LASF173:
+ 3756 0b79 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 3756      4320342E 
+ 3756      392E3320 
+ 3756      32303135 
+ 3756      30333033 
+ 3757 0bac 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 3757      20726576 
+ 3757      6973696F 
+ 3757      6E203232 
+ 3757      31323230 
+ 3758 0bdf 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 3758      66756E63 
+ 3758      74696F6E 
+ 3758      2D736563 
+ 3758      74696F6E 
+ 3759              	.LASF142:
+ 3760 0c07 53656E57 		.ascii	"SenWriteReg\000"
+ 3760      72697465 
+ 3760      52656700 
+ 3761              	.LASF2:
+ 3762 0c13 73686F72 		.ascii	"short int\000"
+ 3762      7420696E 
+ 3762      7400
+ 3763              	.LASF162:
+ 3764 0c1d 5350495F 		.ascii	"SPI_Master_Start\000"
+ 3764      4D617374 
+ 3764      65725F53 
+ 3764      74617274 
+ 3764      00
+ 3765              	.LASF82:
+ 3766 0c2e 4359424C 		.ascii	"CYBLE_ERROR_NO_CONNECTION\000"
+ 3766      455F4552 
+ 3766      524F525F 
+ 3766      4E4F5F43 
+ 3766      4F4E4E45 
+ 3767              	.LASF139:
+ 3768 0c48 6D6F7469 		.ascii	"motionBurstCount\000"
+ 3768      6F6E4275 
+ 3768      72737443 
+ 3768      6F756E74 
+ 3768      00
+ 3769              	.LASF159:
+ 3770 0c59 47524545 		.ascii	"GREEN_SetDriveMode\000"
+ 3770      4E5F5365 
+ 3770      74447269 
+ 3770      76654D6F 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 84
+
+
+ 3770      646500
+ 3771              	.LASF143:
+ 3772 0c6c 43794465 		.ascii	"CyDelayUs\000"
+ 3772      6C617955 
+ 3772      7300
+ 3773              	.LASF53:
+ 3774 0c76 4359424C 		.ascii	"CYBLE_EVT_GATTS_PREP_WRITE_REQ\000"
+ 3774      455F4556 
+ 3774      545F4741 
+ 3774      5454535F 
+ 3774      50524550 
+ 3775              	.LASF130:
+ 3776 0c95 6D6F7469 		.ascii	"motionBurstStartNotification\000"
+ 3776      6F6E4275 
+ 3776      72737453 
+ 3776      74617274 
+ 3776      4E6F7469 
+ 3777              	.LASF124:
+ 3778 0cb2 696E7075 		.ascii	"input\000"
+ 3778      7400
+ 3779              	.LASF58:
+ 3780 0cb8 4359424C 		.ascii	"CYBLE_EVT_GATTS_HANDLE_VALUE_CNF\000"
+ 3780      455F4556 
+ 3780      545F4741 
+ 3780      5454535F 
+ 3780      48414E44 
+ 3781              	.LASF84:
+ 3782 0cd9 4359424C 		.ascii	"CYBLE_ERROR_REPEATED_ATTEMPTS\000"
+ 3782      455F4552 
+ 3782      524F525F 
+ 3782      52455045 
+ 3782      41544544 
+ 3783              	.LASF174:
+ 3784 0cf7 2E5C6D61 		.ascii	".\\main.c\000"
+ 3784      696E2E63 
+ 3784      00
+ 3785              	.LASF151:
+ 3786 0d00 53656E52 		.ascii	"SenReadReg\000"
+ 3786      65616452 
+ 3786      656700
+ 3787              	.LASF158:
+ 3788 0d0b 5245445F 		.ascii	"RED_SetDriveMode\000"
+ 3788      53657444 
+ 3788      72697665 
+ 3788      4D6F6465 
+ 3788      00
+ 3789              	.LASF137:
+ 3790 0d1c 6D6F7469 		.ascii	"motionUpdateNeeded\000"
+ 3790      6F6E5570 
+ 3790      64617465 
+ 3790      4E656564 
+ 3790      656400
+ 3791              	.LASF16:
+ 3792 0d2f 63686172 		.ascii	"char\000"
+ 3792      00
+ 3793              	.LASF87:
+ 3794 0d34 4359424C 		.ascii	"CYBLE_ERROR_BT_ON_NOT_COMPLETED\000"
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 85
+
+
+ 3794      455F4552 
+ 3794      524F525F 
+ 3794      42545F4F 
+ 3794      4E5F4E4F 
+ 3795              	.LASF33:
+ 3796 0d54 4359424C 		.ascii	"CYBLE_EVT_GAP_DEVICE_DISCONNECTED\000"
+ 3796      455F4556 
+ 3796      545F4741 
+ 3796      505F4445 
+ 3796      56494345 
+ 3797              	.LASF17:
+ 3798 0d76 63796973 		.ascii	"cyisraddress\000"
+ 3798      72616464 
+ 3798      72657373 
+ 3798      00
+ 3799              	.LASF8:
+ 3800 0d83 756E7369 		.ascii	"unsigned int\000"
+ 3800      676E6564 
+ 3800      20696E74 
+ 3800      00
+ 3801              	.LASF61:
+ 3802 0d90 4359424C 		.ascii	"CYBLE_EVT_GATTS_READ_CHAR_VAL_ACCESS_REQ\000"
+ 3802      455F4556 
+ 3802      545F4741 
+ 3802      5454535F 
+ 3802      52454144 
+ 3803              	.LASF156:
+ 3804 0db9 50724953 		.ascii	"PrISM_1_WritePulse1\000"
+ 3804      4D5F315F 
+ 3804      57726974 
+ 3804      6550756C 
+ 3804      73653100 
+ 3805              	.LASF106:
+ 3806 0dcd 69734669 		.ascii	"isFirstPixel\000"
+ 3806      72737450 
+ 3806      6978656C 
+ 3806      00
+ 3807              	.LASF15:
+ 3808 0dda 63686172 		.ascii	"char8\000"
+ 3808      3800
+ 3809              	.LASF140:
+ 3810 0de0 696E6974 		.ascii	"initialing\000"
+ 3810      69616C69 
+ 3810      6E6700
+ 3811              	.LASF97:
+ 3812 0deb 4359424C 		.ascii	"CYBLE_ERROR_FLASH_WRITE_NOT_PERMITED\000"
+ 3812      455F4552 
+ 3812      524F525F 
+ 3812      464C4153 
+ 3812      485F5752 
+ 3813              	.LASF92:
+ 3814 0e10 4359424C 		.ascii	"CYBLE_ERROR_L2CAP_CONNECTION_ENTITY_NOT_FOUND\000"
+ 3814      455F4552 
+ 3814      524F525F 
+ 3814      4C324341 
+ 3814      505F434F 
+ 3815              	.LASF131:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 86
+
+
+ 3816 0e3e 696D6167 		.ascii	"imageBurstStartNotification\000"
+ 3816      65427572 
+ 3816      73745374 
+ 3816      6172744E 
+ 3816      6F746966 
+ 3817              	.LASF22:
+ 3818 0e5a 4359424C 		.ascii	"CYBLE_EVT_HARDWARE_ERROR\000"
+ 3818      455F4556 
+ 3818      545F4841 
+ 3818      52445741 
+ 3818      52455F45 
+ 3819              	.LASF3:
+ 3820 0e73 73686F72 		.ascii	"short unsigned int\000"
+ 3820      7420756E 
+ 3820      7369676E 
+ 3820      65642069 
+ 3820      6E7400
+ 3821              	.LASF1:
+ 3822 0e86 756E7369 		.ascii	"unsigned char\000"
+ 3822      676E6564 
+ 3822      20636861 
+ 3822      7200
+ 3823              	.LASF166:
+ 3824 0e94 53656E54 		.ascii	"SenTimer_GetInterruptSourceMasked\000"
+ 3824      696D6572 
+ 3824      5F476574 
+ 3824      496E7465 
+ 3824      72727570 
+ 3825              	.LASF169:
+ 3826 0eb6 43794465 		.ascii	"CyDelay\000"
+ 3826      6C617900 
+ 3827              	.LASF78:
+ 3828 0ebe 4359424C 		.ascii	"CYBLE_ERROR_INVALID_OPERATION\000"
+ 3828      455F4552 
+ 3828      524F525F 
+ 3828      494E5641 
+ 3828      4C49445F 
+ 3829              	.LASF105:
+ 3830 0edc 4359424C 		.ascii	"CYBLE_CALLBACK_T\000"
+ 3830      455F4341 
+ 3830      4C4C4241 
+ 3830      434B5F54 
+ 3830      00
+ 3831              	.LASF41:
+ 3832 0eed 4359424C 		.ascii	"CYBLE_EVT_GATTS_XCNHG_MTU_REQ\000"
+ 3832      455F4556 
+ 3832      545F4741 
+ 3832      5454535F 
+ 3832      58434E48 
+ 3833              	.LASF163:
+ 3834 0f0b 52657365 		.ascii	"Reset_Write\000"
+ 3834      745F5772 
+ 3834      69746500 
+ 3835              	.LASF113:
+ 3836 0f17 6E657744 		.ascii	"newDelta_Y\000"
+ 3836      656C7461 
+ 3836      5F5900
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 87
+
+
+ 3837              	.LASF48:
+ 3838 0f22 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BLOB_RSP\000"
+ 3838      455F4556 
+ 3838      545F4741 
+ 3838      5454435F 
+ 3838      52454144 
+ 3839              	.LASF115:
+ 3840 0f40 496E6974 		.ascii	"Initialize_BLE_ISR_RGBLED_System\000"
+ 3840      69616C69 
+ 3840      7A655F42 
+ 3840      4C455F49 
+ 3840      53525F52 
+ 3841              	.LASF98:
+ 3842 0f61 4359424C 		.ascii	"CYBLE_ERROR_MIC_AUTH_FAILED\000"
+ 3842      455F4552 
+ 3842      524F525F 
+ 3842      4D49435F 
+ 3842      41555448 
+ 3843              	.LASF91:
+ 3844 0f7d 4359424C 		.ascii	"CYBLE_ERROR_L2CAP_PSM_NOT_REGISTERED\000"
+ 3844      455F4552 
+ 3844      524F525F 
+ 3844      4C324341 
+ 3844      505F5053 
+ 3845              	.LASF57:
+ 3846 0fa2 4359424C 		.ascii	"CYBLE_EVT_GATTC_HANDLE_VALUE_IND\000"
+ 3846      455F4556 
+ 3846      545F4741 
+ 3846      5454435F 
+ 3846      48414E44 
+ 3847              	.LASF141:
+ 3848 0fc3 696E6974 		.ascii	"initialNeeded\000"
+ 3848      69616C4E 
+ 3848      65656465 
+ 3848      6400
+ 3849              	.LASF46:
+ 3850 0fd1 4359424C 		.ascii	"CYBLE_EVT_GATTC_FIND_BY_TYPE_VALUE_RSP\000"
+ 3850      455F4556 
+ 3850      545F4741 
+ 3850      5454435F 
+ 3850      46494E44 
+ 3851              	.LASF85:
+ 3852 0ff8 4359424C 		.ascii	"CYBLE_ERROR_GAP_ROLE\000"
+ 3852      455F4552 
+ 3852      524F525F 
+ 3852      4741505F 
+ 3852      524F4C45 
+ 3853              	.LASF112:
+ 3854 100d 6E657744 		.ascii	"newDelta_X\000"
+ 3854      656C7461 
+ 3854      5F5800
+ 3855              	.LASF96:
+ 3856 1018 4359424C 		.ascii	"CYBLE_ERROR_DEVICE_ALREADY_EXISTS\000"
+ 3856      455F4552 
+ 3856      524F525F 
+ 3856      44455649 
+ 3856      43455F41 
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\ccERDFS5.s 			page 88
+
+
+ 3857              	.LASF67:
+ 3858 103a 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DISCONN_IND\000"
+ 3858      455F4556 
+ 3858      545F4C32 
+ 3858      4341505F 
+ 3858      43424643 
+ 3859              	.LASF126:
+ 3860 105b 53656E53 		.ascii	"SenSerialReadBlocking\000"
+ 3860      65726961 
+ 3860      6C526561 
+ 3860      64426C6F 
+ 3860      636B696E 
+ 3861              	.LASF63:
+ 3862 1071 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CONN_PARAM_UPDATE_RSP\000"
+ 3862      455F4556 
+ 3862      545F4C32 
+ 3862      4341505F 
+ 3862      434F4E4E 
+ 3863              	.LASF116:
+ 3864 1097 6D61696E 		.ascii	"main\000"
+ 3864      00
+ 3865              	.LASF160:
+ 3866 109c 424C5545 		.ascii	"BLUE_SetDriveMode\000"
+ 3866      5F536574 
+ 3866      44726976 
+ 3866      654D6F64 
+ 3866      6500
+ 3867              	.LASF40:
+ 3868 10ae 4359424C 		.ascii	"CYBLE_EVT_GATT_DISCONNECT_IND\000"
+ 3868      455F4556 
+ 3868      545F4741 
+ 3868      54545F44 
+ 3868      4953434F 
+ 3869              	.LASF95:
+ 3870 10cc 4359424C 		.ascii	"CYBLE_ERROR_GATT_DB_INVALID_ATTR_HANDLE\000"
+ 3870      455F4552 
+ 3870      524F525F 
+ 3870      47415454 
+ 3870      5F44425F 
+ 3871              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

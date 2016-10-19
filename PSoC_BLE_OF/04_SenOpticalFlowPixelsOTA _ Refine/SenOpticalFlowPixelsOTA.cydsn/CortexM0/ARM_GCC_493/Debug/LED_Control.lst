@@ -1,0 +1,776 @@
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"LED_Control.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	__aeabi_idiv
+  18              		.section	.text.UpdateRGBLED,"ax",%progbits
+  19              		.align	2
+  20              		.global	UpdateRGBLED
+  21              		.code	16
+  22              		.thumb_func
+  23              		.type	UpdateRGBLED, %function
+  24              	UpdateRGBLED:
+  25              	.LFB35:
+  26              		.file 1 ".\\LED_Control.c"
+   1:.\LED_Control.c **** /* ========================================
+   2:.\LED_Control.c ****  *
+   3:.\LED_Control.c ****  * Copyright Sen Li, Dec 2015
+   4:.\LED_Control.c ****  * All Rights Reserved
+   5:.\LED_Control.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\LED_Control.c ****  *
+   7:.\LED_Control.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\LED_Control.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:.\LED_Control.c ****  *
+  10:.\LED_Control.c ****  * ========================================
+  11:.\LED_Control.c **** */
+  12:.\LED_Control.c **** #include "LED_Control.h"
+  13:.\LED_Control.c **** 
+  14:.\LED_Control.c **** void UpdateRGBLED(uint8* ledData, uint8 len) {
+  27              		.loc 1 14 0
+  28              		.cfi_startproc
+  29              	.LVL0:
+  30 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  31              		.cfi_def_cfa_offset 24
+  32              		.cfi_offset 3, -24
+  33              		.cfi_offset 4, -20
+  34              		.cfi_offset 5, -16
+  35              		.cfi_offset 6, -12
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  15:.\LED_Control.c **** 	/* Local variables to store calculated color components */
+  16:.\LED_Control.c **** 	uint8 calc_red;
+  17:.\LED_Control.c **** 	uint8 calc_green;
+  18:.\LED_Control.c **** 	uint8 calc_blue;
+  19:.\LED_Control.c **** 	
+  20:.\LED_Control.c **** 	/* Check if the array has length equal to expected length for RGB LED data */
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 2
+
+
+  21:.\LED_Control.c **** 	if(len == RGB_CHAR_DATA_LEN) {
+  38              		.loc 1 21 0
+  39 0002 0429     		cmp	r1, #4
+  40 0004 1FD1     		bne	.L1
+  41 0006 041C     		mov	r4, r0
+  22:.\LED_Control.c **** 	/* True color to be displayed is calculated on basis of color and intensity value received */ 
+  23:.\LED_Control.c **** 		calc_red 	= (uint8) (((uint16)ledData[RED_INDEX]*ledData[INTENSITY_INDEX])/RGB_LED_MAX_VAL);
+  42              		.loc 1 23 0
+  43 0008 0078     		ldrb	r0, [r0]
+  44              	.LVL1:
+  45 000a E778     		ldrb	r7, [r4, #3]
+  46 000c 7843     		mul	r0, r7
+  47 000e FB31     		add	r1, r1, #251
+  48              	.LVL2:
+  49 0010 FFF7FEFF 		bl	__aeabi_idiv
+  50              	.LVL3:
+  51 0014 C6B2     		uxtb	r6, r0
+  52              	.LVL4:
+  24:.\LED_Control.c **** 		calc_green 	= (uint8) (((uint16)ledData[GREEN_INDEX]*ledData[INTENSITY_INDEX])/RGB_LED_MAX_VAL);
+  53              		.loc 1 24 0
+  54 0016 6078     		ldrb	r0, [r4, #1]
+  55 0018 7843     		mul	r0, r7
+  56 001a FF21     		mov	r1, #255
+  57 001c FFF7FEFF 		bl	__aeabi_idiv
+  58              	.LVL5:
+  59 0020 C5B2     		uxtb	r5, r0
+  60              	.LVL6:
+  25:.\LED_Control.c **** 		calc_blue 	= (uint8) (((uint16)ledData[BLUE_INDEX]*ledData[INTENSITY_INDEX])/RGB_LED_MAX_VAL); 
+  61              		.loc 1 25 0
+  62 0022 A078     		ldrb	r0, [r4, #2]
+  63 0024 7843     		mul	r0, r7
+  64 0026 FF21     		mov	r1, #255
+  65 0028 FFF7FEFF 		bl	__aeabi_idiv
+  66              	.LVL7:
+  67 002c C4B2     		uxtb	r4, r0
+  68              	.LVL8:
+  26:.\LED_Control.c **** 		
+  27:.\LED_Control.c **** 		/* Update the density value of the PrISM module */
+  28:.\LED_Control.c **** 		PrISM_1_WritePulse0(RGB_LED_MAX_VAL - calc_red);
+  69              		.loc 1 28 0
+  70 002e F043     		mvn	r0, r6
+  71 0030 C0B2     		uxtb	r0, r0
+  72 0032 FFF7FEFF 		bl	PrISM_1_WritePulse0
+  73              	.LVL9:
+  29:.\LED_Control.c **** 		PrISM_1_WritePulse1(RGB_LED_MAX_VAL - calc_green);
+  74              		.loc 1 29 0
+  75 0036 E843     		mvn	r0, r5
+  76 0038 C0B2     		uxtb	r0, r0
+  77 003a FFF7FEFF 		bl	PrISM_1_WritePulse1
+  78              	.LVL10:
+  30:.\LED_Control.c **** 		PrISM_2_WritePulse0(RGB_LED_MAX_VAL - calc_blue); 
+  79              		.loc 1 30 0
+  80 003e E043     		mvn	r0, r4
+  81 0040 C0B2     		uxtb	r0, r0
+  82 0042 FFF7FEFF 		bl	PrISM_2_WritePulse0
+  83              	.LVL11:
+  84              	.L1:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 3
+
+
+  31:.\LED_Control.c **** 	}
+  32:.\LED_Control.c **** }
+  85              		.loc 1 32 0
+  86              		@ sp needed
+  87 0046 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+  88              		.cfi_endproc
+  89              	.LFE35:
+  90              		.size	UpdateRGBLED, .-UpdateRGBLED
+  91              		.text
+  92              	.Letext0:
+  93              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+  94              		.file 3 "Generated_Source\\PSoC4/PrISM_1.h"
+  95              		.file 4 "Generated_Source\\PSoC4/PrISM_2.h"
+  96              		.section	.debug_info,"",%progbits
+  97              	.Ldebug_info0:
+  98 0000 6B010000 		.4byte	0x16b
+  99 0004 0400     		.2byte	0x4
+ 100 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 101 000a 04       		.byte	0x4
+ 102 000b 01       		.uleb128 0x1
+ 103 000c A3010000 		.4byte	.LASF21
+ 104 0010 01       		.byte	0x1
+ 105 0011 6D000000 		.4byte	.LASF22
+ 106 0015 BF000000 		.4byte	.LASF23
+ 107 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 108 001d 00000000 		.4byte	0
+ 109 0021 00000000 		.4byte	.Ldebug_line0
+ 110 0025 02       		.uleb128 0x2
+ 111 0026 01       		.byte	0x1
+ 112 0027 06       		.byte	0x6
+ 113 0028 97010000 		.4byte	.LASF0
+ 114 002c 02       		.uleb128 0x2
+ 115 002d 01       		.byte	0x1
+ 116 002e 08       		.byte	0x8
+ 117 002f 4D010000 		.4byte	.LASF1
+ 118 0033 02       		.uleb128 0x2
+ 119 0034 02       		.byte	0x2
+ 120 0035 05       		.byte	0x5
+ 121 0036 69010000 		.4byte	.LASF2
+ 122 003a 02       		.uleb128 0x2
+ 123 003b 02       		.byte	0x2
+ 124 003c 07       		.byte	0x7
+ 125 003d A1000000 		.4byte	.LASF3
+ 126 0041 02       		.uleb128 0x2
+ 127 0042 04       		.byte	0x4
+ 128 0043 05       		.byte	0x5
+ 129 0044 60010000 		.4byte	.LASF4
+ 130 0048 02       		.uleb128 0x2
+ 131 0049 04       		.byte	0x4
+ 132 004a 07       		.byte	0x7
+ 133 004b 5B000000 		.4byte	.LASF5
+ 134 004f 02       		.uleb128 0x2
+ 135 0050 08       		.byte	0x8
+ 136 0051 05       		.byte	0x5
+ 137 0052 00000000 		.4byte	.LASF6
+ 138 0056 02       		.uleb128 0x2
+ 139 0057 08       		.byte	0x8
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 4
+
+
+ 140 0058 07       		.byte	0x7
+ 141 0059 7D000000 		.4byte	.LASF7
+ 142 005d 03       		.uleb128 0x3
+ 143 005e 04       		.byte	0x4
+ 144 005f 05       		.byte	0x5
+ 145 0060 696E7400 		.ascii	"int\000"
+ 146 0064 02       		.uleb128 0x2
+ 147 0065 04       		.byte	0x4
+ 148 0066 07       		.byte	0x7
+ 149 0067 16000000 		.4byte	.LASF8
+ 150 006b 04       		.uleb128 0x4
+ 151 006c 55000000 		.4byte	.LASF9
+ 152 0070 02       		.byte	0x2
+ 153 0071 C2       		.byte	0xc2
+ 154 0072 2C000000 		.4byte	0x2c
+ 155 0076 04       		.uleb128 0x4
+ 156 0077 37020000 		.4byte	.LASF10
+ 157 007b 02       		.byte	0x2
+ 158 007c C3       		.byte	0xc3
+ 159 007d 3A000000 		.4byte	0x3a
+ 160 0081 02       		.uleb128 0x2
+ 161 0082 04       		.byte	0x4
+ 162 0083 04       		.byte	0x4
+ 163 0084 31020000 		.4byte	.LASF11
+ 164 0088 02       		.uleb128 0x2
+ 165 0089 08       		.byte	0x8
+ 166 008a 04       		.byte	0x4
+ 167 008b 73010000 		.4byte	.LASF12
+ 168 008f 02       		.uleb128 0x2
+ 169 0090 01       		.byte	0x1
+ 170 0091 08       		.byte	0x8
+ 171 0092 5B010000 		.4byte	.LASF13
+ 172 0096 02       		.uleb128 0x2
+ 173 0097 04       		.byte	0x4
+ 174 0098 07       		.byte	0x7
+ 175 0099 3E020000 		.4byte	.LASF14
+ 176 009d 05       		.uleb128 0x5
+ 177 009e 04       		.byte	0x4
+ 178 009f 6B000000 		.4byte	0x6b
+ 179 00a3 06       		.uleb128 0x6
+ 180 00a4 94000000 		.4byte	.LASF24
+ 181 00a8 01       		.byte	0x1
+ 182 00a9 0E       		.byte	0xe
+ 183 00aa 00000000 		.4byte	.LFB35
+ 184 00ae 48000000 		.4byte	.LFE35-.LFB35
+ 185 00b2 01       		.uleb128 0x1
+ 186 00b3 9C       		.byte	0x9c
+ 187 00b4 3F010000 		.4byte	0x13f
+ 188 00b8 07       		.uleb128 0x7
+ 189 00b9 0E000000 		.4byte	.LASF15
+ 190 00bd 01       		.byte	0x1
+ 191 00be 0E       		.byte	0xe
+ 192 00bf 9D000000 		.4byte	0x9d
+ 193 00c3 00000000 		.4byte	.LLST0
+ 194 00c7 08       		.uleb128 0x8
+ 195 00c8 6C656E00 		.ascii	"len\000"
+ 196 00cc 01       		.byte	0x1
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 5
+
+
+ 197 00cd 0E       		.byte	0xe
+ 198 00ce 6B000000 		.4byte	0x6b
+ 199 00d2 2C000000 		.4byte	.LLST1
+ 200 00d6 09       		.uleb128 0x9
+ 201 00d7 7A010000 		.4byte	.LASF16
+ 202 00db 01       		.byte	0x1
+ 203 00dc 10       		.byte	0x10
+ 204 00dd 6B000000 		.4byte	0x6b
+ 205 00e1 4D000000 		.4byte	.LLST2
+ 206 00e5 09       		.uleb128 0x9
+ 207 00e6 B4000000 		.4byte	.LASF17
+ 208 00ea 01       		.byte	0x1
+ 209 00eb 11       		.byte	0x11
+ 210 00ec 6B000000 		.4byte	0x6b
+ 211 00f0 60000000 		.4byte	.LLST3
+ 212 00f4 09       		.uleb128 0x9
+ 213 00f5 4B000000 		.4byte	.LASF18
+ 214 00f9 01       		.byte	0x1
+ 215 00fa 12       		.byte	0x12
+ 216 00fb 6B000000 		.4byte	0x6b
+ 217 00ff 73000000 		.4byte	.LLST4
+ 218 0103 0A       		.uleb128 0xa
+ 219 0104 36000000 		.4byte	.LVL9
+ 220 0108 3F010000 		.4byte	0x13f
+ 221 010c 18010000 		.4byte	0x118
+ 222 0110 0B       		.uleb128 0xb
+ 223 0111 01       		.uleb128 0x1
+ 224 0112 50       		.byte	0x50
+ 225 0113 03       		.uleb128 0x3
+ 226 0114 76       		.byte	0x76
+ 227 0115 00       		.sleb128 0
+ 228 0116 20       		.byte	0x20
+ 229 0117 00       		.byte	0
+ 230 0118 0A       		.uleb128 0xa
+ 231 0119 3E000000 		.4byte	.LVL10
+ 232 011d 50010000 		.4byte	0x150
+ 233 0121 2D010000 		.4byte	0x12d
+ 234 0125 0B       		.uleb128 0xb
+ 235 0126 01       		.uleb128 0x1
+ 236 0127 50       		.byte	0x50
+ 237 0128 03       		.uleb128 0x3
+ 238 0129 75       		.byte	0x75
+ 239 012a 00       		.sleb128 0
+ 240 012b 20       		.byte	0x20
+ 241 012c 00       		.byte	0
+ 242 012d 0C       		.uleb128 0xc
+ 243 012e 46000000 		.4byte	.LVL11
+ 244 0132 61010000 		.4byte	0x161
+ 245 0136 0B       		.uleb128 0xb
+ 246 0137 01       		.uleb128 0x1
+ 247 0138 50       		.byte	0x50
+ 248 0139 03       		.uleb128 0x3
+ 249 013a 74       		.byte	0x74
+ 250 013b 00       		.sleb128 0
+ 251 013c 20       		.byte	0x20
+ 252 013d 00       		.byte	0
+ 253 013e 00       		.byte	0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 6
+
+
+ 254 013f 0D       		.uleb128 0xd
+ 255 0140 23000000 		.4byte	.LASF19
+ 256 0144 03       		.byte	0x3
+ 257 0145 51       		.byte	0x51
+ 258 0146 50010000 		.4byte	0x150
+ 259 014a 0E       		.uleb128 0xe
+ 260 014b 6B000000 		.4byte	0x6b
+ 261 014f 00       		.byte	0
+ 262 0150 0D       		.uleb128 0xd
+ 263 0151 37000000 		.4byte	.LASF20
+ 264 0155 03       		.byte	0x3
+ 265 0156 54       		.byte	0x54
+ 266 0157 61010000 		.4byte	0x161
+ 267 015b 0E       		.uleb128 0xe
+ 268 015c 6B000000 		.4byte	0x6b
+ 269 0160 00       		.byte	0
+ 270 0161 0F       		.uleb128 0xf
+ 271 0162 83010000 		.4byte	.LASF25
+ 272 0166 04       		.byte	0x4
+ 273 0167 51       		.byte	0x51
+ 274 0168 0E       		.uleb128 0xe
+ 275 0169 6B000000 		.4byte	0x6b
+ 276 016d 00       		.byte	0
+ 277 016e 00       		.byte	0
+ 278              		.section	.debug_abbrev,"",%progbits
+ 279              	.Ldebug_abbrev0:
+ 280 0000 01       		.uleb128 0x1
+ 281 0001 11       		.uleb128 0x11
+ 282 0002 01       		.byte	0x1
+ 283 0003 25       		.uleb128 0x25
+ 284 0004 0E       		.uleb128 0xe
+ 285 0005 13       		.uleb128 0x13
+ 286 0006 0B       		.uleb128 0xb
+ 287 0007 03       		.uleb128 0x3
+ 288 0008 0E       		.uleb128 0xe
+ 289 0009 1B       		.uleb128 0x1b
+ 290 000a 0E       		.uleb128 0xe
+ 291 000b 55       		.uleb128 0x55
+ 292 000c 17       		.uleb128 0x17
+ 293 000d 11       		.uleb128 0x11
+ 294 000e 01       		.uleb128 0x1
+ 295 000f 10       		.uleb128 0x10
+ 296 0010 17       		.uleb128 0x17
+ 297 0011 00       		.byte	0
+ 298 0012 00       		.byte	0
+ 299 0013 02       		.uleb128 0x2
+ 300 0014 24       		.uleb128 0x24
+ 301 0015 00       		.byte	0
+ 302 0016 0B       		.uleb128 0xb
+ 303 0017 0B       		.uleb128 0xb
+ 304 0018 3E       		.uleb128 0x3e
+ 305 0019 0B       		.uleb128 0xb
+ 306 001a 03       		.uleb128 0x3
+ 307 001b 0E       		.uleb128 0xe
+ 308 001c 00       		.byte	0
+ 309 001d 00       		.byte	0
+ 310 001e 03       		.uleb128 0x3
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 7
+
+
+ 311 001f 24       		.uleb128 0x24
+ 312 0020 00       		.byte	0
+ 313 0021 0B       		.uleb128 0xb
+ 314 0022 0B       		.uleb128 0xb
+ 315 0023 3E       		.uleb128 0x3e
+ 316 0024 0B       		.uleb128 0xb
+ 317 0025 03       		.uleb128 0x3
+ 318 0026 08       		.uleb128 0x8
+ 319 0027 00       		.byte	0
+ 320 0028 00       		.byte	0
+ 321 0029 04       		.uleb128 0x4
+ 322 002a 16       		.uleb128 0x16
+ 323 002b 00       		.byte	0
+ 324 002c 03       		.uleb128 0x3
+ 325 002d 0E       		.uleb128 0xe
+ 326 002e 3A       		.uleb128 0x3a
+ 327 002f 0B       		.uleb128 0xb
+ 328 0030 3B       		.uleb128 0x3b
+ 329 0031 0B       		.uleb128 0xb
+ 330 0032 49       		.uleb128 0x49
+ 331 0033 13       		.uleb128 0x13
+ 332 0034 00       		.byte	0
+ 333 0035 00       		.byte	0
+ 334 0036 05       		.uleb128 0x5
+ 335 0037 0F       		.uleb128 0xf
+ 336 0038 00       		.byte	0
+ 337 0039 0B       		.uleb128 0xb
+ 338 003a 0B       		.uleb128 0xb
+ 339 003b 49       		.uleb128 0x49
+ 340 003c 13       		.uleb128 0x13
+ 341 003d 00       		.byte	0
+ 342 003e 00       		.byte	0
+ 343 003f 06       		.uleb128 0x6
+ 344 0040 2E       		.uleb128 0x2e
+ 345 0041 01       		.byte	0x1
+ 346 0042 3F       		.uleb128 0x3f
+ 347 0043 19       		.uleb128 0x19
+ 348 0044 03       		.uleb128 0x3
+ 349 0045 0E       		.uleb128 0xe
+ 350 0046 3A       		.uleb128 0x3a
+ 351 0047 0B       		.uleb128 0xb
+ 352 0048 3B       		.uleb128 0x3b
+ 353 0049 0B       		.uleb128 0xb
+ 354 004a 27       		.uleb128 0x27
+ 355 004b 19       		.uleb128 0x19
+ 356 004c 11       		.uleb128 0x11
+ 357 004d 01       		.uleb128 0x1
+ 358 004e 12       		.uleb128 0x12
+ 359 004f 06       		.uleb128 0x6
+ 360 0050 40       		.uleb128 0x40
+ 361 0051 18       		.uleb128 0x18
+ 362 0052 9642     		.uleb128 0x2116
+ 363 0054 19       		.uleb128 0x19
+ 364 0055 01       		.uleb128 0x1
+ 365 0056 13       		.uleb128 0x13
+ 366 0057 00       		.byte	0
+ 367 0058 00       		.byte	0
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 8
+
+
+ 368 0059 07       		.uleb128 0x7
+ 369 005a 05       		.uleb128 0x5
+ 370 005b 00       		.byte	0
+ 371 005c 03       		.uleb128 0x3
+ 372 005d 0E       		.uleb128 0xe
+ 373 005e 3A       		.uleb128 0x3a
+ 374 005f 0B       		.uleb128 0xb
+ 375 0060 3B       		.uleb128 0x3b
+ 376 0061 0B       		.uleb128 0xb
+ 377 0062 49       		.uleb128 0x49
+ 378 0063 13       		.uleb128 0x13
+ 379 0064 02       		.uleb128 0x2
+ 380 0065 17       		.uleb128 0x17
+ 381 0066 00       		.byte	0
+ 382 0067 00       		.byte	0
+ 383 0068 08       		.uleb128 0x8
+ 384 0069 05       		.uleb128 0x5
+ 385 006a 00       		.byte	0
+ 386 006b 03       		.uleb128 0x3
+ 387 006c 08       		.uleb128 0x8
+ 388 006d 3A       		.uleb128 0x3a
+ 389 006e 0B       		.uleb128 0xb
+ 390 006f 3B       		.uleb128 0x3b
+ 391 0070 0B       		.uleb128 0xb
+ 392 0071 49       		.uleb128 0x49
+ 393 0072 13       		.uleb128 0x13
+ 394 0073 02       		.uleb128 0x2
+ 395 0074 17       		.uleb128 0x17
+ 396 0075 00       		.byte	0
+ 397 0076 00       		.byte	0
+ 398 0077 09       		.uleb128 0x9
+ 399 0078 34       		.uleb128 0x34
+ 400 0079 00       		.byte	0
+ 401 007a 03       		.uleb128 0x3
+ 402 007b 0E       		.uleb128 0xe
+ 403 007c 3A       		.uleb128 0x3a
+ 404 007d 0B       		.uleb128 0xb
+ 405 007e 3B       		.uleb128 0x3b
+ 406 007f 0B       		.uleb128 0xb
+ 407 0080 49       		.uleb128 0x49
+ 408 0081 13       		.uleb128 0x13
+ 409 0082 02       		.uleb128 0x2
+ 410 0083 17       		.uleb128 0x17
+ 411 0084 00       		.byte	0
+ 412 0085 00       		.byte	0
+ 413 0086 0A       		.uleb128 0xa
+ 414 0087 898201   		.uleb128 0x4109
+ 415 008a 01       		.byte	0x1
+ 416 008b 11       		.uleb128 0x11
+ 417 008c 01       		.uleb128 0x1
+ 418 008d 31       		.uleb128 0x31
+ 419 008e 13       		.uleb128 0x13
+ 420 008f 01       		.uleb128 0x1
+ 421 0090 13       		.uleb128 0x13
+ 422 0091 00       		.byte	0
+ 423 0092 00       		.byte	0
+ 424 0093 0B       		.uleb128 0xb
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 9
+
+
+ 425 0094 8A8201   		.uleb128 0x410a
+ 426 0097 00       		.byte	0
+ 427 0098 02       		.uleb128 0x2
+ 428 0099 18       		.uleb128 0x18
+ 429 009a 9142     		.uleb128 0x2111
+ 430 009c 18       		.uleb128 0x18
+ 431 009d 00       		.byte	0
+ 432 009e 00       		.byte	0
+ 433 009f 0C       		.uleb128 0xc
+ 434 00a0 898201   		.uleb128 0x4109
+ 435 00a3 01       		.byte	0x1
+ 436 00a4 11       		.uleb128 0x11
+ 437 00a5 01       		.uleb128 0x1
+ 438 00a6 31       		.uleb128 0x31
+ 439 00a7 13       		.uleb128 0x13
+ 440 00a8 00       		.byte	0
+ 441 00a9 00       		.byte	0
+ 442 00aa 0D       		.uleb128 0xd
+ 443 00ab 2E       		.uleb128 0x2e
+ 444 00ac 01       		.byte	0x1
+ 445 00ad 3F       		.uleb128 0x3f
+ 446 00ae 19       		.uleb128 0x19
+ 447 00af 03       		.uleb128 0x3
+ 448 00b0 0E       		.uleb128 0xe
+ 449 00b1 3A       		.uleb128 0x3a
+ 450 00b2 0B       		.uleb128 0xb
+ 451 00b3 3B       		.uleb128 0x3b
+ 452 00b4 0B       		.uleb128 0xb
+ 453 00b5 27       		.uleb128 0x27
+ 454 00b6 19       		.uleb128 0x19
+ 455 00b7 3C       		.uleb128 0x3c
+ 456 00b8 19       		.uleb128 0x19
+ 457 00b9 01       		.uleb128 0x1
+ 458 00ba 13       		.uleb128 0x13
+ 459 00bb 00       		.byte	0
+ 460 00bc 00       		.byte	0
+ 461 00bd 0E       		.uleb128 0xe
+ 462 00be 05       		.uleb128 0x5
+ 463 00bf 00       		.byte	0
+ 464 00c0 49       		.uleb128 0x49
+ 465 00c1 13       		.uleb128 0x13
+ 466 00c2 00       		.byte	0
+ 467 00c3 00       		.byte	0
+ 468 00c4 0F       		.uleb128 0xf
+ 469 00c5 2E       		.uleb128 0x2e
+ 470 00c6 01       		.byte	0x1
+ 471 00c7 3F       		.uleb128 0x3f
+ 472 00c8 19       		.uleb128 0x19
+ 473 00c9 03       		.uleb128 0x3
+ 474 00ca 0E       		.uleb128 0xe
+ 475 00cb 3A       		.uleb128 0x3a
+ 476 00cc 0B       		.uleb128 0xb
+ 477 00cd 3B       		.uleb128 0x3b
+ 478 00ce 0B       		.uleb128 0xb
+ 479 00cf 27       		.uleb128 0x27
+ 480 00d0 19       		.uleb128 0x19
+ 481 00d1 3C       		.uleb128 0x3c
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 10
+
+
+ 482 00d2 19       		.uleb128 0x19
+ 483 00d3 00       		.byte	0
+ 484 00d4 00       		.byte	0
+ 485 00d5 00       		.byte	0
+ 486              		.section	.debug_loc,"",%progbits
+ 487              	.Ldebug_loc0:
+ 488              	.LLST0:
+ 489 0000 00000000 		.4byte	.LVL0
+ 490 0004 0A000000 		.4byte	.LVL1
+ 491 0008 0100     		.2byte	0x1
+ 492 000a 50       		.byte	0x50
+ 493 000b 0A000000 		.4byte	.LVL1
+ 494 000f 2E000000 		.4byte	.LVL8
+ 495 0013 0100     		.2byte	0x1
+ 496 0015 54       		.byte	0x54
+ 497 0016 2E000000 		.4byte	.LVL8
+ 498 001a 48000000 		.4byte	.LFE35
+ 499 001e 0400     		.2byte	0x4
+ 500 0020 F3       		.byte	0xf3
+ 501 0021 01       		.uleb128 0x1
+ 502 0022 50       		.byte	0x50
+ 503 0023 9F       		.byte	0x9f
+ 504 0024 00000000 		.4byte	0
+ 505 0028 00000000 		.4byte	0
+ 506              	.LLST1:
+ 507 002c 00000000 		.4byte	.LVL0
+ 508 0030 10000000 		.4byte	.LVL2
+ 509 0034 0100     		.2byte	0x1
+ 510 0036 51       		.byte	0x51
+ 511 0037 10000000 		.4byte	.LVL2
+ 512 003b 48000000 		.4byte	.LFE35
+ 513 003f 0400     		.2byte	0x4
+ 514 0041 F3       		.byte	0xf3
+ 515 0042 01       		.uleb128 0x1
+ 516 0043 51       		.byte	0x51
+ 517 0044 9F       		.byte	0x9f
+ 518 0045 00000000 		.4byte	0
+ 519 0049 00000000 		.4byte	0
+ 520              	.LLST2:
+ 521 004d 16000000 		.4byte	.LVL4
+ 522 0051 46000000 		.4byte	.LVL11
+ 523 0055 0100     		.2byte	0x1
+ 524 0057 56       		.byte	0x56
+ 525 0058 00000000 		.4byte	0
+ 526 005c 00000000 		.4byte	0
+ 527              	.LLST3:
+ 528 0060 22000000 		.4byte	.LVL6
+ 529 0064 46000000 		.4byte	.LVL11
+ 530 0068 0100     		.2byte	0x1
+ 531 006a 55       		.byte	0x55
+ 532 006b 00000000 		.4byte	0
+ 533 006f 00000000 		.4byte	0
+ 534              	.LLST4:
+ 535 0073 2E000000 		.4byte	.LVL8
+ 536 0077 46000000 		.4byte	.LVL11
+ 537 007b 0100     		.2byte	0x1
+ 538 007d 54       		.byte	0x54
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 11
+
+
+ 539 007e 00000000 		.4byte	0
+ 540 0082 00000000 		.4byte	0
+ 541              		.section	.debug_aranges,"",%progbits
+ 542 0000 1C000000 		.4byte	0x1c
+ 543 0004 0200     		.2byte	0x2
+ 544 0006 00000000 		.4byte	.Ldebug_info0
+ 545 000a 04       		.byte	0x4
+ 546 000b 00       		.byte	0
+ 547 000c 0000     		.2byte	0
+ 548 000e 0000     		.2byte	0
+ 549 0010 00000000 		.4byte	.LFB35
+ 550 0014 48000000 		.4byte	.LFE35-.LFB35
+ 551 0018 00000000 		.4byte	0
+ 552 001c 00000000 		.4byte	0
+ 553              		.section	.debug_ranges,"",%progbits
+ 554              	.Ldebug_ranges0:
+ 555 0000 00000000 		.4byte	.LFB35
+ 556 0004 48000000 		.4byte	.LFE35
+ 557 0008 00000000 		.4byte	0
+ 558 000c 00000000 		.4byte	0
+ 559              		.section	.debug_line,"",%progbits
+ 560              	.Ldebug_line0:
+ 561 0000 81000000 		.section	.debug_str,"MS",%progbits,1
+ 561      02006400 
+ 561      00000201 
+ 561      FB0E0D00 
+ 561      01010101 
+ 562              	.LASF6:
+ 563 0000 6C6F6E67 		.ascii	"long long int\000"
+ 563      206C6F6E 
+ 563      6720696E 
+ 563      7400
+ 564              	.LASF15:
+ 565 000e 6C656444 		.ascii	"ledData\000"
+ 565      61746100 
+ 566              	.LASF8:
+ 567 0016 756E7369 		.ascii	"unsigned int\000"
+ 567      676E6564 
+ 567      20696E74 
+ 567      00
+ 568              	.LASF19:
+ 569 0023 50724953 		.ascii	"PrISM_1_WritePulse0\000"
+ 569      4D5F315F 
+ 569      57726974 
+ 569      6550756C 
+ 569      73653000 
+ 570              	.LASF20:
+ 571 0037 50724953 		.ascii	"PrISM_1_WritePulse1\000"
+ 571      4D5F315F 
+ 571      57726974 
+ 571      6550756C 
+ 571      73653100 
+ 572              	.LASF18:
+ 573 004b 63616C63 		.ascii	"calc_blue\000"
+ 573      5F626C75 
+ 573      6500
+ 574              	.LASF9:
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 12
+
+
+ 575 0055 75696E74 		.ascii	"uint8\000"
+ 575      3800
+ 576              	.LASF5:
+ 577 005b 6C6F6E67 		.ascii	"long unsigned int\000"
+ 577      20756E73 
+ 577      69676E65 
+ 577      6420696E 
+ 577      7400
+ 578              	.LASF22:
+ 579 006d 2E5C4C45 		.ascii	".\\LED_Control.c\000"
+ 579      445F436F 
+ 579      6E74726F 
+ 579      6C2E6300 
+ 580              	.LASF7:
+ 581 007d 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 581      206C6F6E 
+ 581      6720756E 
+ 581      7369676E 
+ 581      65642069 
+ 582              	.LASF24:
+ 583 0094 55706461 		.ascii	"UpdateRGBLED\000"
+ 583      74655247 
+ 583      424C4544 
+ 583      00
+ 584              	.LASF3:
+ 585 00a1 73686F72 		.ascii	"short unsigned int\000"
+ 585      7420756E 
+ 585      7369676E 
+ 585      65642069 
+ 585      6E7400
+ 586              	.LASF17:
+ 587 00b4 63616C63 		.ascii	"calc_green\000"
+ 587      5F677265 
+ 587      656E00
+ 588              	.LASF23:
+ 589 00bf 433A5C55 		.ascii	"C:\\Users\\liziy\\Desktop\\62_SenBlePSoC_AbandonSer"
+ 589      73657273 
+ 589      5C6C697A 
+ 589      69795C44 
+ 589      65736B74 
+ 590 00ee 69616C44 		.ascii	"ialDialogUI_Perfect\\PSoC_Ble\\04_SenOpticalFlowPix"
+ 590      69616C6F 
+ 590      6755495F 
+ 590      50657266 
+ 590      6563745C 
+ 591 011f 656C734F 		.ascii	"elsOTA _ Refine\\SenOpticalFlowPixelsOTA.cydsn\000"
+ 591      5441205F 
+ 591      20526566 
+ 591      696E655C 
+ 591      53656E4F 
+ 592              	.LASF1:
+ 593 014d 756E7369 		.ascii	"unsigned char\000"
+ 593      676E6564 
+ 593      20636861 
+ 593      7200
+ 594              	.LASF13:
+ 595 015b 63686172 		.ascii	"char\000"
+ARM GAS  C:\Users\liziy\AppData\Local\Temp\cc2Yk2MJ.s 			page 13
+
+
+ 595      00
+ 596              	.LASF4:
+ 597 0160 6C6F6E67 		.ascii	"long int\000"
+ 597      20696E74 
+ 597      00
+ 598              	.LASF2:
+ 599 0169 73686F72 		.ascii	"short int\000"
+ 599      7420696E 
+ 599      7400
+ 600              	.LASF12:
+ 601 0173 646F7562 		.ascii	"double\000"
+ 601      6C6500
+ 602              	.LASF16:
+ 603 017a 63616C63 		.ascii	"calc_red\000"
+ 603      5F726564 
+ 603      00
+ 604              	.LASF25:
+ 605 0183 50724953 		.ascii	"PrISM_2_WritePulse0\000"
+ 605      4D5F325F 
+ 605      57726974 
+ 605      6550756C 
+ 605      73653000 
+ 606              	.LASF0:
+ 607 0197 7369676E 		.ascii	"signed char\000"
+ 607      65642063 
+ 607      68617200 
+ 608              	.LASF21:
+ 609 01a3 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 609      4320342E 
+ 609      392E3320 
+ 609      32303135 
+ 609      30333033 
+ 610 01d6 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 610      20726576 
+ 610      6973696F 
+ 610      6E203232 
+ 610      31323230 
+ 611 0209 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 611      66756E63 
+ 611      74696F6E 
+ 611      2D736563 
+ 611      74696F6E 
+ 612              	.LASF11:
+ 613 0231 666C6F61 		.ascii	"float\000"
+ 613      7400
+ 614              	.LASF10:
+ 615 0237 75696E74 		.ascii	"uint16\000"
+ 615      313600
+ 616              	.LASF14:
+ 617 023e 73697A65 		.ascii	"sizetype\000"
+ 617      74797065 
+ 617      00
+ 618              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

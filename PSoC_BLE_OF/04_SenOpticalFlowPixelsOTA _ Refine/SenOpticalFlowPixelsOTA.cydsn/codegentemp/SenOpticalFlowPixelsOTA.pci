@@ -1,0 +1,24 @@
+# SenOpticalFlowPixelsOTA
+# 2016-03-31 20:26:31Z
+
+# IO_6@[IOP=(0)][IoId=(6)] is reserved: SWDDebugEnabled
+dont_use_io iocell 0 6
+# IO_7@[IOP=(0)][IoId=(7)] is reserved: SWDDebugEnabled
+dont_use_io iocell 0 7
+# IO_0@[IOP=(6)][IoId=(0)] is reserved: KhzXtalEnabled
+dont_use_io iocell 6 0
+# IO_1@[IOP=(6)][IoId=(1)] is reserved: KhzXtalEnabled
+dont_use_io iocell 6 1
+set_location "ClockGenBlock" m0s8clockgenblockcell -1 -1 0
+set_io "RED(0)" iocell 1 0
+set_io "GREEN(0)" iocell 1 1
+set_io "BLUE(0)" iocell 1 2
+set_io "\UART:tx(0)\" iocell 1 5
+set_io "\UART:rx(0)\" iocell 1 4
+set_io "\SPI_Master:sclk_m(0)\" iocell 0 3
+set_io "\SPI_Master:miso_m(0)\" iocell 0 1
+set_io "\SPI_Master:mosi_m(0)\" iocell 0 0
+set_io "\SPI_Master:ss0_m(0)\" iocell 0 2
+set_io "SS(0)" iocell 0 4
+set_io "Reset(0)" iocell 3 5
+set_io "Reset2(0)" iocell 3 4

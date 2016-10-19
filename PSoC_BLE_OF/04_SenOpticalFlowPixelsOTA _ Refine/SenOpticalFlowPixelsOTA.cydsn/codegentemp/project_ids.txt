@@ -1,0 +1,5 @@
+C:\Users\liziy\Desktop\62_SenBlePSoC_AbandonSerialDialogUI_Perfect\PSoC_Ble\04_SenOpticalFlowPixelsOTA _ Refine\SenOpticalFlowPixelsOTA.cydsn\SenOpticalFlowPixelsOTA.cyprj|1658489d-6b99-4aee-92e1-8fa6ecbd0363
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|54c78d59-59e4-47ac-a6d0-47adf956baf8
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|88e93fab-7872-4aba-9f9e-70dd4d982c15
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|88718aed-8672-4ff7-bb60-c83a3999a31b
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|f2be67a1-8b36-405a-9d50-3793ef91fda1
